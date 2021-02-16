@@ -1,12 +1,498 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="utf-8">
+	<title>수습과제::통합검색::전체</title>
+	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+	<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+	<div class="totalSearch">
+		<div class="s-header"><!--s-header/s-->
+			<div class="titleArea">
+				<p class="title">
+					통합검색
+				</p>
+			</div>
+			<div class="searchArea">
+				<div class="schBarWrap">
+					<div class="schBar">
+						<div class="iptWrap">
+							<div class="iptBar">
+								<script type="text/javascript">
+									$(function() {
+										/* input */
+										$('.iptBar').each(function(index, item) {
+											$(item).find('label').click(function() {
+												$(this).next('input').focus();
+											});
+											$(item).find('input').keydown(function() {
+												$(this).prev('label').hide();
+											});
+											$(item).find('input').blur(function() {
+												if (!this.value) $(this).prev('label').show();
+											});
+										});
+									});
+								</script>
+								<!--  검색라인 -->
+								<input type="text" id="searchWord" name="search" class="ipt" placeholder="검색어를 입력해 주세요."
+								value ="${index.str}" onkeypress="search_enter();">
+								<div class="schArrow">
+									<a href="#" title="검색창 위 화살표" class="selected"><img src="resources/img/sch_arrow_up.png" alt="검색창 위 화살표"></a>
+									<a href="#" title="검색창 아래 화살표" class="unselected"><img src="resources/img/sch_arrow_down.png" alt="검색창 아래 화살표"></a>
+								</div>
+							</div>
+						</div>
+						<a href="javascript:void(0);" class="btnSch" onclick="search_btn();">검색</a>
+					</div>
+					<!-- 일반 검색 -->
+					<form action="index" method="get" id='form_search'>
+						<input type="hidden" name="search">
+						<input type="hidden" name="osearch">
+					</form>
+					<!-- 상세 검색 -->
+					<form action="index" method="get" id="form_search_option">
+						<input type="hidden" name="search">
+						<input type="hidden" name="osearch">
+						<input type="hidden" name="category">
+						<input type="hidden" name="page">
+						<input type="hidden" name="perPageNum">
+					</form>
+					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
+					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
+					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
+					<textarea id="paramVO_page" style="display: none;">${index.pageMaker.cri.page}</textarea>
+					<textarea id="paramVO_perPageNum" style="display: none;">${index.pageMaker.cri.perPageNum}</textarea>
+				</div>
+				<div class="schAuto">
+					<ul class="schlist">
+						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span></a></li>
+						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>년</a></li>
+						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>코로나</a></li>
+					</ul>
+					<div class="autoBtm">
+						<div class="word_all">
+							<a href="javascript:void(0);" class="first_word">첫 단어 보기</a>
+							<a href="javascript:void(0);" class="last_word">끝 단어 보기</a>
+						</div>
+						<a href="javascript:void(0);" class="btnClose" onclick="$(this).closest('.schAuto').hide();">자동완성 끄기</a>
+					</div>
+				</div>
+				<div class="schCheckBox">				
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox" name="chkSearch" class="fCheck">
+						<label for="schCheckBox">결과 내 재검색</label>
+					</span>
+				</div>
+				<div class="schCheckArea">
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox2" name="chkSearch" class="fCheck">
+						<label for="schCheckBox2">전체</label>
+					</span>
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox3" name="chkSearch" class="fCheck">
+						<label for="schCheckBox3">제목</label>
+					</span>
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox4" name="chkSearch" class="fCheck">
+						<label for="schCheckBox4">본문</label>
+					</span>
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox5" name="chkSearch" class="fCheck">
+						<label for="schCheckBox5">첨부파일명</label>
+					</span>
+					<span class="checkBtn">
+						<input type="checkbox" id="schCheckBox6" name="chkSearch" class="fCheck">
+						<label for="schCheckBox6">첨부파일 내용</label>
+					</span>
+				</div>
+			</div>
+			<script type="text/javascript">
+				/* 포틀릿 width가 1150이하로 작아질 때 배경겹침 현상 제거 */
+				$(document).ready(function(){
+					$(window).resize(throttle(100, function(e) {
+						resizeContents();
+					}));
+					resizeContents();
+				});
+				function resizeContents() {
+					var searchBarW = $('.s-header').width();
+					if(searchBarW >= 1150) {
+						$('.s-header .titleArea').removeClass('min-width');
+					} else {
+						$('.s-header .titleArea').addClass('min-width');
+					}
+				}
+				function throttle(ms, fn) {
+					var allow = true;
+					function enable() {
+						allow = true;
+					}
+					return function(e) {
+						if(allow) {
+							allow = false;
+							setTimeout(enable, ms);
+							fn.call(this, e);
+						}
+					}
+				}
+			</script>
+		</div><!--s-header/e-->
+		<div class="s-container"><!--s-container/s-->
+			<!--ct-left/s-->
+			<div class="ct-left">
+				<div class="lnbDiv">
+					<ul class="lnbList">
+						<li class="lnbItem"><!--add class:selected-->
+							<a href="javascript:void(0)" class="Item" value="통합검색" onclick="search_Category(this);"><span class="title">전체</span><span class="num">${index.total}</span></a>
+						</li>
+						<li class="lnbItem">
+							<a href="javascript:void(0);" class="Item" value="MOIS" onclick="search_Category(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
+							<ul class="sub_list">
+								<li class="sub_item selected">
+									<a href="mois" class="sub_info"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
+								</li>
+							</ul>
+						</li>
+						<li class="lnbItem">
+							<a href="javascript:void(0);" class="Item" value="LAW" onclick="search_Category(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
+							<ul class="sub_list">
+								<li class="sub_item selected">
+									<a href="law" class="sub_info"><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
+								</li>
+							</ul>
+						</li>
+						<li class="lnbItem">
+							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="search_Category(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
+							<ul class="sub_list">
+								<li class="sub_item selected">
+									<a href="news" class="sub_info"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
+								</li>
+							</ul>
+						</li>
+						<script type="text/javascript">//서브메뉴 슬라이드
+						$(function(){
+							$(".lnbDiv .lnbList .lnbItem .sub_list").slideUp(0);
+							$(".lnbDiv .lnbList .lnbItem").click(function(){
+								$(".lnbDiv .lnbList > li").removeClass('selected');
+								$(this).addClass('selected');
+							});
+						});
+						</script>
+					</ul>
+				</div>
+				<div class="detailSearch">
+					<div class="detailSearch_top">
+						<p class="detail_title">상세검색</p>
+						<p class="detail_info">여러 개의 단어를 입력할 때는 <span>쉼표(,)</span>로 구분해주세요</p>
+					</div>
+					<div class="detailSearch_middle">
+						<ul class="fund_list">
+							<li class="fund_item">
+								<p class="fund_txt">정확히 일치하는 문장</p>
+								<input class="funfd_btn" placeholder="남북협력기금">
+							</li>
+							<li class="fund_item">
+								<p class="fund_txt">입력된 단어가 포함</p>
+								<input class="funfd_btn" placeholder="남북협력기금">
+							</li>
+							<li class="fund_item">
+								<p class="fund_txt">입력된 단어를 제회</p>
+								<input class="funfd_btn" placeholder="남북협력기금">
+							</li>
+						</ul>
+					</div>
+					<div class="detailSearch_bottom">
+						<div class="btn_wrap">
+							<div class="refresh_wrap">
+								<a href="javascript:void(0);" class="refresh"><span>초기화</span></a>
+							</div>
+							<div class="search_wrap">
+								<a href="javascript:void(0);" class="search"><span>검색</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="periodDiv">
+					<div class="titArea">
+						<p class="tit">기간</p>
+					</div>
+					<div class="ctArea">
+						<div class="data">
+							<div class="set">
+								<div class="barWrap">
+									<div class="bar">
+										<span class="handle" style="left:100%;">Handle</span><!--txt on된 영역의 % 입력-->
+										<span class="bgSlt" style="width:100%;"></span><!--txt on된 영역의 % 입력-->
+									</div>
+								</div>
+								<div class="txtWrap">
+									<a class="txt" style="left:0%;">1주</a>
+									<a class="txt on" style="left:33.3333%;">6개월</a><!--add class:on-->
+									<a class="txt" style="left:66.6666%;">1년</a>
+									<a class="txt" style="left:100%;">전체</a>
+								</div>
+							</div>
+							<div class="period">
+								<div class="iptWrap"><input type="text" readonly="" class="startDate" value="2020.08.21"></div>
+								<span class="bar">~</span>
+								<div class="iptWrap"><input type="text" readonly="" class="endDate" value="2020.09.21"></div>
+							</div>
+							<a href="#" class="btnSltDate">날짜적용</a>
+						</div>
+					</div>
+				</div>
+			</div><!--ct-left/e-->
+			<!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 -->
+			<!--ct-center/s-->
+			<div class="ct-center">
+				<!--resultTopDiv/s-->
+				<div class="resultTopDiv">
+					<p>　</p>
+					<div class="viewTab">
+						<script type="text/javascript">
+							$(function() {
+								$('.viewTab li a').click(function() {
+									$('.viewTab li').removeClass('selected');
+									$(this).parents('li').addClass('selected');
+								});
+							});
+						</script>
+						<ul>
+							<li class="selected"><a href="javascript:void(0);">정확도순</a></li><!--add class:selected-->
+							<li><a href="javascript:void(0);">최신순</a></li>
+						</ul>
+					</div>
+				</div><!--resultTopDiv/e-->
+				<!--resultDiv/s-->
+				<c:if test="${index.elastic.total > 1}">
+				<div class="resultDiv">
+					<p class="resultTit">중국<b>${index.elastic.total}</b>건</p>
+					<div class="resultCt">
+						<ul class="list">
+							<c:forEach items="${index.elastic.NEWS}" var="NEWS">
+								<li class="listItem">
+									<div class="titAreaWrap">
+										<div class="titArea">
+											<a href="javascript:void(0);" class="tit">${NEWS.title}</a>
+										</div>
+									</div>
+									<div class="infoArea">
+										<span>공개</span><span class="bar">|</span><span>${NEWS.writer}</span><span class="bar">|</span><span>${NEWS.date}</span><span class="bar">|</span><span>${NEWS.stitle }</span>
+									</div>
+									<div class="contentArea">
+										${NEWS.text }                          
+									</div>
+								</li>			
+							</c:forEach>
+						</ul>
+					</div>
+					<c:if test="${index.elastic.stotal.item2 > 4}">
+						<a href="javascript:void(0);" class="btnMore" onclick="search_Category('NEWS')">더보기</a>
+					</c:if>
+				</div>
+				</c:if>
+				<!--resultDiv/e-->
+				<c:if test="${index.pageMaker.totalDataCount > index.pageMaker.cri.perPageNum }">
+					<div class="text-center">
+						<nav aria-label="pagination">
+							<ul class="pagination">
+								<!-- prev 버튼 -->
+								<li id="page-prev" style="float: left;">
+									<a href="javascript:void(0)" aria-label="Prev"><span class="aria-hidden="true"><<</span></a>
+								</li>
+								<c:forEach begin="${index.pageMaker.startPage}" end="${index.pageMaker.endPage }" var="idx">
+									<li id="page${idx}" style="float: left;">
+										<a href="javascript:void(0);" class="page-link pglist" move_pg="${idx}"><span class="sr-only"> [${idx}] </span></a>
+									</li>
+								</c:forEach>
+									<!-- next 버튼 -->
+								<li id="page-next" style="float: left;">
+									<a href="javascript:void(0)" aria-label="Next"><span class="aria-hidden="true">>></span></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</c:if>
+			</div><!--ct-center/e-->
+			<!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 -->
+			<!--ct-right/s-->
+			<div class="ct-right">
+				<div class="hitDiv">
+					<div class="titArea">
+						<p class="tit">인기 검색어</p>
+					</div>
+					<div class="ctArea">
+						<div class="data">
+							<ul class="hitList">
+								<li class="hitItem top3"><!--add class:top3-->
+									<span class="i">1</span>
+									<a href="javascript:void(0);" title="투자계약법 길면 점점점처리">투자계약법 길면 점점점처리</a>
+									<span class="rank up">300</span><!--add class:up-->
+								</li>
+								<li class="hitItem top3">
+									<span class="i">2</span>
+									<a href="javascript:void(0);" title="신규운용사">신규운용사</a>
+									<span class="rank down">1</span><!--add class:down-->
+								</li>
+								<li class="hitItem top3">
+									<span class="i">3</span>
+									<a href="javascript:void(0);" title="수익자 배당 기준">수익자 배당 기준</a>
+									<span class="rank down">88</span>
+								</li>
+								<li class="hitItem">
+									<span class="i">4</span>
+									<a href="javascript:void(0);" title="REITS">REITS</a>
+									<span class="rank new">new</span><!--add class:new-->
+								</li>
+								<li class="hitItem">
+									<span class="i">5</span>
+									<a href="javascript:void(0);" title="계약보수율">계약보수율</a>
+									<span class="rank">-</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="historyDiv"><!--RIGHT > historyDiv/s-->
+					<div class="titArea">
+						<p class="tit">연관 검색어</p>
+					</div>
+					<div class="ctArea">
+						<div class="data">
+							<ul class="historyList">
+								<li class="historyItem">
+									<span class="item">
+										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
+									</span>
+								</li>
+								<li class="historyItem selected"><!--add class:selected-->
+									<span class="item">
+										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
+									</span>
+								</li>
+								<li class="historyItem">
+									<span class="item">
+										<a href="javascript:void(0);" class="txt" title="협력기금 운룔규정길어지면 쩜쩜쩜쩜">협력기금 운룔규정길어지면 쩜쩜쩜쩜</a>
+									</span>
+								</li>
+								<li class="historyItem">
+									<span class="item">
+										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
+									</span>
+								</li>
+								<li class="historyItem">
+									<span class="item">
+										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
+									</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div><!--ct-right/e-->
+		</div><!--s-container/e-->
+	</div>
+	<script>
+		// 검색어, 이전 검색어, 카테고리
+		var search, osearch, category;
+		// 페이지, 검색 목록 사이즈
+		var page, perPageNum
+		
+		
+		// 초기값 세팅
+		var search = document.getElementById("paramVO_search").value;
+		var osearch = document.getElementById("paramVO_osearch").value;
+		var category = document.getElementById("paramVO_category").value;
+		var page = document.getElementById("paramVO_page").value;
+		var perPageNum = document.getElementById("paramVO_perPageNum").value;
+		
+		// 엔터 검색
+		var search_enter = function(){
+			if(event.keyCode == 13){
+				search_btn();
+			}
+		}
+		
+		// 버튼 검색
+		var search_btn = function() {
+			// 태그 네임이 saerch의 값을 가져온다.
+			search = document.getElementById("searchWord").value;
+			osearch = document.getElementById("paramVO_search").value;
+			
+			if (category && category != '통합검색') {
+				searchAll(true);
+			} else {
+				searchAll();
+			}
+				
+		}
+		
+		//검색
+		var searchAll = function(obj){
+			if (obj) {
+				search_option();
+			} else {
+				search_default();
+			}
+		}
+		
+		// 일반 검색
+		var search_default = function(){
+			var form = document.getElementById('form_search');
+			// form으로 부터 해당하는 정보를 받아온다.
+			form.querySelector('input[name=search]').value = search;
+			form.querySelector('input[name=osearch]').value = osearch;
+			// controlller로 제출
+			form.submit();
+		}
+		
+		// 상세 검색
+		var search_option = function() {
+			var form = document.getElementById('form_search_option');
+			// form으로 부터 해당하는 정보를 받아온다.
+			form.querySelector('input[name=search]').value = search;
+			form.querySelector('input[name=osearch]').value = osearch;
+			form.querySelector('input[name=category]').value = category;
+			form.querySelector('input[name=page]').value = page;
+			form.querySelector('input[name=perPageNum]').value = perPageNum;
+			form.submit();
+		}
+		
+		// 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
+	 	var search_Category = function(btn) {
+			category = btn.getAttribute('value');
+			searchAll(true)
+		}
+		
+		// 페이지 번호 클릭 활성화
+	 	$(function(){
+			ClickPagination();
+		});
+		
+		// 페이지 번호 클릭
+		var ClickPagination = function() {
+			var pagination = document.getElementsByClassName("pglist");
+			if (pagination) {
+				for (var i =0; i < pagination.length; i++) {
+					pagination[i].addEventListener('click', function(){
+						page = $(this).attr("move_pg");
+						searchAll(true);	
+					}, false);
+					
+				}
+			}
+		}
+		
+		 
+	</script>
 </body>
 </html>

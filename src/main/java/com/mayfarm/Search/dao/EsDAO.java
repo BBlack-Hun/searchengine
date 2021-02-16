@@ -1,8 +1,12 @@
 package com.mayfarm.Search.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.elasticsearch.action.search.MultiSearchRequest;
 import org.elasticsearch.action.search.MultiSearchResponse;
@@ -19,27 +23,51 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mayfarm.Search.vo.Criteria;
+import com.mayfarm.Search.vo.ParamVO;
 
 @Repository
 public class EsDAO {
 	
 	@Inject 
 	RestHighLevelClient restClient;
+	@Inject
+	HttpServletRequest request;
+	@Inject
+	ObjectMapper objectMapper;
+	@Inject
+	Properties properties;
 	
-	public MultiSearchResponse TSearch(String str, Criteria cri, String Category) throws IOException {
+	private final String domain = "DICT_0";
+	
+	private void setSearch(ParamVO paramVO) throws IOException {
+		String search = paramVO.getSearch();
+		String osearch = paramVO.getOsearch();
+		// 변수 초기화 (pagination)
+		int listSize = paramVO.getListSize();
 		
+		if(!paramVO.getCategory().equals("통합검색")) {
+			listSize = (listSize < 10) ? 10 : listSize;
+			paramVO.setListSize(listSize);
+		} else {
+			paramVO.setListSize(4);
+		}
+	}
+	
+	public MultiSearchResponse TSearch(ParamVO paramVO) throws IOException {
+		setSearch(paramVO);
 		// 통합 검색을 위한 MultiSearch 초기화
 		MultiSearchRequest multiSerachRequest = new MultiSearchRequest();
 		
 		// MOIS 
-		SearchRequest searchRequest_mois = getMoisRequest(cri, str, Category);
+		SearchRequest searchRequest_mois = getMoisRequest(paramVO);
 		multiSerachRequest.add(searchRequest_mois);
 		// LAW	
-		SearchRequest searchRequest_law = getLawRequest(cri, str, Category);
+		SearchRequest searchRequest_law = getLawRequest(paramVO);
 		multiSerachRequest.add(searchRequest_law);
 		// News
-		SearchRequest searchRequest_news = getNewsRequest(cri, str, Category);
+		SearchRequest searchRequest_news = getNewsRequest(paramVO);
 		multiSerachRequest.add(searchRequest_news);
 		
 		return restClient.msearch(multiSerachRequest, RequestOptions.DEFAULT);
@@ -52,8 +80,8 @@ public class EsDAO {
 	 * @return MOIS 기사 검색 결과
 	 * @throws IOException
 	 */
-	public SearchResponse Msearch(String str, Criteria cri, String Category) throws IOException {
-		SearchRequest searchRequest = getMoisRequest(cri, str, Category);
+	public SearchResponse Msearch(ParamVO paramVO) throws IOException {
+		SearchRequest searchRequest = getMoisRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
 	/**
@@ -64,8 +92,8 @@ public class EsDAO {
 	 * @return Law 법률 검색 결과 반환
 	 * @throws IOException
 	 */
-	public SearchResponse Lsearch(String str, Criteria cri, String Category) throws IOException {
-		SearchRequest searchRequest = getLawRequest(cri, str, Category);
+	public SearchResponse Lsearch(ParamVO paramVO) throws IOException {
+		SearchRequest searchRequest = getLawRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
 	
@@ -77,25 +105,24 @@ public class EsDAO {
 	 * @return News 기사 검색 결과 반환
 	 * @throws IOException
 	 */
-	public SearchResponse Nsearch(String str, Criteria cri, String Category) throws IOException {
-		SearchRequest searchRequest = getNewsRequest(cri, str, Category);
+	public SearchResponse Nsearch(ParamVO paramVO) throws IOException {
+		SearchRequest searchRequest = getNewsRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
-	
-	private SearchRequest getMoisRequest(Criteria cri, String str, String Category) {
+	/**
+	 * 
+	 * @param cri
+	 * @param str
+	 * @param Category
+	 * @return MOIS 결과 반환
+	 */
+	private SearchRequest getMoisRequest(ParamVO paramVO) {
 		
-		// 변수 초기화 (pagination)
-		int listSize = cri.getPerPageNum();
-		
-		// 카테고리가 빈값일 경우,
-		if (Category =="통합검색") {
-			listSize = 4;
-		} else {
-			listSize = (listSize < 10) ? 10 : listSize;
-		}
+
 		
 		// 값 세팅
-		int page = cri.getPage();
+		int page = paramVO.getPage();
+		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
 		
 		// 엘라스틱 초기화
@@ -111,15 +138,15 @@ public class EsDAO {
 //		boolQueryBuilder.must(termQueryBuilder);
 		
 		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", str);
+		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
 		
 		// stitle
-		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", str);
+		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
 		
 		// Content
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", str);
+		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
@@ -137,21 +164,18 @@ public class EsDAO {
 		return searchRequest;
 		
 	}
-	
-	private SearchRequest getLawRequest(Criteria cri, String str, String Category) {
-		
-		// 변수 초기화 (pagination)
-		int listSize = cri.getPerPageNum();
-		
-		// 카테고리가 빈값일 경우,
-		if (Category =="통합검색") {
-			listSize = 4;
-		} else {
-			listSize = (listSize < 10) ? 10 : listSize;
-		}
-		
+	/**
+	 * 
+	 * @param cri
+	 * @param str
+	 * @param Category
+	 * @return LAW 결과 반환
+	 */
+	private SearchRequest getLawRequest(ParamVO paramVO) {
+			
 		// 값 세팅
-		int page = cri.getPage();
+		int page = paramVO.getPage();
+		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
 		
 		// 엘라스틱 초기화
@@ -167,15 +191,15 @@ public class EsDAO {
 //		boolQueryBuilder.must(termQueryBuilder);
 		
 		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", str);
+		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
 		
 		// stitle
-		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", str);
+		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
 		
 		// Content
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", str);
+		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
@@ -192,21 +216,18 @@ public class EsDAO {
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 	}
-	
-	private SearchRequest getNewsRequest(Criteria cri, String str, String Category) {
-		
-		// 변수 초기화 (pagination)
-		int listSize = cri.getPerPageNum();
-		
-		// 카테고리가 빈값일 경우,
-		if (Category =="통합검색") {
-			listSize = 4;
-		} else {
-			listSize = (listSize < 10) ? 10 : listSize;
-		}
-		
+	/**
+	 * 
+	 * @param cri
+	 * @param str
+	 * @param Category
+	 * @return NEWS 결과 반환
+	 */
+	private SearchRequest getNewsRequest(ParamVO paramVO) {
+
 		// 값 세팅
-		int page = cri.getPage();
+		int page = paramVO.getPage();
+		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
 		
 		// 엘라스틱 초기화
@@ -222,11 +243,11 @@ public class EsDAO {
 //		boolQueryBuilder.must(termQueryBuilder);
 		
 		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", str);
+		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
 		
 		// Content(뉴스에선 text 사용)
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("text", str);
+		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("text", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
@@ -243,4 +264,6 @@ public class EsDAO {
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 	}
+	// 로그 생성
+		
 }

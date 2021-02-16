@@ -9,7 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-	
 </head>
 <body>
 	<div class="totalSearch">
@@ -61,8 +60,6 @@
 						<input type="hidden" name="search">
 						<input type="hidden" name="osearch">
 						<input type="hidden" name="category">
-						<input type="hidden" name="page">
-						<input type="hidden" name="perPageNum">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
@@ -254,7 +251,7 @@
 			<div class="ct-center">
 				<!--resultTopDiv/s-->
 				<div class="resultTopDiv">
-					<p>　</p>				
+					<p class="result"><b>'${index.str}'</b>에 대하여 총 <b>${index.total}</b>건이 검색되었습니다.</p>
 					<div class="viewTab">
 						<script type="text/javascript">
 							$(function() {
@@ -271,10 +268,9 @@
 					</div>
 				</div><!--resultTopDiv/e-->
 				<!--portalDiv/s-->
-				<!--portalDiv/s-->
-				<c:if test="${index.elastic.total > 1}">
+				<c:if test="${index.elastic.stotal.item0 > 1}">
 				<div class="portalDiv">
-					<p class="portalTit">행정자치부<b>${index.elastic.total}</b>건</p>
+					<p class="portalTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
 					<div class="portalCt">
 						<ul class="list">
 							<c:forEach items="${index.elastic.MOIS}" var="MOIS">
@@ -297,7 +293,6 @@
 											<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
 											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
 										</div>
-										<!-- 첨부파일 미리보기 -->
 										<%-- <div class="FileView_mordal">
 											<div class="FileView_top">
 												<p class="view_title">미리보기</p>
@@ -320,31 +315,94 @@
 						</ul>
 					</div>
 					<c:if test="${index.elastic.stotal.item0 > 4 }">
-						<a href="javascript:void(0);" class="btnMore" onclick="search_Category('MOIS')">더보기</a>
+						<a href="javascript:void(0);" class="btnMore" value="MOIS" onclick="search_Category(this)">더보기</a>
 					</c:if>
 				</div><!--resultDiv/e-->
 				</c:if>
-				<c:if test="${index.pageMaker.totalDataCount > index.pageMaker.cri.perPageNum }">
-					<div class="text-center">
-						<nav aria-label="pagination">
-							<ul class="pagination">
-								<!-- prev 버튼 -->
-								<li id="page-prev" style="float: left;">
-									<a href="javascript:void(0)" class="pglist" move_pg="${index.pageMaker.startPage-1}" aria-label="Prev"><span class="aria-hidden="true"><<</span></a>
-								</li>
-								<c:forEach begin="${index.pageMaker.startPage}" end="${index.pageMaker.endPage }" var="idx">
-									<li id="page${idx}" style="float: left;">
-										<a href="javascript:void(0);" class="page-link pglist" move_pg="${idx}"><span class="sr-only"> [${idx}] </span></a>
-									</li>
-								</c:forEach>
-									<!-- next 버튼 -->
-								<li id="page-next" style="float: left;">
-									<a href="javascript:void(0)" class="pglist" move_pg="${index.pageMaker.endPage+1 }" aria-label="Next"><span class="aria-hidden="true">>></span></a>
-								</li>
-							</ul>
-						</nav>
+				<!--resultDiv/s-->
+				<c:if test="${index.elastic.stotal.item1 > 1}">
+				<div class="resultDiv">
+					<p class="resultTit">법령<b>${index.elastic.stotal.item1}</b>건</p>
+					<div class="resultCt">
+						<ul class="list">
+							<c:forEach items="${index.elastic.LAW}" var="LAW">
+								<li class="listItem">
+									<div class="titAreaWrap">
+										<div class="titArea">
+											<a href="javascript:void(0);" class="tit">${LAW.title}</a>
+										</div>
+									</div>
+									<div class="infoArea">
+										<span>공개</span><span class="bar">|</span><span>${LAW.froms}</span><span class="bar">|</span><span>${LAW.date}</span><span class="bar">|</span><span>${LAW.stitle }</span>
+									</div>
+									<div class="contentArea">
+										${LAW.content }                          
+									</div>
+									<div class="fileArea">
+										<div class="file">
+											<img src="resources/img/ico/file/hwp.gif" class="fileIco">
+											<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
+											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
+										</div>
+										<!-- <div class="FileView_mordal">
+											<div class="FileView_top">
+												<p class="view_title">미리보기</p>
+												<a href="javascript:void(0);" class="close_btn"></a>
+											</div>
+											<div class="FileView_bottom">
+												<p class="view_info">
+													제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
+													제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
+													제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
+													<개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8.>
+												</p>
+											</div>
+										</div> -->
+									</div>
+									<script type="text/javascript"> //미리보기 modal창 fadeOut
+										$(function(){
+											$(".FileView_mordal").fadeOut(0);
+										});
+									</script>
+								</li>			
+							</c:forEach>
+						</ul>
 					</div>
+					<c:if test="${index.elastic.stotal.item1 > 4}">
+						<a href="javascript:void(0);" class="btnMore" onclick="search_Category('LAW')">더보기</a>
+					</c:if>
+				</div>
 				</c:if>
+				<!--resultDiv/e-->
+				<!--resultDiv/s-->
+				<c:if test="${index.elastic.stotal.item2 > 1}">
+				<div class="resultDiv">
+					<p class="resultTit">중국<b>${index.elastic.stotal.item2}</b>건</p>
+					<div class="resultCt">
+						<ul class="list">
+							<c:forEach items="${index.elastic.NEWS}" var="NEWS">
+								<li class="listItem">
+									<div class="titAreaWrap">
+										<div class="titArea">
+											<a href="javascript:void(0);" class="tit">${NEWS.title}</a>
+										</div>
+									</div>
+									<div class="infoArea">
+										<span>공개</span><span class="bar">|</span><span>${NEWS.writer}</span><span class="bar">|</span><span>${NEWS.date}</span><span class="bar">|</span><span>${NEWS.stitle }</span>
+									</div>
+									<div class="contentArea">
+										${NEWS.text }                          
+									</div>
+								</li>			
+							</c:forEach>
+						</ul>
+					</div>
+					<c:if test="${index.elastic.stotal.item2 > 4}">
+						<a href="javascript:void(0);" class="btnMore" onclick="search_Category('NEWS')">더보기</a>
+					</c:if>
+				</div>
+				</c:if>
+				<!--resultDiv/e-->
 			</div><!--ct-center/e-->
 			<!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 -->
 			<!--ct-right/s-->
@@ -425,18 +483,14 @@
 		</div><!--s-container/e-->
 	</div>
 	<script>
-		// 검색어, 이전 검색어, 카테고리
+		//검색어, 이전 검색어, 카테고리
 		var search, osearch, category;
-		// 페이지, 검색 목록 사이즈
-		var page, perPageNum
 		
 		
 		// 초기값 세팅
 		var search = document.getElementById("paramVO_search").value;
 		var osearch = document.getElementById("paramVO_osearch").value;
-		var category = document.getElementById("paramVO_category").value;
-		var page = document.getElementById("paramVO_page").value;
-		var perPageNum = document.getElementById("paramVO_perPageNum").value;
+		var category = "통합검색";
 		
 		// 엔터 검색
 		var search_enter = function(){
@@ -450,7 +504,6 @@
 			// 태그 네임이 saerch의 값을 가져온다.
 			search = document.getElementById("searchWord").value;
 			osearch = document.getElementById("paramVO_search").value;
-			resetParam('search');
 			
 			if (category && category != '통합검색') {
 				searchAll(true);
@@ -486,78 +539,16 @@
 			form.querySelector('input[name=search]').value = search;
 			form.querySelector('input[name=osearch]').value = osearch;
 			form.querySelector('input[name=category]').value = category;
-			form.querySelector('input[name=page]').value = page;
-			form.querySelector('input[name=perPageNum]').value = perPageNum;
 			form.submit();
 		}
 		
-		// 더보기 또는 카테고리를 눌렀을때
+		// 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
 	 	var search_Category = function(btn) {
-	 		resetParam('search_category');
 			category = btn.getAttribute('value');
 			searchAll(true)
 		}
 		
-		// 페이지 활성화
-		$(function(){
-			ClickPagination();
-			
-			//prev 버튼 활성화, 비활성화 처리
-			var canPrev = '${index.pageMaker.prev}';
-			if(canPrev !== 'true'){
-				$('#page-prev').addClass('disabled');
-			}
-			
-			//next 버튼 활성화, 비활성화 처리
-			var canNext = '${index.pageMaker.next}';
-			if(canNext !== 'true'){
-				$('#page-next').addClass('disabled');
-			}
-			
-			//현재 페이지 파란색으로 활성화
-			var thisPage = '${index.pageMaker.cri.page}';
-			//매번 refresh 되므로 다른 페이지 removeClass 할 필요는 없음->Ajax 이용시엔 해야함
-			$('#page'+thisPage).addClass('active');
-		});
-		
-		// 페이지 번호 클릭
-		var ClickPagination = function() {
-			var pagination = document.getElementsByClassName("pglist");
-			if (pagination) {
-				for (var i =0; i < pagination.length; i++) {
-					pagination[i].addEventListener('click', function(){
-						if ($(this).attr("move_pg") == 0) {
-							page = 1;
-						} else {
-							page = $(this).attr("move_pg");
-						}
-						searchAll(true);	
-					}, false);
-					
-				}
-			}
-		}
-		
-		// 파라미터 초기화
-		var resetParam = function(where) {
-			switch(where) {
-			case 'search':
-				page = 1;
-				break;
-			case 'search_category':
-				page = 1;
-				perPageNum = 10;
-				break;
-			case 'search_option':
-				page = 1;
-				perPageNum = 110;
-				break;
-			case 'default':
-				page = 1;
-				perPageNum = 1;
-				break;
-			}
-		}
+		 
 	</script>
 </body>
 </html>

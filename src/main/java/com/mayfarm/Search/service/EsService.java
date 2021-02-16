@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.MultiSearchResponse.Item;
 import org.elasticsearch.search.SearchHit;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.mayfarm.Search.dao.EsDAO;
 import com.mayfarm.Search.vo.Criteria;
 import com.mayfarm.Search.vo.EsVO;
+import com.mayfarm.Search.vo.ParamVO;
 
 @Service
 public class EsService {
@@ -26,7 +27,7 @@ public class EsService {
 	private EsDAO dao;
 	
 	
-	public Map<String, Object> TSearch(String str, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> TSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
 
 		// 카테고리별 검색 결과 수 저장을 위한 Map 
 		Map<String, Object> semiTotal = new HashMap<String, Object>();
@@ -34,7 +35,7 @@ public class EsService {
 		// 반환을 위한 Map
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		
-		MultiSearchResponse multiSearchResponse = dao.TSearch(str, cri, Category);
+		MultiSearchResponse multiSearchResponse = dao.TSearch(paramVO);
 		Item items[] = multiSearchResponse.getResponses();
 		
 		// MOIS
@@ -76,6 +77,13 @@ public class EsService {
 			cnt +=1;
 		}
 		
+		// 로그 생성
+		if (!StringUtils.isBlank(paramVO.getSearch())) {
+			System.out.println("인기검색어 구현 예정");
+		}
+			
+		// 연관검색어
+		
 		returnMap.put("stotal", semiTotal);
 		returnMap.put("MOIS", list_mois);
 		returnMap.put("LAW", list_law);
@@ -84,13 +92,13 @@ public class EsService {
 		return returnMap;
 	}
 	
-	public Map<String, Object> MSearch(String str, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> MSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
 		
 		// 반환을 위한 Map
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		
 		// 데이터를 가져온다.
-		SearchResponse searchResponse = dao.Msearch(str, cri, Category);
+		SearchResponse searchResponse = dao.Msearch(paramVO);
 		
 		// MOIS 결과 정제
 		List<Map<String, Object>> list_mois = new ArrayList<Map<String, Object>>();
@@ -102,6 +110,48 @@ public class EsService {
 		
 		returnMap.put("total", total);
 		returnMap.put("MOIS", list_mois);
+		return returnMap;
+	}
+	
+	public Map<String, Object> LSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+		
+		// 반환을 위한 Map
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		
+		// 데이터를 가져온다.
+		SearchResponse searchResponse = dao.Lsearch(paramVO);
+		
+		// MOIS 결과 정제
+		List<Map<String, Object>> list_law = new ArrayList<Map<String, Object>>();
+		for (SearchHit hit : searchResponse.getHits().getHits()) {
+			list_law.add(hit.getSourceAsMap());
+		}
+		
+		long total = searchResponse.getHits().getTotalHits().value;
+		
+		returnMap.put("total", total);
+		returnMap.put("LAW", list_law);
+		return returnMap;
+	}
+	
+	public Map<String, Object> NSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+		
+		// 반환을 위한 Map
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		
+		// 데이터를 가져온다.
+		SearchResponse searchResponse = dao.Nsearch(paramVO);
+		
+		// MOIS 결과 정제
+		List<Map<String, Object>> list_news = new ArrayList<Map<String, Object>>();
+		for (SearchHit hit : searchResponse.getHits().getHits()) {
+			list_news.add(hit.getSourceAsMap());
+		}
+		
+		long total = searchResponse.getHits().getTotalHits().value;
+		
+		returnMap.put("total", total);
+		returnMap.put("NEWS", list_news);
 		return returnMap;
 	}
 }
