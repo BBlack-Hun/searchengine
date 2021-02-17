@@ -1,5 +1,6 @@
 package com.mayfarm.Search.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ public class EsController {
 	
 	// Main 검색 화면
 	@RequestMapping(value="/index", method=RequestMethod.GET)
-	public String index(Model model, HttpServletRequest request, Criteria cri, ParamVO paramVO) {
+	public String index(Model model, HttpServletRequest request, Criteria cri, ParamVO paramVO) throws IOException {
 		// 로그 출력
 		logger.info("Search Index");
 		
@@ -47,6 +48,11 @@ public class EsController {
 		List<EsVO> hit = new ArrayList<EsVO>();
 		// 한번에 값을 넘기기 위해, Map에 저장해 둔다.
 		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// 인기검색어 반환을 위한 list 선언 및 반환
+		List<Map<String, Integer>> list = service.getSearchTopWordList();
+		System.out.println(list.get(0).get("2020"));
+		modelMap.put("searchResult", list);
 		
 		// 통합검색 Map 생성
 		Map<String, Object> TSearch = new HashMap<String, Object>();
@@ -77,7 +83,7 @@ public class EsController {
 			switch (Category) {
 			case "통합검색":
 				Category = "통합검색";
-				TSearch = service.TSearch(paramVO, cri, Category);
+				TSearch = service.TSearch(paramVO);
 				
 				modelMap.put("str", str);
 				modelMap.put("ostr", ostr);
@@ -88,7 +94,7 @@ public class EsController {
 			
 			case "MOIS":
 				Category= "MOIS";
-				MSearch = service.MSearch(paramVO, cri, Category);
+				MSearch = service.MSearch(paramVO);
 				
 				// 전체 게시물의 수를 구함 String -> int 형변환
 				totalCount = MSearch.get("total").toString();
@@ -105,7 +111,7 @@ public class EsController {
 				return "elastic/mois";
 			case "LAW":
 				Category= "LAW";
-				LSearch = service.LSearch(paramVO, cri, Category);
+				LSearch = service.LSearch(paramVO);
 				
 				// 전체 게시물의 수를 구함 String -> int 형변환
 				totalCount = LSearch.get("total").toString();
@@ -123,7 +129,7 @@ public class EsController {
 				return "elastic/law";
 			case "NEWS":
 				Category= "NEWS";
-				NSearch = service.NSearch(paramVO, cri, Category);
+				NSearch = service.NSearch(paramVO);
 				
 				// 전체 게시물의 수를 구함 String -> int 형변환
 				totalCount = NSearch.get("total").toString();

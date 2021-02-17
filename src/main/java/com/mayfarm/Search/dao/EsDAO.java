@@ -2,7 +2,9 @@ package com.mayfarm.Search.dao;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -23,9 +25,8 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mayfarm.Search.vo.Criteria;
 import com.mayfarm.Search.vo.ParamVO;
+import com.mayfarm.core.utils.ElasticSearchUtil;
 
 @Repository
 public class EsDAO {
@@ -34,8 +35,6 @@ public class EsDAO {
 	RestHighLevelClient restClient;
 	@Inject
 	HttpServletRequest request;
-	@Inject
-	ObjectMapper objectMapper;
 	@Inject
 	Properties properties;
 	
@@ -118,8 +117,6 @@ public class EsDAO {
 	 */
 	private SearchRequest getMoisRequest(ParamVO paramVO) {
 		
-
-		
 		// 값 세팅
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
@@ -166,9 +163,7 @@ public class EsDAO {
 	}
 	/**
 	 * 
-	 * @param cri
-	 * @param str
-	 * @param Category
+	 * @param paramVO
 	 * @return LAW 결과 반환
 	 */
 	private SearchRequest getLawRequest(ParamVO paramVO) {
@@ -264,6 +259,55 @@ public class EsDAO {
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 	}
-	// 로그 생성
+	/**
+	 * 검색 로그 생성 및 엘라스틱 서치 PUT
+	 * @param paramVO
+	 * @param total
+	 * @throws IOException
+	 */
+	public void createSearchLog(ParamVO paramVO, long total) throws IOException {
 		
+		// 값 세팅
+		String search = paramVO.getSearch();
+		String osearch = paramVO.getOsearch();
+		String category = paramVO.getCategory();
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		ElasticSearchUtil.createSearchLog(request, restClient, map, search, osearch, category, domain, total);
+	}
+	
+	/**
+	 * 검색 로그 생성 및 엘라스틱 서치 PUT
+	 * @param response
+	 * @param paramVO
+	 * @throws IOException
+	 */
+	public void createSearchLog(SearchResponse response, ParamVO paramVO) throws IOException {
+		
+		// 값 세팅
+		String search = paramVO.getSearch();
+		String osearch = paramVO.getOsearch();
+		String category = paramVO.getCategory();
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		ElasticSearchUtil.createSearchLog(request, response, restClient, map, search, osearch, category, domain);
+	}
+	/**
+	 * 인기검색어 호출 인기검색어 목록 반환
+	 * @return 인기검색어 목록
+	 * @throws IOException
+	 */
+	public List<Map<String, Integer>> getSearchTopWordList() throws IOException {
+		int year = 0;
+		int month = 0;
+		int day = -7;
+		int size = 20;
+		// 현재 인기 검색어
+		List<String> nowSearchTopList = ElasticSearchUtil.getSearchTopList(restClient, year, month, day, size, domain);
+		// 마지막 인기 검색어
+		List<String> logSearchTopList = ElasticSearchUtil.getSearchLogTopList(restClient, domain);
+		return ElasticSearchUtil.getSearchTopListAndRank(nowSearchTopList, logSearchTopList);
+	}
 }

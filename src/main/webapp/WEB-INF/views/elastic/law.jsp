@@ -9,14 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-	<!-- 합쳐지고 최소화된 최신 CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	
-	<!-- 부가적인 테마 -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	
-	<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div class="totalSearch">
@@ -365,32 +357,25 @@
 					</div>
 					<div class="ctArea">
 						<div class="data">
-							<ul class="hitList">
-								<li class="hitItem top3"><!--add class:top3-->
-									<span class="i">1</span>
-									<a href="javascript:void(0);" title="투자계약법 길면 점점점처리">투자계약법 길면 점점점처리</a>
-									<span class="rank up">300</span><!--add class:up-->
-								</li>
-								<li class="hitItem top3">
-									<span class="i">2</span>
-									<a href="javascript:void(0);" title="신규운용사">신규운용사</a>
-									<span class="rank down">1</span><!--add class:down-->
-								</li>
-								<li class="hitItem top3">
-									<span class="i">3</span>
-									<a href="javascript:void(0);" title="수익자 배당 기준">수익자 배당 기준</a>
-									<span class="rank down">88</span>
-								</li>
-								<li class="hitItem">
-									<span class="i">4</span>
-									<a href="javascript:void(0);" title="REITS">REITS</a>
-									<span class="rank new">new</span><!--add class:new-->
-								</li>
-								<li class="hitItem">
-									<span class="i">5</span>
-									<a href="javascript:void(0);" title="계약보수율">계약보수율</a>
-									<span class="rank">-</span>
-								</li>
+							<ul class="hitList">							
+								<c:forEach items="${index.searchResult}" begin="0" end="4" var="SR" varStatus="status">
+									<c:forEach items="${SR}" var="SRR">
+										<c:if test="${status.count <= 3}">
+											<li class="hitItem top3"><!--add class:top3-->
+												<span class="i">${status.count}</span>
+													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
+												<span class="rank up">new</span><!--add class:up-->
+											</li>
+										</c:if>
+										<c:if test="${status.count > 3}">
+											<li class="hitItem"><!--add class:top3-->
+												<span class="i">${status.count}</span>
+													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
+												<span class="rank up">new</span><!--add class:up-->
+											</li>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
 							</ul>
 						</div>
 					</div>

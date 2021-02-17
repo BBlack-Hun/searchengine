@@ -16,7 +16,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.stereotype.Service;
 
 import com.mayfarm.Search.dao.EsDAO;
-import com.mayfarm.Search.vo.Criteria;
 import com.mayfarm.Search.vo.EsVO;
 import com.mayfarm.Search.vo.ParamVO;
 
@@ -27,7 +26,7 @@ public class EsService {
 	private EsDAO dao;
 	
 	
-	public Map<String, Object> TSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> TSearch(ParamVO paramVO) throws IOException {
 
 		// 카테고리별 검색 결과 수 저장을 위한 Map 
 		Map<String, Object> semiTotal = new HashMap<String, Object>();
@@ -79,10 +78,10 @@ public class EsService {
 		
 		// 로그 생성
 		if (!StringUtils.isBlank(paramVO.getSearch())) {
-			System.out.println("인기검색어 구현 예정");
+			dao.createSearchLog(paramVO, total);
 		}
-			
-		// 연관검색어
+		
+		// 연관 검색어
 		
 		returnMap.put("stotal", semiTotal);
 		returnMap.put("MOIS", list_mois);
@@ -92,7 +91,7 @@ public class EsService {
 		return returnMap;
 	}
 	
-	public Map<String, Object> MSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> MSearch(ParamVO paramVO) throws IOException {
 		
 		// 반환을 위한 Map
 		Map<String, Object> returnMap = new HashMap<String, Object>();
@@ -105,15 +104,18 @@ public class EsService {
 		for (SearchHit hit : searchResponse.getHits().getHits()) {
 			list_mois.add(hit.getSourceAsMap());
 		}
-		
+		// 전체 검색 결과 수
 		long total = searchResponse.getHits().getTotalHits().value;
+		
+		// 로그 생성
+		dao.createSearchLog(searchResponse, paramVO);
 		
 		returnMap.put("total", total);
 		returnMap.put("MOIS", list_mois);
 		return returnMap;
 	}
 	
-	public Map<String, Object> LSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> LSearch(ParamVO paramVO) throws IOException {
 		
 		// 반환을 위한 Map
 		Map<String, Object> returnMap = new HashMap<String, Object>();
@@ -127,14 +129,18 @@ public class EsService {
 			list_law.add(hit.getSourceAsMap());
 		}
 		
+		// 전체 검색 결과 수
 		long total = searchResponse.getHits().getTotalHits().value;
+		
+		// 로그 생성
+		dao.createSearchLog(searchResponse, paramVO);
 		
 		returnMap.put("total", total);
 		returnMap.put("LAW", list_law);
 		return returnMap;
 	}
 	
-	public Map<String, Object> NSearch(ParamVO paramVO, Criteria cri, String Category) throws IOException {
+	public Map<String, Object> NSearch(ParamVO paramVO) throws IOException {
 		
 		// 반환을 위한 Map
 		Map<String, Object> returnMap = new HashMap<String, Object>();
@@ -148,10 +154,25 @@ public class EsService {
 			list_news.add(hit.getSourceAsMap());
 		}
 		
+		// 전체 검색 결과 수
 		long total = searchResponse.getHits().getTotalHits().value;
+		
+		// 로그 생성
+		dao.createSearchLog(searchResponse, paramVO);
 		
 		returnMap.put("total", total);
 		returnMap.put("NEWS", list_news);
 		return returnMap;
 	}
+	
+	/**
+	 * 인기검색어 호출 서비스
+	 * 인기검색어 DAO 호출 인기검색어 목록 반환
+	 * @return 인기검색어 목록
+	 * @throws IOException
+	 */
+	public List<Map<String, Integer>> getSearchTopWordList() throws IOException {
+		return dao.getSearchTopWordList();
+	}
+	
 }
