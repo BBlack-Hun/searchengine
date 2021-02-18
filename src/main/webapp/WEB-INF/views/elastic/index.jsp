@@ -60,18 +60,20 @@
 						<input type="hidden" name="search">
 						<input type="hidden" name="osearch">
 						<input type="hidden" name="category">
+						<input type="hidden" name="page">
+						<input type="hidden" name="perPageNum">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
-					<textarea id="paramVO_page" style="display: none;">${index.pageMaker.cri.page}</textarea>
-					<textarea id="paramVO_perPageNum" style="display: none;">${index.pageMaker.cri.perPageNum}</textarea>
+					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
+					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span></a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>년</a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>코로나</a></li>
+						<c:forEach items="${index.autoC}" var="AC">
+							<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">${AC}</span></a></li>
+						</c:forEach>
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
@@ -153,7 +155,7 @@
 							<a href="javascript:void(0);" class="Item" value="MOIS" onclick="search_Category(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
 							<ul class="sub_list">
 								<li class="sub_item selected">
-									<a href="mois" class="sub_info"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
+									<a href="javascript:void(0);" class="sub_info"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
 								</li>
 							</ul>
 						</li>
@@ -161,7 +163,7 @@
 							<a href="javascript:void(0);" class="Item" value="LAW" onclick="search_Category(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
 							<ul class="sub_list">
 								<li class="sub_item selected">
-									<a href="law" class="sub_info"><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
+									<a href="javascript:void(0);" class="sub_info" ><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
 								</li>
 							</ul>
 						</li>
@@ -169,7 +171,7 @@
 							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="search_Category(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
 							<ul class="sub_list">
 								<li class="sub_item selected">
-									<a href="news" class="sub_info"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
+									<a href="javascript:void(0);" class="sub_info"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
 								</li>
 							</ul>
 						</li>
@@ -443,31 +445,13 @@
 					<div class="ctArea">
 						<div class="data">
 							<ul class="historyList">
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem selected"><!--add class:selected-->
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="협력기금 운룔규정길어지면 쩜쩜쩜쩜">협력기금 운룔규정길어지면 쩜쩜쩜쩜</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
+								<c:forEach items="${index.elastic.autoRecommList }" var="autoR">
+									<li class="historyItem"> <!-- select라는 옵션 추가 가능! -->
+										<span class="item">
+											<a href="javascript:void(0);" class="txt" title="${autoR}">${autoR}</a>
+										</span>
+									</li>
+								</c:forEach>
 							</ul>
 						</div>
 					</div>
@@ -475,73 +459,7 @@
 			</div><!--ct-right/e-->
 		</div><!--s-container/e-->
 	</div>
-	<script>
-		//검색어, 이전 검색어, 카테고리
-		var search, osearch, category;
-		
-		
-		// 초기값 세팅
-		var search = document.getElementById("paramVO_search").value;
-		var osearch = document.getElementById("paramVO_osearch").value;
-		var category = "통합검색";
-		
-		// 엔터 검색
-		var search_enter = function(){
-			if(event.keyCode == 13){
-				search_btn();
-			}
-		}
-		
-		// 버튼 검색
-		var search_btn = function() {
-			// 태그 네임이 saerch의 값을 가져온다.
-			search = document.getElementById("searchWord").value;
-			osearch = document.getElementById("paramVO_search").value;
-			
-			if (category && category != '통합검색') {
-				searchAll(true);
-			} else {
-				searchAll();
-			}
-				
-		}
-		
-		//검색
-		var searchAll = function(obj){
-			if (obj) {
-				search_option();
-			} else {
-				search_default();
-			}
-		}
-		
-		// 일반 검색
-		var search_default = function(){
-			var form = document.getElementById('form_search');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			// controlller로 제출
-			form.submit();
-		}
-		
-		// 상세 검색
-		var search_option = function() {
-			var form = document.getElementById('form_search_option');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			form.querySelector('input[name=category]').value = category;
-			form.submit();
-		}
-		
-		// 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
-	 	var search_Category = function(btn) {
-			category = btn.getAttribute('value');
-			searchAll(true)
-		}
-		
-		 
-	</script>
+	<!-- 스크립트 영역 -->
+	<script src="resources/js/search.js" ></script>
 </body>
 </html>

@@ -51,9 +51,16 @@ public class EsController {
 		
 		// 인기검색어 반환을 위한 list 선언 및 반환
 		List<Map<String, Integer>> list = service.getSearchTopWordList();
-		System.out.println(list.get(0).get("2020"));
 		modelMap.put("searchResult", list);
 		
+		// 통합검색 검색어 자동완성 반환을 위한 list선언 및 반환
+		List<String> list2 = service.getAutocompleteSearch(paramVO.getSearch());
+		System.out.println(list2);
+		modelMap.put("autoC", list2);
+		
+		// VO 반환
+		modelMap.put("paramVO", paramVO);
+			
 		// 통합검색 Map 생성
 		Map<String, Object> TSearch = new HashMap<String, Object>();
 		// MOIS 카테고리 Map 생성

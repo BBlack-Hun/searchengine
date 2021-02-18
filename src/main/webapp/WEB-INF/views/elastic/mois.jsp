@@ -9,7 +9,6 @@
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
 	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-	
 </head>
 <body>
 	<div class="totalSearch">
@@ -67,14 +66,14 @@
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
-					<textarea id="paramVO_page" style="display: none;">${index.pageMaker.cri.page}</textarea>
-					<textarea id="paramVO_perPageNum" style="display: none;">${index.pageMaker.cri.perPageNum}</textarea>
+					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
+					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span></a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>년</a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>코로나</a></li>
+						<c:forEach items="${index.autoC}" var="AC">
+							<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">${AC}</span></a></li>
+						</c:forEach>
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
@@ -385,31 +384,13 @@
 					<div class="ctArea">
 						<div class="data">
 							<ul class="historyList">
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem selected"><!--add class:selected-->
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="협력기금 운룔규정길어지면 쩜쩜쩜쩜">협력기금 운룔규정길어지면 쩜쩜쩜쩜</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
+								<c:forEach items="${index.elastic.autoRecommList }" var="autoR">
+									<li class="historyItem"> <!-- select라는 옵션 추가 가능! -->
+										<span class="item">
+											<a href="javascript:void(0);" class="txt" title="${autoR}">${autoR}</a>
+										</span>
+									</li>
+								</c:forEach>
 							</ul>
 						</div>
 					</div>
@@ -417,140 +398,7 @@
 			</div><!--ct-right/e-->
 		</div><!--s-container/e-->
 	</div>
-	<script>
-		// 검색어, 이전 검색어, 카테고리
-		var search, osearch, category;
-		// 페이지, 검색 목록 사이즈
-		var page, perPageNum
-		
-		
-		// 초기값 세팅
-		var search = document.getElementById("paramVO_search").value;
-		var osearch = document.getElementById("paramVO_osearch").value;
-		var category = document.getElementById("paramVO_category").value;
-		var page = document.getElementById("paramVO_page").value;
-		var perPageNum = document.getElementById("paramVO_perPageNum").value;
-		
-		// 엔터 검색
-		var search_enter = function(){
-			if(event.keyCode == 13){
-				search_btn();
-			}
-		}
-		
-		// 버튼 검색
-		var search_btn = function() {
-			// 태그 네임이 saerch의 값을 가져온다.
-			search = document.getElementById("searchWord").value;
-			osearch = document.getElementById("paramVO_search").value;
-			resetParam('search');
-			
-			if (category && category != '통합검색') {
-				searchAll(true);
-			} else {
-				searchAll();
-			}
-				
-		}
-		
-		//검색
-		var searchAll = function(obj){
-			if (obj) {
-				search_option();
-			} else {
-				search_default();
-			}
-		}
-		
-		// 일반 검색
-		var search_default = function(){
-			var form = document.getElementById('form_search');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			// controlller로 제출
-			form.submit();
-		}
-		
-		// 상세 검색
-		var search_option = function() {
-			var form = document.getElementById('form_search_option');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			form.querySelector('input[name=category]').value = category;
-			form.querySelector('input[name=page]').value = page;
-			form.querySelector('input[name=perPageNum]').value = perPageNum;
-			form.submit();
-		}
-		
-		// 더보기 또는 카테고리를 눌렀을때
-	 	var search_Category = function(btn) {
-	 		resetParam('search_category');
-			category = btn.getAttribute('value');
-			searchAll(true)
-		}
-		
-		// 페이지 활성화
-		$(function(){
-			ClickPagination();
-			
-			//prev 버튼 활성화, 비활성화 처리
-			var canPrev = '${index.pageMaker.prev}';
-			if(canPrev !== 'true'){
-				$('#page-prev').addClass('disabled');
-			}
-			
-			//next 버튼 활성화, 비활성화 처리
-			var canNext = '${index.pageMaker.next}';
-			if(canNext !== 'true'){
-				$('#page-next').addClass('disabled');
-			}
-			
-			//현재 페이지 파란색으로 활성화
-			var thisPage = '${index.pageMaker.cri.page}';
-			//매번 refresh 되므로 다른 페이지 removeClass 할 필요는 없음->Ajax 이용시엔 해야함
-			$('#page'+thisPage).addClass('active');
-		});
-		
-		// 페이지 번호 클릭
-		var ClickPagination = function() {
-			var pagination = document.getElementsByClassName("pglist");
-			if (pagination) {
-				for (var i =0; i < pagination.length; i++) {
-					pagination[i].addEventListener('click', function(){
-						if ($(this).attr("move_pg") == 0) {
-							page = 1;
-						} else {
-							page = $(this).attr("move_pg");
-						}
-						searchAll(true);	
-					}, false);
-					
-				}
-			}
-		}
-		
-		// 파라미터 초기화
-		var resetParam = function(where) {
-			switch(where) {
-			case 'search':
-				page = 1;
-				break;
-			case 'search_category':
-				page = 1;
-				perPageNum = 10;
-				break;
-			case 'search_option':
-				page = 1;
-				perPageNum = 110;
-				break;
-			case 'default':
-				page = 1;
-				perPageNum = 1;
-				break;
-			}
-		}
-	</script>
+	<!-- 스크립트 위치 -->
+	<script src="resources/js/search.js" ></script>
 </body>
 </html>

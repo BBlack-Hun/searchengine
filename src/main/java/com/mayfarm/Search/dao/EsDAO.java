@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mayfarm.Search.vo.ParamVO;
 import com.mayfarm.core.utils.ElasticSearchUtil;
+import com.mayfarm.core.utils.SearchUtil;
 
 @Repository
 public class EsDAO {
@@ -80,6 +81,7 @@ public class EsDAO {
 	 * @throws IOException
 	 */
 	public SearchResponse Msearch(ParamVO paramVO) throws IOException {
+		setSearch(paramVO);
 		SearchRequest searchRequest = getMoisRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
@@ -92,6 +94,7 @@ public class EsDAO {
 	 * @throws IOException
 	 */
 	public SearchResponse Lsearch(ParamVO paramVO) throws IOException {
+		setSearch(paramVO);
 		SearchRequest searchRequest = getLawRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
@@ -105,6 +108,7 @@ public class EsDAO {
 	 * @throws IOException
 	 */
 	public SearchResponse Nsearch(ParamVO paramVO) throws IOException {
+		setSearch(paramVO);
 		SearchRequest searchRequest = getNewsRequest(paramVO);
 		return restClient.search(searchRequest, RequestOptions.DEFAULT);
 	}
@@ -118,6 +122,9 @@ public class EsDAO {
 	private SearchRequest getMoisRequest(ParamVO paramVO) {
 		
 		// 값 세팅
+		String sort = paramVO.getSort();
+		String field = paramVO.getField();
+		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
@@ -126,6 +133,14 @@ public class EsDAO {
 		SearchRequest searchRequest = new SearchRequest("mois");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		
+		// 검색 필드
+		String [] fields = SearchUtil.getSearchFieldLAW(field);
+		
+		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
+		if (sort.equals("최신순")) {
+			searchSourceBuilder.sort(new FieldSortBuilder("regdt").order(SortOrder.DESC));
+		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
 		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
@@ -169,6 +184,9 @@ public class EsDAO {
 	private SearchRequest getLawRequest(ParamVO paramVO) {
 			
 		// 값 세팅
+		String sort = paramVO.getSort();
+		String field = paramVO.getField();
+		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
@@ -177,6 +195,15 @@ public class EsDAO {
 		SearchRequest searchRequest = new SearchRequest("laws");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		
+		// 검색 필드
+		String [] fields = SearchUtil.getSearchFieldLAW(field);
+		
+		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
+		if (sort.equals("최신순")) {
+			searchSourceBuilder.sort(new FieldSortBuilder("date").order(SortOrder.DESC));
+		}
+				
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
 		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
@@ -197,18 +224,14 @@ public class EsDAO {
 		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
-		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
-		//searchSourceBuilder.sort(new FieldSortBuilder("no").order(SortOrder.ASC));
-		searchSourceBuilder.sort(new FieldSortBuilder("_score").order(SortOrder.DESC));
 		
+		// 소스 빌더에 값 넣기
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);
 		searchSourceBuilder.size(listSize);
-		// 하이라이트 적용
-//		searchSourceBuilder.highlighter(makeHighLightField());
-		// 테스트 출력
-		System.out.println(searchSourceBuilder.toString());
 		searchRequest.source(searchSourceBuilder);
+		// 테스트 출력
+//		System.out.println(searchSourceBuilder.toString());
 		return searchRequest;
 	}
 	/**
@@ -221,6 +244,9 @@ public class EsDAO {
 	private SearchRequest getNewsRequest(ParamVO paramVO) {
 
 		// 값 세팅
+		String sort = paramVO.getSort();
+		String field = paramVO.getField();
+		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
@@ -229,6 +255,14 @@ public class EsDAO {
 		SearchRequest searchRequest = new SearchRequest("news");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		
+		// 검색 필드
+		String [] fields = SearchUtil.getSearchFieldLAW(field);
+		
+		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
+		if (sort.equals("최신순")) {
+			searchSourceBuilder.sort(new FieldSortBuilder("date").order(SortOrder.DESC));
+		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
 		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
@@ -295,7 +329,7 @@ public class EsDAO {
 		ElasticSearchUtil.createSearchLog(request, response, restClient, map, search, osearch, category, domain);
 	}
 	/**
-	 * 인기검색어 호출 인기검색어 목록 반환
+	 * 인기검색어 호출, 인기검색어 목록 반환
 	 * @return 인기검색어 목록
 	 * @throws IOException
 	 */
@@ -309,5 +343,27 @@ public class EsDAO {
 		// 마지막 인기 검색어
 		List<String> logSearchTopList = ElasticSearchUtil.getSearchLogTopList(restClient, domain);
 		return ElasticSearchUtil.getSearchTopListAndRank(nowSearchTopList, logSearchTopList);
+	}
+	
+	/**
+	 * 연관검색어 호출, 연관검색어 목록 반환
+	 * @param search 검색어
+	 * @param minDocCount 최소 노출 횟수
+	 * @param size 목록 사이즈
+	 * @return 연관검색어 목록
+	 * @throws IOException
+	 */
+	public List<String> getAutoRecommList(String search, int minDocCount, int size) throws IOException {
+		return ElasticSearchUtil.getAutoRecommList(restClient, search, domain, minDocCount, size);
+	}
+	
+	/**
+	 * 통합검색 검색어 자동완성 호출, 자동완성 반환 
+	 * @param search 검색어
+	 * @return 통합검색 검색어 자동완성 목록
+	 * @throws IOException
+	 */
+	public List<String> getAutoComplateSearch(String search) throws IOException {
+		return ElasticSearchUtil.getKeywordSuggestion(restClient, search);
 	}
 }

@@ -66,14 +66,14 @@
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
-					<textarea id="paramVO_page" style="display: none;">${index.pageMaker.cri.page}</textarea>
-					<textarea id="paramVO_perPageNum" style="display: none;">${index.pageMaker.cri.perPageNum}</textarea>
+					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
+					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span></a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>년</a></li>
-						<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">2021</span>코로나</a></li>
+						<c:forEach items="${index.autoC}" var="AC">
+							<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">${AC}</span></a></li>
+						</c:forEach>
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
@@ -364,14 +364,14 @@
 											<li class="hitItem top3"><!--add class:top3-->
 												<span class="i">${status.count}</span>
 													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank up">new</span><!--add class:up-->
+												<span class="rank new">new</span><!--add class:up-->
 											</li>
 										</c:if>
 										<c:if test="${status.count > 3}">
 											<li class="hitItem"><!--add class:top3-->
 												<span class="i">${status.count}</span>
 													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank up">new</span><!--add class:up-->
+												<span class="rank new">new</span><!--add class:up-->
 											</li>
 										</c:if>
 									</c:forEach>
@@ -387,31 +387,13 @@
 					<div class="ctArea">
 						<div class="data">
 							<ul class="historyList">
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem selected"><!--add class:selected-->
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="협력기금 운룔규정길어지면 쩜쩜쩜쩜">협력기금 운룔규정길어지면 쩜쩜쩜쩜</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="사회교류">사회교류</a>
-									</span>
-								</li>
-								<li class="historyItem">
-									<span class="item">
-										<a href="javascript:void(0);" class="txt" title="남북경협 추진방안">남북경협 추진방안</a>
-									</span>
-								</li>
+								<c:forEach items="${index.elastic.autoRecommList }" var="autoR">
+									<li class="historyItem"> <!-- select라는 옵션 추가 가능! -->
+										<span class="item">
+											<a href="javascript:void(0);" class="txt" title="${autoR}">${autoR}</a>
+										</span>
+									</li>
+								</c:forEach>
 							</ul>
 						</div>
 					</div>
@@ -419,93 +401,8 @@
 			</div><!--ct-right/e-->
 		</div><!--s-container/e-->
 	</div>
-	<script>
-		// 검색어, 이전 검색어, 카테고리
-		var search, osearch, category;
-		// 페이지, 검색 목록 사이즈
-		var page, perPageNum
-		
-		
-		// 초기값 세팅
-		var search = document.getElementById("paramVO_search").value;
-		var osearch = document.getElementById("paramVO_osearch").value;
-		var category = document.getElementById("paramVO_category").value;
-		var page = document.getElementById("paramVO_page").value;
-		var perPageNum = document.getElementById("paramVO_perPageNum").value;
-		
-		// 엔터 검색
-		var search_enter = function(){
-			if(event.keyCode == 13){
-				search_btn();
-			}
-		}
-		
-		// 버튼 검색
-		var search_btn = function() {
-			// 태그 네임이 saerch의 값을 가져온다.
-			search = document.getElementById("searchWord").value;
-			osearch = document.getElementById("paramVO_search").value;
-			
-			if (category && category != '통합검색') {
-				searchAll(true);
-			} else {
-				searchAll();
-			}
-				
-		}
-		
-		//검색
-		var searchAll = function(obj){
-			if (obj) {
-				search_option();
-			} else {
-				search_default();
-			}
-		}
-		
-		// 일반 검색
-		var search_default = function(){
-			var form = document.getElementById('form_search');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			// controlller로 제출
-			form.submit();
-		}
-		
-		// 상세 검색
-		var search_option = function() {
-			var form = document.getElementById('form_search_option');
-			// form으로 부터 해당하는 정보를 받아온다.
-			form.querySelector('input[name=search]').value = search;
-			form.querySelector('input[name=osearch]').value = osearch;
-			form.querySelector('input[name=category]').value = category;
-			form.querySelector('input[name=page]').value = page;
-			form.querySelector('input[name=perPageNum]').value = perPageNum;
-			form.submit();
-		}
-		
-		// 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
-	 	var search_Category = function(btn) {
-			category = btn.getAttribute('value');
-			searchAll(true)
-		}
-		
-		// 페이지 번호 클릭
-		var ClickPagiNation = function() {
-			var pagination = document.getElementsByClassName("pglist");
-			if (pagination) {
-				for (var i =0; i < pagination.length; i++) {
-					pagination[i].addEventListener('click', function(){
-						page = $(this).attr("move_pg");
-						searchAll(true);	
-					}, false);
-					
-				}
-			}
-		}
-		
-		 
-	</script>
+	
+	<!-- 스크립트 위치 -->	
+	<script src="resources/js/search.js" ></script>
 </body>
 </html>
