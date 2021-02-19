@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -62,12 +61,16 @@
 						<input type="hidden" name="category">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
+						<input type="hidden" name="sort">
+						<input type="hidden" name="field">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
+					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
+					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
@@ -264,8 +267,8 @@
 							});
 						</script>
 						<ul>
-							<li class="selected"><a href="javascript:void(0);">정확도순</a></li><!--add class:selected-->
-							<li><a href="javascript:void(0);">최신순</a></li>
+							<li <c:if test="${index.paramVO.sort eq '정확도순' }">class="selected"</c:if>><a href="javascript:void(0);" value="정확도순" class="sort_btn" onclick="sort_btn(this);">정확도순</a></li><!--add class:selected-->
+							<li <c:if test="${index.paramVO.sort eq '최신순'}" >class="selected"</c:if>><a href="javascript:void(0);" value="최신순" class="sort_btn" onclick="sort_btn(this);">최신순</a></li>
 						</ul>
 					</div>
 				</div><!--resultTopDiv/e-->
@@ -422,14 +425,39 @@
 											<li class="hitItem top3"><!--add class:top3-->
 												<span class="i">${status.count}</span>
 													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank new">new</span><!--add class:up-->
+<!-- 												<span class="rank new">new</span>add class:up -->
+													<c:if test="${SRR.getValue() < 0 }">
+														<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() > 0 }">
+														<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 999 }">
+														<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 0 }">
+														<span class="rank">-</span><!--add class:up-->
+													</c:if>
 											</li>
 										</c:if>
 										<c:if test="${status.count > 3}">
 											<li class="hitItem"><!--add class:top3-->
 												<span class="i">${status.count}</span>
 													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank new">new</span><!--add class:up-->
+<!-- 												<span class="rank new">new</span>add class:up -->
+												<c:if test="${SRR.getValue() < 0 }">
+														<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() > 0 }">
+														<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 999 }">
+														<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 0 }">
+														<span class="rank">-</span><!--add class:up-->
+													</c:if>
+													
 											</li>
 										</c:if>
 									</c:forEach>
@@ -462,4 +490,4 @@
 	<!-- 스크립트 영역 -->
 	<script src="resources/js/search.js" ></script>
 </body>
-</html>
+</html>v

@@ -6,8 +6,8 @@
 var search, osearch, category;
 // 페이지, 검색 목록 사이즈
 var page, perPageNum
-// 정렬
-var sort
+// 정렬, 검색 영역
+var sort, field
 
 
 // 초기값 세팅
@@ -16,6 +16,8 @@ var osearch = document.getElementById("paramVO_osearch").value;
 var category = document.getElementById("paramVO_category").value;
 var page = document.getElementById("paramVO_page").value;
 var perPageNum = document.getElementById("paramVO_perPageNum").value;
+var sort = document.getElementById("paramVO_sort").value;
+var field = document.getElementById("paramVO_field").value;
 
 // 엔터 검색
 var search_enter = function(){
@@ -67,7 +69,24 @@ var search_option = function() {
 	form.querySelector('input[name=category]').value = category;
 	form.querySelector('input[name=page]').value = page;
 	form.querySelector('input[name=perPageNum]').value = perPageNum;
+	form.querySelector('input[name=sort]').value = sort;
+	form.querySelector('input[name=field]').value = field;
 	form.submit();
+}
+
+// 정렬 변경
+var sort_btn = function(btn) {
+	page = 1;
+	sort = btn.getAttribute('value');
+	alert(sort);
+	
+	switch(sort) {
+		case '최신순':
+			searchAll(true);
+			break;
+		default:
+			searchAll(true);
+	}
 }
 
 // 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
@@ -95,18 +114,24 @@ var resetParam = function(where) {
 	switch(where) {
 	case 'search':
 		page = 1;
+		sort = '정확도순';
 		break;
 	case 'search_category':
 		page = 1;
 		perPageNum = 10;
+		sort = '정확도순';
+		field = "전체";
 		break;
 	case 'search_option':
 		page = 1;
 		perPageNum = 10;
+		field = "전체";
 		break;
 	case 'default':
 		page = 1;
 		perPageNum = 1;
+		sort = '정확도순';
+		field = "전체";
 		break;
 	}
 }

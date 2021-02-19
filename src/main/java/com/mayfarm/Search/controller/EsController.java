@@ -77,7 +77,7 @@ public class EsController {
 		String totalCount = "";
 		int toCnt;
 		
-		// 검색어 유입
+		// 검색어 유입 -> param에 저장되어 있으므로, 바꿀 예정....
 		str = request.getParameter("search");
 					
 		// 카테고리 유입

@@ -15,7 +15,7 @@ public class ParamVO {
 	private Integer page = 1;
 	private Integer listSize = 4;
 	private String field = "전체";
-	private String sort = "정확도";
+	private String sort = "정확도순";
 	
 	// IOSTUDIO
 	// 아래 index의 역할을 아직 잘 모르겠다.

@@ -62,12 +62,16 @@
 						<input type="hidden" name="category">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
+						<input type="hidden" name="sort">
+						<input type="hidden" name="field">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
+					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
+					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
@@ -264,8 +268,8 @@
 							});
 						</script>
 						<ul>
-							<li class="selected"><a href="javascript:void(0);">정확도순</a></li><!--add class:selected-->
-							<li><a href="javascript:void(0);">최신순</a></li>
+							<li <c:if test="${index.paramVO.sort eq '정확도순' }">class="selected"</c:if>><a href="javascript:void(0);" value="정확도순" class="sort_btn" onclick="sort_btn(this);">정확도순</a></li><!--add class:selected-->
+							<li <c:if test="${index.paramVO.sort eq '최신순'}" >class="selected"</c:if>><a href="javascript:void(0);" value="최신순" class="sort_btn" onclick="sort_btn(this);">최신순</a></li>
 						</ul>
 					</div>
 				</div><!--resultTopDiv/e-->
