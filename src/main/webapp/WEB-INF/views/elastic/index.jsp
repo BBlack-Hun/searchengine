@@ -59,18 +59,24 @@
 						<input type="hidden" name="search">
 						<input type="hidden" name="osearch">
 						<input type="hidden" name="category">
+						<input type="hidden" name="sort">
+						<input type="hidden" name="startDate">
+						<input type="hidden" name="endDate">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
-						<input type="hidden" name="sort">
 						<input type="hidden" name="field">
+						<input type="hidden" name="max">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
+					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
+					<textarea id="paramVO_startDate" style="display: none;">${index.paramVO.startDate}</textarea>
+					<textarea id="paramVO_endDate" style="display: none;">${index.paramVO.endDate}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
-					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
 					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
+					<textarea id="paramVO_max" style="display: none;">${index.paramVO.max}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
@@ -230,23 +236,27 @@
 							<div class="set">
 								<div class="barWrap">
 									<div class="bar">
-										<span class="handle" style="left:100%;">Handle</span><!--txt on된 영역의 % 입력-->
-										<span class="bgSlt" style="width:100%;"></span><!--txt on된 영역의 % 입력-->
+										<span class="handle" style="left:${index.paramVO.max}%;">Handle</span><!--txt on된 영역의 % 입력-->
+										<span class="bgSlt" style="width:${index.paramVO.max}%;"></span><!--txt on된 영역의 % 입력-->
 									</div>
 								</div>
 								<div class="txtWrap">
-									<a class="txt" style="left:0%;">1주</a>
-									<a class="txt on" style="left:33.3333%;">6개월</a><!--add class:on-->
-									<a class="txt" style="left:66.6666%;">1년</a>
-									<a class="txt" style="left:100%;">전체</a>
+									<a class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
+									<span style="display:none;">0%</span>
+									<a class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
+									<span style="display:none;">33.3333%</span>
+									<a class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
+									<span style="display:none;">66.6666%</span>
+									<a class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
+									<span style="display:none;">1000%</span>
 								</div>
 							</div>
 							<div class="period">
-								<div class="iptWrap"><input type="text" readonly="" class="startDate" value="2020.08.21"></div>
+								<div class="iptWrap"><input type="text" id="startDate" class="startDate" placeholder="YYYY.MM.DD" value="${index.paramVO.startDate}"></div>
 								<span class="bar">~</span>
-								<div class="iptWrap"><input type="text" readonly="" class="endDate" value="2020.09.21"></div>
+								<div class="iptWrap"><input type="text" id="endDate" class="endDate" placeholder="YYYY.MM.DD" value="${index.paramVO.endDate}"></div>
 							</div>
-							<a href="#" class="btnSltDate">날짜적용</a>
+							<a href="javascript:void(0);" class="btnSltDate" onclick="date_btn(this);">날짜적용</a>
 						</div>
 					</div>
 				</div>

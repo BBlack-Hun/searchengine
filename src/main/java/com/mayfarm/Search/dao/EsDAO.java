@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.MultiSearchRequest;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -19,6 +20,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -40,6 +42,7 @@ public class EsDAO {
 	Properties properties;
 	
 	private final String domain = "DICT_0";
+	private final String searchDateFormat = "yyyy-MM-dd";
 	
 	private void setSearch(ParamVO paramVO) throws IOException {
 		String search = paramVO.getSearch();
@@ -123,11 +126,13 @@ public class EsDAO {
 		
 		// 값 세팅
 		String sort = paramVO.getSort();
-		String field = paramVO.getField();
+		String startDate = paramVO.getStartDate();
+		String endDate = paramVO.getEndDate();
 		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
+		String field = paramVO.getField();
 		
 		// 엘라스틱 초기화
 		SearchRequest searchRequest = new SearchRequest("mois");
@@ -140,6 +145,12 @@ public class EsDAO {
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
 		if (sort.equals("최신순")) {
 			searchSourceBuilder.sort(new FieldSortBuilder("regdt").order(SortOrder.DESC));
+		}
+		
+		// 기간
+		if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)) {
+			RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("regdt").gte(startDate).lte(endDate).format(searchDateFormat);
+			boolQueryBuilder.must(rangeQueryBuilder);
 		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
@@ -185,11 +196,13 @@ public class EsDAO {
 			
 		// 값 세팅
 		String sort = paramVO.getSort();
-		String field = paramVO.getField();
+		String startDate = paramVO.getStartDate();
+		String endDate = paramVO.getEndDate();
 		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
+		String field = paramVO.getField();
 		
 		// 엘라스틱 초기화
 		SearchRequest searchRequest = new SearchRequest("laws");
@@ -203,7 +216,12 @@ public class EsDAO {
 		if (sort.equals("최신순")) {
 			searchSourceBuilder.sort(new FieldSortBuilder("date").order(SortOrder.DESC));
 		}
-				
+		
+		// 기간
+		if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)) {
+			RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("date").gte(startDate).lte(endDate).format(searchDateFormat);
+			boolQueryBuilder.must(rangeQueryBuilder);
+		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
 		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
@@ -245,11 +263,13 @@ public class EsDAO {
 
 		// 값 세팅
 		String sort = paramVO.getSort();
-		String field = paramVO.getField();
+		String startDate = paramVO.getStartDate();
+		String endDate = paramVO.getEndDate();
 		
 		int page = paramVO.getPage();
 		int listSize = paramVO.getListSize();
 		int from = (page ==1) ? 0 : listSize * (page - 1);
+		String field = paramVO.getField();
 		
 		// 엘라스틱 초기화
 		SearchRequest searchRequest = new SearchRequest("news");
@@ -262,6 +282,12 @@ public class EsDAO {
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
 		if (sort.equals("최신순")) {
 			searchSourceBuilder.sort(new FieldSortBuilder("date").order(SortOrder.DESC));
+		}
+		
+		// 기간
+		if (!StringUtils.isBlank(startDate) && !StringUtils.isBlank(endDate)) {
+			RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("date").gte(startDate).lte(endDate).format(searchDateFormat);
+			boolQueryBuilder.must(rangeQueryBuilder);
 		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
