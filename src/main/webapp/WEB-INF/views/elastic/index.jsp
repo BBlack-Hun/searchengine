@@ -424,7 +424,8 @@
 										<c:if test="${status.count <= 3}">
 											<li class="hitItem top3"><!--add class:top3-->
 												<span class="i">${status.count}</span>
-													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
+													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="search_btn_click(this)">${SRR.getKey()}</a>
+													<span style="display:none;">${SRR.getKey()}</span>
 <!-- 												<span class="rank new">new</span>add class:up -->
 													<c:if test="${SRR.getValue() < 0 }">
 														<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
@@ -443,21 +444,21 @@
 										<c:if test="${status.count > 3}">
 											<li class="hitItem"><!--add class:top3-->
 												<span class="i">${status.count}</span>
-													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
+													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="search_btn_click(this);">${SRR.getKey()}</a>
+													<span style="display:none;">${SRR.getKey()}</span>
 <!-- 												<span class="rank new">new</span>add class:up -->
 												<c:if test="${SRR.getValue() < 0 }">
-														<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
-													</c:if>
-													<c:if test="${SRR.getValue() > 0 }">
-														<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
-													</c:if>
-													<c:if test="${SRR.getValue() == 999 }">
-														<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
-													</c:if>
-													<c:if test="${SRR.getValue() == 0 }">
-														<span class="rank">-</span><!--add class:up-->
-													</c:if>
-													
+													<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() > 0 }">
+													<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() == 999 }">
+													<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() == 0 }">
+													<span class="rank">-</span><!--add class:up-->
+												</c:if>
 											</li>
 										</c:if>
 									</c:forEach>
@@ -476,7 +477,8 @@
 								<c:forEach items="${index.elastic.autoRecommList }" var="autoR">
 									<li class="historyItem"> <!-- select라는 옵션 추가 가능! -->
 										<span class="item">
-											<a href="javascript:void(0);" class="txt" title="${autoR}">${autoR}</a>
+											<a href="javascript:void(0);" class="txt" title="${autoR}" onclick="search_btn_click(this)">${autoR}</a>
+											<span style="display:none;">${autoR}</span>
 										</span>
 									</li>
 								</c:forEach>

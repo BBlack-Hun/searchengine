@@ -128,13 +128,24 @@ public class EsService {
 		// MOIS 결과 정제
 		List<Map<String, Object>> list_mois = new ArrayList<Map<String, Object>>();
 		for (SearchHit hit : searchResponse.getHits().getHits()) {
-			list_mois.add(hit.getSourceAsMap());
+			Map<String, Object> sourceMap = hit.getSourceAsMap();
+			
+			//하이라이트
+			ElasticSearchUtil.sourceToHighlight(sourceMap, SearchUtil.getSearchFieldMOIS_highlight(paramVO.getField()), getHighlightKeywordArray(paramVO), preTags, postTags);
+			list_mois.add(sourceMap);
+			
 		}
 		// 전체 검색 결과 수
 		long total = searchResponse.getHits().getTotalHits().value;
 		
 		// 로그 생성
 		dao.createSearchLog(searchResponse, paramVO);
+		
+		// 연관 검색어
+		List<String> autoRecommList = new ArrayList<>();
+		if (!StringUtils.isBlank(paramVO.getSearch())) {
+			autoRecommList = dao.getAutoRecommList(paramVO.getSearch(), autoRecommMindocCount, 7);
+		}
 		
 		returnMap.put("total", total);
 		returnMap.put("MOIS", list_mois);
@@ -149,10 +160,14 @@ public class EsService {
 		// 데이터를 가져온다.
 		SearchResponse searchResponse = dao.Lsearch(paramVO);
 		
-		// MOIS 결과 정제
+		// LAW 결과 정제
 		List<Map<String, Object>> list_law = new ArrayList<Map<String, Object>>();
 		for (SearchHit hit : searchResponse.getHits().getHits()) {
-			list_law.add(hit.getSourceAsMap());
+			Map<String, Object> sourceMap = hit.getSourceAsMap();
+			
+			// 하이라이트
+			ElasticSearchUtil.sourceToHighlight(sourceMap, SearchUtil.getSearchFieldLAW_highlight(paramVO.getField()), getHighlightKeywordArray(paramVO), preTags, postTags);
+			list_law.add(sourceMap);
 		}
 		
 		// 전체 검색 결과 수
@@ -160,6 +175,12 @@ public class EsService {
 		
 		// 로그 생성
 		dao.createSearchLog(searchResponse, paramVO);
+
+		// 연관 검색어
+		List<String> autoRecommList = new ArrayList<>();
+		if (!StringUtils.isBlank(paramVO.getSearch())) {
+			autoRecommList = dao.getAutoRecommList(paramVO.getSearch(), autoRecommMindocCount, 7);
+		}
 		
 		returnMap.put("total", total);
 		returnMap.put("LAW", list_law);
@@ -174,10 +195,14 @@ public class EsService {
 		// 데이터를 가져온다.
 		SearchResponse searchResponse = dao.Nsearch(paramVO);
 		
-		// MOIS 결과 정제
+		// NEWS 결과 정제
 		List<Map<String, Object>> list_news = new ArrayList<Map<String, Object>>();
 		for (SearchHit hit : searchResponse.getHits().getHits()) {
-			list_news.add(hit.getSourceAsMap());
+			Map<String, Object> sourceMap = hit.getSourceAsMap();
+			
+			// 하이라이트
+			ElasticSearchUtil.sourceToHighlight(sourceMap, SearchUtil.getSearchFieldNEWS_highlight(paramVO.getField()), getHighlightKeywordArray(paramVO), preTags, postTags);
+			list_news.add(sourceMap);
 		}
 		
 		// 전체 검색 결과 수
@@ -185,6 +210,12 @@ public class EsService {
 		
 		// 로그 생성
 		dao.createSearchLog(searchResponse, paramVO);
+		
+		// 연관 검색어
+		List<String> autoRecommList = new ArrayList<>();
+		if (!StringUtils.isBlank(paramVO.getSearch())) {
+			autoRecommList = dao.getAutoRecommList(paramVO.getSearch(), autoRecommMindocCount, 7);
+		}
 		
 		returnMap.put("total", total);
 		returnMap.put("NEWS", list_news);
