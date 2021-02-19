@@ -15,12 +15,13 @@ public class ParamVO {
 	private String sort = "정확도순";
 	private String startDate;
 	private String endDate;
-	/*
-	 * 상세 검색 쿼리 들어갈 영역
-	 */
+	private String exactSearch = "";	// 정확하게 일치
+	private String includeSearch = "";	// 포함
+	private String excludeSearch = "";	// 제외
+	
 	private Integer page = 1;
 	private Integer listSize = 4;
-	private float max = 100;
+	private float max = 100;			// 기간bar 수정을 위한 변수
 	/*
 	 * 결과내 재검색 쿼리 들어갈 영역
 	 */

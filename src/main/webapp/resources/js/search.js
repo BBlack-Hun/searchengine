@@ -8,6 +8,8 @@ var search, osearch, category;
 var page, perPageNum;
 // 정렬, 시작날짜, 종료날짜, 검색 영역
 var sort, startDate, endDate, field;
+// 상세검색 일치, 포함, 제외
+var exactSearch, includeSearch, excludeSearch;
 // 기간
 var max;
 
@@ -18,6 +20,9 @@ var osearch = document.getElementById("paramVO_osearch").value;
 var category = document.getElementById("paramVO_category").value;
 var startDate = document.getElementById("paramVO_startDate").value;
 var endDate = document.getElementById("paramVO_endDate").value;
+var exactSearch = document.getElementById("paramVO_exactSearch").value;
+var includeSearch = document.getElementById("paramVO_includeSearch").value;
+var excludeSearch = document.getElementById("paramVO_excludeSearch").value;
 var sort = document.getElementById("paramVO_sort").value;
 var page = document.getElementById("paramVO_page").value;
 var perPageNum = document.getElementById("paramVO_perPageNum").value;
@@ -88,6 +93,9 @@ var search_option = function() {
 	form.submit();
 }
 
+// 영역 클릭 (field-> 전체, 제목, 내용, 등...)
+
+
 // 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
 var search_Category = function(btn) {
 	resetParam('search_category');
@@ -109,7 +117,12 @@ var sort_btn = function(btn) {
 	}
 }
 
-// 영역 클릭
+//  상세검색 초기화
+var initValDetailFilter = function(btn) {
+	var cat = btn.getAttribute('cat'); // 카테고리 구분(한글)
+	
+	// 검색바, 상세 검색창
+}
 
 // 기간 클릭 및 적용
 var date_btn = function(btn) {
@@ -154,12 +167,6 @@ var date_btn = function(btn) {
 	searchAll(true);
 }
 
-var click_date = function(e) {
-	
-}
-
-
-
 // 페이지 번호 클릭
 var ClickPagiNation = function() {
 	var pagination = document.getElementsByClassName("pglist");
@@ -201,6 +208,13 @@ var resetParam = function(where) {
 		break;
 	}
 }
+
+
+
+
+
+
+
 /**
  * 날짜 관련 유틸
  */

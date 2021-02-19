@@ -73,6 +73,9 @@
 					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
 					<textarea id="paramVO_startDate" style="display: none;">${index.paramVO.startDate}</textarea>
 					<textarea id="paramVO_endDate" style="display: none;">${index.paramVO.endDate}</textarea>
+					<textarea id="paramVO_exactSearch" style="display: none;">${index.paramVO.exactSearch}</textarea>
+					<textarea id="paramVO_includeSearch" style="display: none;">${index.paramVO.includeSearch}</textarea>
+					<textarea id="paramVO_excludeSearch" style="display: none;">${index.paramVO.excludeSearch}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
 					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
@@ -219,7 +222,7 @@
 					<div class="detailSearch_bottom">
 						<div class="btn_wrap">
 							<div class="refresh_wrap">
-								<a href="javascript:void(0);" class="refresh"><span>초기화</span></a>
+								<a href="javascript:void(0);" class="refresh" onclick="initValDetailFilter(this); return false;"><span>초기화</span></a>
 							</div>
 							<div class="search_wrap">
 								<a href="javascript:void(0);" class="search"><span>검색</span></a>
@@ -242,13 +245,9 @@
 								</div>
 								<div class="txtWrap">
 									<a class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
-									<span style="display:none;">0%</span>
 									<a class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
-									<span style="display:none;">33.3333%</span>
 									<a class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
-									<span style="display:none;">66.6666%</span>
 									<a class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
-									<span style="display:none;">1000%</span>
 								</div>
 							</div>
 							<div class="period">
