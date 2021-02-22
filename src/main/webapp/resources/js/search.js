@@ -117,9 +117,18 @@ var sort_btn = function(btn) {
 	}
 }
 
+// 지금 작동 안함... 왜?? 왜 update가 안됨?? ㄷㄷ
+// 상세검색
+var search_btn_detail = function() {
+	restParm('search');
+	alert("검색한다???");
+}
+// 지금 작동 안함... 왜?? 왜 update가 안됨?? ㄷㄷ
 //  상세검색 초기화
 var initValDetailFilter = function(btn) {
+	alert("이거 뜨면 이 함수 작동 한다는 건데... 안뜸..");
 	var cat = btn.getAttribute('cat'); // 카테고리 구분(한글)
+	alert(cat);
 	
 	// 검색바, 상세 검색창
 }
@@ -127,6 +136,7 @@ var initValDetailFilter = function(btn) {
 // 기간 클릭 및 적용
 var date_btn = function(btn) {
 	var range = btn.innerText;
+	// 클릭 했을때 해당 클래스에 on이란 것을 더하고 싶다. ㅠ
 	
 	if (range === "날짜적용") {
 		var tempStartDate = document.getElementById("startDate").value;
@@ -286,6 +296,4 @@ function validationDate(start, end) {
 var inputDateSplit = function(obj) {
 	var dateArray = obj.split("-");
 	return dateArray[0] + dateArray[1] + dateArray[2];
-}/**
- * 
- */
+}

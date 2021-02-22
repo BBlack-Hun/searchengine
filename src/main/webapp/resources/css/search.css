@@ -1,5 +1,4 @@
-@charset "utf-8";
-
+@charset "UTF-8";
 
 .totalSearch{position:relative;height:100%;padding:142px 0 0 0;box-sizing:border-box;-moz-box-sizing:border-box;}
 .totalSearch *{font-family:nanumgothic,'Gulim';}
@@ -114,7 +113,7 @@
 .detailSearch .detailSearch_middle .fund_list .fund_item:after{content:''; display:block; width:3px; height:3px; background:#8f9090; position:absolute; top:5px; left:0;}
 .detailSearch .detailSearch_middle .fund_list .fund_item .fund_txt{font-size:12px; color:#0f1011; line-height:17px;}
 .detailSearch .detailSearch_middle .fund_list .fund_item .funfd_btn{width:110px; font-size:13px; padding:7px 25px 7px 10px; box-sizing:border-box;position:absolute; right:0; top:0; background:#fff; border:1px solid #dbdbdb; color:#3f3f3f; outline:0;}
-.detailSearch .detailSearch_middle .fund_list .fund_item .funfd_btn::placeholder{font-size:13px; color:#3f3f3f;}
+.detailSearch .detailSearch_middle .fund_list .fund_item .funfd_btn::placeholder{font-size:13px; color:#dadedf;}
 .detailSearch .detailSearch_middle:after{content:''; display:block; height:1px; background:url("../img/bullet_repeat1.png")repeat-x; position:absolute; left:0; right:0; bottom:0;}
 .detailSearch .detailSearch_bottom{padding:16px 0 31px; margin:0 19px; border-bottom:1px solid #dadedf;}
 .detailSearch .detailSearch_bottom .btn_wrap{height:29px;}
@@ -242,7 +241,7 @@
 .resultDiv .list .listItem .fileArea .FileView_mordal{background:#fff; border:1px solid #e0e0e0; position:absolute; left:0; top:25px; z-index:1;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top{background:#f6fbff; border-bottom:1px solid #e0e0e0; padding:10px 20px 9px; position:relative;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top .view_title{font-size:13px; font-weight:700; color:#333;}
-.resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top .close_btn{display:block; width:10px; height:9px; background:url(img/close_btn.png)no-repeat; position:absolute; right:20px; top:13px;}
+.resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top .close_btn{display:block; width:10px; height:9px; background:url("../img/close_btn.png")no-repeat; position:absolute; right:20px; top:13px;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_bottom{padding:14px 20px 14px;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_bottom .view_info{font-size:13px; color:#646464; line-height:20px; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 4; /* ellipsis line */ -webkit-box-orient: vertical;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_bottom .view_info b{color:#dc5268;}
@@ -293,7 +292,7 @@
 .portalDiv .list .listItem .fileArea .file .fileLink:hover{border-bottom:1px solid #5080bb;}
 .portalDiv .list .listItem .fileArea .btnFileView{margin:0 0 0 5px;border-radius:2px;padding:0 9px 1px 8px;color:#a3a3a3;font-size:12px;font-family:nanumgothic,'Dotum';letter-spacing:-1px;background:url("../img/btnFile.gif") 0 0 repeat;border-top:1px solid #e5e5e6;border-right:1px solid #ddddde;border-bottom:1px solid #d0d1d3;border-left:1px solid #e0e0e1;}
 .portalDiv .list .listItem .fileArea .btnFileView:hover{border-top:1px solid #c4c4c4;border-right:1px solid #c4c4c4;border-bottom:1px solid #b7b7b7;border-left:1px solid #c4c4c4;}
-.portalDiv .list .listItem .fileArea .btnFileView:active{background:url(img/btnFile_down.gif) 0 0 repeat;border-top:1px solid #999;border-right:1px solid #c4c4c4;border-bottom:1px solid #c4c4c4;border-left:1px solid #c4c4c4;}
+.portalDiv .list .listItem .fileArea .btnFileView:active{background:url("resources/img/btnFile_down.gif") 0 0 repeat;border-top:1px solid #999;border-right:1px solid #c4c4c4;border-bottom:1px solid #c4c4c4;border-left:1px solid #c4c4c4;}
 .portalDiv .memberWrap{*zoom:1;padding:10px 0 2px 0;margin:0 0 0 -10px;}
 .portalDiv .memberWrap:after{content:'';display:block;clear:both;}
 .portalDiv .member{float:left;width:395px;height:121px;margin:5px 10px;border:1px solid #e7e7e7;background:#FFF;}

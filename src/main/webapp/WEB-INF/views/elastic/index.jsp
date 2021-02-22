@@ -206,26 +206,26 @@
 					<div class="detailSearch_middle">
 						<ul class="fund_list">
 							<li class="fund_item">
-								<p class="fund_txt">정확히 일치하는 문장</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">정확히 일치</p>
+								<input class="funfd_btn" placeholder="정확하게 일치하는 단어/문장">
 							</li>
 							<li class="fund_item">
-								<p class="fund_txt">입력된 단어가 포함</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">포함하는 단어</p>
+								<input class="funfd_btn" placeholder="포함하는 단어를 입력하세요.">
 							</li>
 							<li class="fund_item">
-								<p class="fund_txt">입력된 단어를 제회</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">제외하는 단어</p>
+								<input class="funfd_btn" placeholder="제외하는 단어를 입력하세요.">
 							</li>
 						</ul>
 					</div>
 					<div class="detailSearch_bottom">
 						<div class="btn_wrap">
 							<div class="refresh_wrap">
-								<a href="javascript:void(0);" class="refresh" onclick="initValDetailFilter(this); return false;"><span>초기화</span></a>
+								<a href="javascript:void(0);" class="refresh" cat="통합 검색" onclick="initValDetailFilter(this);"><span>초기화</span></a>
 							</div>
 							<div class="search_wrap">
-								<a href="javascript:void(0);" class="search"><span>검색</span></a>
+								<a href="javascript:void(0);" class="search" onclick="search_btn_detail();"><span>검색</span></a>
 							</div>
 						</div>
 					</div>
@@ -501,4 +501,4 @@
 	<!-- 스크립트 영역 -->
 	<script src="resources/js/search.js" ></script>
 </body>
-</html>v
+</html>
