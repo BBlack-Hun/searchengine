@@ -18,13 +18,15 @@ public class ParamVO {
 	private String exactSearch = "";	// 정확하게 일치
 	private String includeSearch = "";	// 포함
 	private String excludeSearch = "";	// 제외
+	private Boolean re = false;
 	
 	private Integer page = 1;
 	private Integer listSize = 4;
 	private float max = 100;			// 기간bar 수정을 위한 변수
-	/*
-	 * 결과내 재검색 쿼리 들어갈 영역
-	 */
+	private String reSearch = "";
+	private String reexactSearch = "";
+	private String reincludeSearch = "";
+	private String reexcludeSearch = "";
 	private String field = "전체";
 	
 	// IOSTUDIO

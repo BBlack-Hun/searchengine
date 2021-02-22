@@ -49,6 +49,7 @@ public class EsDAO {
 	
 	private final String domain = "DICT_0";
 	private final int slop = 1;
+	private final String splitFormat = ",";
 	private final String searchDateFormat = "yyyy-MM-dd";
 	
 	private void setSearch(ParamVO paramVO) throws IOException {
@@ -408,7 +409,8 @@ public class EsDAO {
 	
 	private void setSearchQuery(ParamVO paramVO, BoolQueryBuilder boolQueryBuilder, String[] fields) {
 		
-		// 값 세팅
+		// 값 세팅(재검색, 검색, 일치, 포함, 제외)
+		String reSearch = paramVO.getReSearch();
 		String search = paramVO.getSearch();
 		String exactSearch = paramVO.getExactSearch();
 		String includeSearch = paramVO.getIncludeSearch();
@@ -489,6 +491,23 @@ public class EsDAO {
 			boolQueryBuilderForSearch_inner.should(matchPhraseQueryBuilder);
 		}
 		boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner);
+		
+		// 결과 내 재검색
+		String[] reSearchs = reSearch.split(splitFormat);
+		for (String rq : reSearchs) {
+			if (StringUtils.isBlank(rq)) {
+				continue;
+			}
+			// 일반 영역
+			BoolQueryBuilder boolQueryBuilderForSearch_inner_re = QueryBuilders.boolQuery();
+			
+			MatchPhraseQueryBuilder[] MatchPhraseQueryBuilder_re = ElasticSearchUtil.getMatchPhraseQueryBuilders(fields, rq, slop);
+			
+			for (MatchPhraseQueryBuilder matchPhraseQueryBUilder : MatchPhraseQueryBuilder_re) {
+				boolQueryBuilderForSearch_inner_re.should(matchPhraseQueryBUilder);
+			}
+			boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner_re);
+		}
 		boolQueryBuilder.must(boolQueryBuilderForSearch);
 	}
 	
