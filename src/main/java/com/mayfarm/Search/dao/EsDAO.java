@@ -234,24 +234,29 @@ public class EsDAO {
 			boolQueryBuilder.must(rangeQueryBuilder);
 		}
 		
-		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
-		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
+		/*
+		 * // must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언 BoolQueryBuilder
+		 * semiboolQueryBuilder = QueryBuilders.boolQuery();
+		 * 
+		 * // JTBC가 무조건 들어간 카테고리만 검색 // TermQueryBuilder termQueryBuilder =
+		 * QueryBuilders.termQuery("violt_ctgr_cd_nm", "mois"); //
+		 * boolQueryBuilder.must(termQueryBuilder);
+		 * 
+		 * // title MatchQueryBuilder matchQueryBuilder =
+		 * QueryBuilders.matchQuery("title", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
+		 * 
+		 * // stitle MatchQueryBuilder matchQueryBuilder2 =
+		 * QueryBuilders.matchQuery("stitle", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
+		 * 
+		 * // Content MatchQueryBuilder matchQueryBuilder3 =
+		 * QueryBuilders.matchQuery("content", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
+		 */
 		
-		// JTBC가 무조건 들어간 카테고리만 검색
-//		TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("violt_ctgr_cd_nm", "mois");
-//		boolQueryBuilder.must(termQueryBuilder);
-		
-		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
-		
-		// stitle
-		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
-		
-		// Content
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
+		// 검색 쿼리 생성
+		setSearchQuery(paramVO, boolQueryBuilder, fields);
 		
 		// 소스 빌더에 값 넣기
 		searchSourceBuilder.query(boolQueryBuilder);
@@ -300,20 +305,24 @@ public class EsDAO {
 			boolQueryBuilder.must(rangeQueryBuilder);
 		}
 		
-		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
-		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
-		
-		// JTBC가 무조건 들어간 카테고리만 검색
-//		TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("violt_ctgr_cd_nm", "mois");
-//		boolQueryBuilder.must(termQueryBuilder);
-		
-		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
-		
-		// Content(뉴스에선 text 사용)
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("text", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
+		/*
+		 * // must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언 BoolQueryBuilder
+		 * semiboolQueryBuilder = QueryBuilders.boolQuery();
+		 * 
+		 * // JTBC가 무조건 들어간 카테고리만 검색 // TermQueryBuilder termQueryBuilder =
+		 * QueryBuilders.termQuery("violt_ctgr_cd_nm", "mois"); //
+		 * boolQueryBuilder.must(termQueryBuilder);
+		 * 
+		 * // title MatchQueryBuilder matchQueryBuilder =
+		 * QueryBuilders.matchQuery("title", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
+		 * 
+		 * // Content(뉴스에선 text 사용) MatchQueryBuilder matchQueryBuilder3 =
+		 * QueryBuilders.matchQuery("text", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
+		 */
+		// 검색 쿼리 생성
+		setSearchQuery(paramVO, boolQueryBuilder, fields);
 		
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);

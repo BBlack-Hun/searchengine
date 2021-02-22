@@ -247,10 +247,10 @@
 									</div>
 								</div>
 								<div class="txtWrap">
-									<a id = "chk" class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
-									<a id = "chk" class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
-									<a id = "chk" class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
-									<a id = "chk" class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
+									<a class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
+									<a class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
+									<a class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
+									<a class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
 								</div>
 							</div>
 							<div class="period">
@@ -285,7 +285,7 @@
 					</div>
 				</div><!--resultTopDiv/e-->
 				<!--portalDiv/s-->
-				<c:if test="${index.elastic.stotal.item0 > 1}">
+				<c:if test="${index.elastic.stotal.item0 >= 1}">
 				<div class="portalDiv">
 					<p class="portalTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
 					<div class="portalCt">
@@ -337,7 +337,7 @@
 				</div><!--resultDiv/e-->
 				</c:if>
 				<!--resultDiv/s-->
-				<c:if test="${index.elastic.stotal.item1 > 1}">
+				<c:if test="${index.elastic.stotal.item1 >= 1 }">
 				<div class="resultDiv">
 					<p class="resultTit">법령<b>${index.elastic.stotal.item1}</b>건</p>
 					<div class="resultCt">
@@ -392,7 +392,7 @@
 				</c:if>
 				<!--resultDiv/e-->
 				<!--resultDiv/s-->
-				<c:if test="${index.elastic.stotal.item2 > 1}">
+				<c:if test="${index.elastic.stotal.item2 >= 1}">
 				<div class="resultDiv">
 					<p class="resultTit">중국<b>${index.elastic.stotal.item2}</b>건</p>
 					<div class="resultCt">

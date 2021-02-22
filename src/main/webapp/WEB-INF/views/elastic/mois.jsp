@@ -210,26 +210,26 @@
 					<div class="detailSearch_middle">
 						<ul class="fund_list">
 							<li class="fund_item">
-								<p class="fund_txt">정확히 일치하는 문장</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">정확히 일치</p>
+								<input class="funfd_btn" id = "exactSearch" placeholder="정확하게 일치하는 단어/문장">
 							</li>
 							<li class="fund_item">
-								<p class="fund_txt">입력된 단어가 포함</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">포함하는 단어</p>
+								<input class="funfd_btn" id = "includeSearch" placeholder="포함하는 단어를 입력하세요.">
 							</li>
 							<li class="fund_item">
-								<p class="fund_txt">입력된 단어를 제회</p>
-								<input class="funfd_btn" placeholder="남북협력기금">
+								<p class="fund_txt">제외하는 단어</p>
+								<input class="funfd_btn" id = "excludeSearch" placeholder="제외하는 단어를 입력하세요.">
 							</li>
 						</ul>
 					</div>
 					<div class="detailSearch_bottom">
 						<div class="btn_wrap">
 							<div class="refresh_wrap">
-								<a href="javascript:void(0);" class="refresh"><span>초기화</span></a>
+								<a href="javascript:void(0);" class="refresh" cat="통합 검색" onclick="initValDetailFilter(this);"><span>초기화</span></a>
 							</div>
 							<div class="search_wrap">
-								<a href="javascript:void(0);" class="search"><span>검색</span></a>
+								<a href="javascript:void(0);" class="search" onclick="search_btn_detail();"><span>검색</span></a>
 							</div>
 						</div>
 					</div>
@@ -243,23 +243,23 @@
 							<div class="set">
 								<div class="barWrap">
 									<div class="bar">
-										<span class="handle" style="left:100%;">Handle</span><!--txt on된 영역의 % 입력-->
-										<span class="bgSlt" style="width:100%;"></span><!--txt on된 영역의 % 입력-->
+										<span class="handle" style="left:${index.paramVO.max}%;">Handle</span><!--txt on된 영역의 % 입력-->
+										<span class="bgSlt" style="width:${index.paramVO.max}%;"></span><!--txt on된 영역의 % 입력-->
 									</div>
 								</div>
 								<div class="txtWrap">
-									<a class="txt" style="left:0%;">1주</a>
-									<a class="txt on" style="left:33.3333%;">6개월</a><!--add class:on-->
-									<a class="txt" style="left:66.6666%;">1년</a>
-									<a class="txt" style="left:100%;">전체</a>
+									<a class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
+									<a class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
+									<a class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
+									<a class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
 								</div>
 							</div>
 							<div class="period">
-								<div class="iptWrap"><input type="text" readonly="" class="startDate" value="2020.08.21"></div>
+								<div class="iptWrap"><input type="text" id="startDate" class="startDate" placeholder="YYYY.MM.DD" value="${index.paramVO.startDate}"></div>
 								<span class="bar">~</span>
-								<div class="iptWrap"><input type="text" readonly="" class="endDate" value="2020.09.21"></div>
+								<div class="iptWrap"><input type="text" id="endDate" class="endDate" placeholder="YYYY.MM.DD" value="${index.paramVO.endDate}"></div>
 							</div>
-							<a href="#" class="btnSltDate">날짜적용</a>
+							<a href="javascript:void(0);" class="btnSltDate" onclick="date_btn(this);">날짜적용</a>
 						</div>
 					</div>
 				</div>
@@ -415,6 +415,6 @@
 		</div><!--s-container/e-->
 	</div>
 	<!-- 스크립트 위치 -->
-	<script src="resources/js/search.js" ></script>
+	<script src="resources/js/Msearch.js" ></script>
 </body>
 </html>
