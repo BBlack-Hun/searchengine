@@ -85,6 +85,9 @@ var search_option = function() {
 	form.querySelector('input[name=category]').value = category;
 	form.querySelector('input[name=startDate]').value = startDate;
 	form.querySelector('input[name=endDate]').value = endDate;
+	form.querySelector('input[name=exactSearch]').value = exactSearch;
+	form.querySelector('input[name=includeSearch]').value = includeSearch;
+	form.querySelector('input[name=excludeSearch]').value = excludeSearch;
 	form.querySelector('input[name=sort]').value = sort;
 	form.querySelector('input[name=page]').value = page;
 	form.querySelector('input[name=perPageNum]').value = perPageNum;
@@ -117,27 +120,31 @@ var sort_btn = function(btn) {
 	}
 }
 
-// 지금 작동 안함... 왜?? 왜 update가 안됨?? ㄷㄷ
 // 상세검색
 var search_btn_detail = function() {
-	restParm('search');
-	alert("검색한다???");
+	resetParam('search');
+	
+	exactSearch = document.getElementById('exactSearch').value;
+	includeSearch = document.getElementById('includeSearch').value;
+	excludeSearch = document.getElementById('excludeSearch').value;
+	searchAll(true);
+	
 }
-// 지금 작동 안함... 왜?? 왜 update가 안됨?? ㄷㄷ
+
 //  상세검색 초기화
 var initValDetailFilter = function(btn) {
-	alert("이거 뜨면 이 함수 작동 한다는 건데... 안뜸..");
 	var cat = btn.getAttribute('cat'); // 카테고리 구분(한글)
-	alert(cat);
 	
 	// 검색바, 상세 검색창
-}
+	document.getElementById('exactSearch').value = "";
+	document.getElementById('includeSearch').value = "";
+	document.getElementById('excludeSearch').value = "";
+}	
 
 // 기간 클릭 및 적용
 var date_btn = function(btn) {
 	var range = btn.innerText;
-	// 클릭 했을때 해당 클래스에 on이란 것을 더하고 싶다. ㅠ
-	
+		
 	if (range === "날짜적용") {
 		var tempStartDate = document.getElementById("startDate").value;
 		var tempEndDate = document.getElementById('endDate').value;
@@ -156,7 +163,7 @@ var date_btn = function(btn) {
 	page = 1;
 	endDate = getToday();
 	switch (range) {
-		case "전체":
+		case "전체":			
 			startDate = null;
 			endDate = null;
 			max = 100;
@@ -166,6 +173,7 @@ var date_btn = function(btn) {
 			max = 0;
 			break;
 		case "6개월":
+			
 			startDate = dateCalculator(endDate, -6, 'm');
 			max = 33.3333;
 			break;

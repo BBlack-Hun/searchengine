@@ -60,18 +60,30 @@
 						<input type="hidden" name="search">
 						<input type="hidden" name="osearch">
 						<input type="hidden" name="category">
+						<input type="hidden" name="sort">
+						<input type="hidden" name="startDate">
+						<input type="hidden" name="endDate">
+						<input type="hidden" name="exactSearch">
+						<input type="hidden" name="includeSearch">
+						<input type="hidden" name="excludeSearch">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
-						<input type="hidden" name="sort">
 						<input type="hidden" name="field">
+						<input type="hidden" name="max">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
 					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
 					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
+					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
+					<textarea id="paramVO_startDate" style="display: none;">${index.paramVO.startDate}</textarea>
+					<textarea id="paramVO_endDate" style="display: none;">${index.paramVO.endDate}</textarea>
+					<textarea id="paramVO_exactSearch" style="display: none;">${index.paramVO.exactSearch}</textarea>
+					<textarea id="paramVO_includeSearch" style="display: none;">${index.paramVO.includeSearch}</textarea>
+					<textarea id="paramVO_excludeSearch" style="display: none;">${index.paramVO.excludeSearch}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
-					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
 					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
+					<textarea id="paramVO_max" style="display: none;">${index.paramVO.max}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">

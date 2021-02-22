@@ -62,6 +62,9 @@
 						<input type="hidden" name="sort">
 						<input type="hidden" name="startDate">
 						<input type="hidden" name="endDate">
+						<input type="hidden" name="exactSearch">
+						<input type="hidden" name="includeSearch">
+						<input type="hidden" name="excludeSearch">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
 						<input type="hidden" name="field">
@@ -207,15 +210,15 @@
 						<ul class="fund_list">
 							<li class="fund_item">
 								<p class="fund_txt">정확히 일치</p>
-								<input class="funfd_btn" placeholder="정확하게 일치하는 단어/문장">
+								<input class="funfd_btn" id = "exactSearch" placeholder="정확하게 일치하는 단어/문장">
 							</li>
 							<li class="fund_item">
 								<p class="fund_txt">포함하는 단어</p>
-								<input class="funfd_btn" placeholder="포함하는 단어를 입력하세요.">
+								<input class="funfd_btn" id = "includeSearch" placeholder="포함하는 단어를 입력하세요.">
 							</li>
 							<li class="fund_item">
 								<p class="fund_txt">제외하는 단어</p>
-								<input class="funfd_btn" placeholder="제외하는 단어를 입력하세요.">
+								<input class="funfd_btn" id = "excludeSearch" placeholder="제외하는 단어를 입력하세요.">
 							</li>
 						</ul>
 					</div>
@@ -244,10 +247,10 @@
 									</div>
 								</div>
 								<div class="txtWrap">
-									<a class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
-									<a class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
-									<a class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
-									<a class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
+									<a id = "chk" class="txt" style="left:0%;" onclick="date_btn(this);">1주</a>
+									<a id = "chk" class="txt" style="left:33.3333%;" onclick="date_btn(this);">6개월</a><!--add class:on-->
+									<a id = "chk" class="txt" style="left:66.6666%;" onclick="date_btn(this);">1년</a>
+									<a id = "chk" class="txt" style="left:100%;" onclick="date_btn(this);">전체</a>
 								</div>
 							</div>
 							<div class="period">
@@ -499,6 +502,6 @@
 		</div><!--s-container/e-->
 	</div>
 	<!-- 스크립트 영역 -->
-	<script src="resources/js/search.js" ></script>
+	<script src="resources/js/Msearch.js" ></script>
 </body>
 </html>

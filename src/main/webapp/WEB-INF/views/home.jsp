@@ -12,7 +12,7 @@
 		<table class="elementsContainer">
 			<tr>
 				<td>
-					<input type="text"  id="searchWord" name="search" placeholder="검색할 내용을 입력해주세요!" class="serach">
+					<input type="text"  id="searchWord" name="search" placeholder="검색할 내용을 입력해주세요!" class="serach" onkeypress="search_enter();">
 				</td>
 				<td>
 					<a href='javascript:void(0);' onclick="search_btn();"><span class="material-icons">검색</span>

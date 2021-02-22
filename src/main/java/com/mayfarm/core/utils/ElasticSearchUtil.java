@@ -34,6 +34,7 @@ import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -57,6 +58,17 @@ import org.elasticsearch.search.sort.SortOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ElasticSearchUtil {
+	
+	
+	// MatchPhraseQUeryBuilder 배열 생성
+	public static MatchPhraseQueryBuilder[] getMatchPhraseQueryBuilders(String[] fields, String search, int slop) {
+		MatchPhraseQueryBuilder[] matchQuery = new MatchPhraseQueryBuilder[fields.length];
+		
+		for (int i = 0; i < fields.length; i++) {
+			matchQuery[i] = QueryBuilders.matchPhraseQuery(fields[i], search).slop(slop);
+		}
+		return matchQuery;
+	}
 
 	// 로그생성
 	public static void createSearchLog(HttpServletRequest request, RestHighLevelClient restClient,

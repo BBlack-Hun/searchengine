@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
+import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +19,13 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.RegexpQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
@@ -29,6 +34,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mayfarm.Search.vo.ParamVO;
 import com.mayfarm.core.utils.ElasticSearchUtil;
+import com.mayfarm.core.utils.RefineUtil;
 import com.mayfarm.core.utils.SearchUtil;
 
 @Repository
@@ -42,11 +48,15 @@ public class EsDAO {
 	Properties properties;
 	
 	private final String domain = "DICT_0";
+	private final int slop = 1;
 	private final String searchDateFormat = "yyyy-MM-dd";
 	
 	private void setSearch(ParamVO paramVO) throws IOException {
 		String search = paramVO.getSearch();
 		String osearch = paramVO.getOsearch();
+		String exactSearch = paramVO.getExactSearch();
+		String includeSearch = paramVO.getIncludeSearch();
+		String excludeSearch = paramVO.getExcludeSearch();
 		// 변수 초기화 (pagination)
 		int listSize = paramVO.getListSize();
 		
@@ -140,7 +150,7 @@ public class EsDAO {
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		
 		// 검색 필드
-		String [] fields = SearchUtil.getSearchFieldLAW(field);
+		String [] fields = SearchUtil.getSearchFieldMOIS(field);
 		
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
 		if (sort.equals("최신순")) {
@@ -154,27 +164,28 @@ public class EsDAO {
 		}
 		
 		// must 내부의 and 조건절 추가를 위한 추가 bool 쿼리 선언
-		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
+//		BoolQueryBuilder semiboolQueryBuilder = QueryBuilders.boolQuery();
 		
 		// JTBC가 무조건 들어간 카테고리만 검색
 //		TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("violt_ctgr_cd_nm", "mois");
 //		boolQueryBuilder.must(termQueryBuilder);
 		
-		// title
-		MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
+		/*
+		 * // title MatchQueryBuilder matchQueryBuilder =
+		 * QueryBuilders.matchQuery("title", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder));
+		 * 
+		 * // stitle MatchQueryBuilder matchQueryBuilder2 =
+		 * QueryBuilders.matchQuery("stitle", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
+		 * 
+		 * // Content MatchQueryBuilder matchQueryBuilder3 =
+		 * QueryBuilders.matchQuery("content", paramVO.getSearch());
+		 * boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
+		 */
 		
-		// stitle
-		MatchQueryBuilder matchQueryBuilder2 = QueryBuilders.matchQuery("stitle", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder2));
-		
-		// Content
-		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
-		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
-		
-		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
-		//searchSourceBuilder.sort(new FieldSortBuilder("no").order(SortOrder.ASC));
-		searchSourceBuilder.sort(new FieldSortBuilder("_score").order(SortOrder.DESC));
+		// 검색 쿼리 생성
+		setSearchQuery(paramVO, boolQueryBuilder, fields);
 		
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);
@@ -242,7 +253,6 @@ public class EsDAO {
 		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("content", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
-		
 		// 소스 빌더에 값 넣기
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);
@@ -277,7 +287,7 @@ public class EsDAO {
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		
 		// 검색 필드
-		String [] fields = SearchUtil.getSearchFieldLAW(field);
+		String [] fields = SearchUtil.getSearchFieldNEWS(field);
 		
 		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
 		if (sort.equals("최신순")) {
@@ -305,17 +315,11 @@ public class EsDAO {
 		MatchQueryBuilder matchQueryBuilder3 = QueryBuilders.matchQuery("text", paramVO.getSearch());
 		boolQueryBuilder.must(semiboolQueryBuilder.should(matchQueryBuilder3));
 		
-		// 정렬 ( 이름순으로 정렬, Default는 정확도순)
-		//searchSourceBuilder.sort(new FieldSortBuilder("no").order(SortOrder.ASC));
-		searchSourceBuilder.sort(new FieldSortBuilder("_score").order(SortOrder.DESC));
-		
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);
 		searchSourceBuilder.size(listSize);
-		// 하이라이트 적용
-//		searchSourceBuilder.highlighter(makeHighLightField());
 		// 테스트 출력
-		System.out.println(searchSourceBuilder.toString());
+//		System.out.println(searchSourceBuilder.toString());
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 	}
@@ -392,4 +396,91 @@ public class EsDAO {
 	public List<String> getAutoComplateSearch(String search) throws IOException {
 		return ElasticSearchUtil.getKeywordSuggestion(restClient, search);
 	}
+	
+	private void setSearchQuery(ParamVO paramVO, BoolQueryBuilder boolQueryBuilder, String[] fields) {
+		
+		// 값 세팅
+		String search = paramVO.getSearch();
+		String exactSearch = paramVO.getExactSearch();
+		String includeSearch = paramVO.getIncludeSearch();
+		String excludeSearch = paramVO.getExcludeSearch();
+		
+		BoolQueryBuilder boolQueryBuilderForSearch = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForExact = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForInclude = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForExclude = QueryBuilders.boolQuery();
+		
+		// 상세검색
+		// 정확히 일치
+		if (StringUtils.isNoneBlank(exactSearch)) {
+			String[] exactArray = exactSearch.split(",+");
+			for (String exact : exactArray) {
+				if (StringUtils.isBlank(exact)) {
+					continue;
+				}
+				exact = RefineUtil.escapeString(exact);
+				BoolQueryBuilder boolQueryBilderForExactInner = QueryBuilders.boolQuery();
+				// 일반영역
+				for (String f : fields) {
+					if (f.contains("ngram")) {
+						continue;
+					} else {
+						f = f + ".keyword";
+					}
+					RegexpQueryBuilder regexpQueryBuilder = QueryBuilders.regexpQuery(f, ".*" + exact + ".*");
+					 boolQueryBilderForExactInner.should(regexpQueryBuilder);
+				}
+				boolQueryBuilderForExact.must(boolQueryBilderForExactInner);
+			}
+			boolQueryBuilder.must(boolQueryBuilderForExact);
+		}
+		
+		// 반드시 포함
+		if (StringUtils.isNoneBlank(includeSearch)) {
+			String[] includeSearchArray = includeSearch.split(",+");
+			for (String include : includeSearchArray) {
+				if (StringUtils.isBlank(include)) {
+					continue;
+				}
+				include = RefineUtil.escapeString(include);
+				BoolQueryBuilder boolQueryBuilderForIncludeQueryInner = QueryBuilders.boolQuery();
+				// 일반 영역
+				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(include, fields)
+						.operator(Operator.AND);
+				boolQueryBuilderForIncludeQueryInner.should(multiMatchQueryBuilder);
+				boolQueryBuilderForInclude.must(boolQueryBuilderForIncludeQueryInner);
+			}
+			boolQueryBuilder.must(boolQueryBuilderForInclude);
+		}
+		
+		// 제외 단어
+		if (StringUtils.isNoneBlank(excludeSearch)) {
+			String[] excludeSearchArray = excludeSearch.split(",+");
+			for (String exclude : excludeSearchArray) {
+				if (StringUtils.isBlank(excludeSearch)) {
+					continue;
+				}
+				exclude = RefineUtil.escapeString(exclude);
+				BoolQueryBuilder boolQeuryBuilderForExcludeQueryInner = QueryBuilders.boolQuery();
+				// 일반 영역
+				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(exclude, fields)
+						.operator(Operator.AND);
+				boolQeuryBuilderForExcludeQueryInner.should(multiMatchQueryBuilder);
+				boolQueryBuilderForExclude.must(boolQeuryBuilderForExcludeQueryInner);
+			}
+			boolQueryBuilder.mustNot(boolQueryBuilderForExclude);
+		}
+		
+		// 검색
+		BoolQueryBuilder boolQueryBuilderForSearch_inner = QueryBuilders.boolQuery();
+		
+		MatchPhraseQueryBuilder[] MatchPhraseQueryBuilder = ElasticSearchUtil.getMatchPhraseQueryBuilders(
+				fields, search, slop);
+		for (MatchPhraseQueryBuilder matchPhraseQueryBuilder : MatchPhraseQueryBuilder) {
+			boolQueryBuilderForSearch_inner.should(matchPhraseQueryBuilder);
+		}
+		boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner);
+		boolQueryBuilder.must(boolQueryBuilderForSearch);
+	}
+	
 }

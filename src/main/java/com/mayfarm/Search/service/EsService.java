@@ -252,9 +252,13 @@ public class EsService {
 	 */
 	private String[] getHighlightKeywordArray(ParamVO paramVO) {
 		String search = paramVO.getSearch();
+		String exactSearch = paramVO.getExactSearch();
+		String includeSearch = paramVO.getIncludeSearch(); 
 		
 		Set<String> highlightKeywords = new HashSet<>();
 		highlightKeywords.add(search);
+		highlightKeywords.add(exactSearch);
+		highlightKeywords.add(includeSearch);
 		
 		for (String word : new HashSet<>(highlightKeywords)) {
 			if (StringUtils.isBlank(word)) {
