@@ -67,6 +67,19 @@ public class EsDAO {
 		} else {
 			paramVO.setListSize(4);
 		}
+		
+		String reSearch = paramVO.getReSearch();
+		String reexactSearch = paramVO.getReexactSearch();
+		String reincludeSearch = paramVO.getReincludeSearch();
+		String reexcludeSearch = paramVO.getReexcludeSearch();
+		
+		// 결과 내 재검색 쿼리 세팅
+		if (paramVO.getRe()) {
+			paramVO.setReSearch(SearchUtil.appendSearch(osearch, reSearch, splitFormat));
+			paramVO.setReexactSearch(SearchUtil.appendSearch(exactSearch, reexactSearch, splitFormat));
+			paramVO.setReincludeSearch(SearchUtil.appendSearch(includeSearch, reincludeSearch, splitFormat));
+			paramVO.setReexcludeSearch(SearchUtil.appendSearch(excludeSearch, reexactSearch, splitFormat));
+		}
 	}
 	
 	public MultiSearchResponse TSearch(ParamVO paramVO) throws IOException {
@@ -345,6 +358,8 @@ public class EsDAO {
 		String search = paramVO.getSearch();
 		String osearch = paramVO.getOsearch();
 		String category = paramVO.getCategory();
+		String sort = paramVO.getSort();
+		Boolean re = paramVO.getRe();
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -363,6 +378,8 @@ public class EsDAO {
 		String search = paramVO.getSearch();
 		String osearch = paramVO.getOsearch();
 		String category = paramVO.getCategory();
+		String sort = paramVO.getSort();
+		Boolean re = paramVO.getRe();
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -398,7 +415,7 @@ public class EsDAO {
 	}
 	
 	/**
-	 * 통합검색 검색어 자동완성 호출, 자동완성 반환 
+	 * 통합검색 검색어 자동완성 호출, 자동완성 목록 반환 
 	 * @param search 검색어
 	 * @return 통합검색 검색어 자동완성 목록
 	 * @throws IOException
@@ -415,6 +432,9 @@ public class EsDAO {
 		String exactSearch = paramVO.getExactSearch();
 		String includeSearch = paramVO.getIncludeSearch();
 		String excludeSearch = paramVO.getExcludeSearch();
+		String reexactSearch = paramVO.getReexactSearch();
+		String reincludeSearch = paramVO.getReincludeSearch();
+		String reexcludeSearch = paramVO.getReexcludeSearch();
 		
 		BoolQueryBuilder boolQueryBuilderForSearch = QueryBuilders.boolQuery();
 		BoolQueryBuilder boolQueryBuilderForExact = QueryBuilders.boolQuery();
@@ -423,7 +443,10 @@ public class EsDAO {
 		
 		// 상세검색
 		// 정확히 일치
-		if (StringUtils.isNoneBlank(exactSearch)) {
+		if (StringUtils.isNoneBlank(exactSearch) || StringUtils.isNoneBlank(reexactSearch)) {
+			if (StringUtils.isNoneBlank(reexactSearch)) {
+				exactSearch = reexactSearch;
+			}
 			String[] exactArray = exactSearch.split(",+");
 			for (String exact : exactArray) {
 				if (StringUtils.isBlank(exact)) {
@@ -447,7 +470,10 @@ public class EsDAO {
 		}
 		
 		// 반드시 포함
-		if (StringUtils.isNoneBlank(includeSearch)) {
+		if (StringUtils.isNoneBlank(includeSearch) || StringUtils.isNoneBlank(reincludeSearch)) {
+			if (StringUtils.isNoneBlank(reincludeSearch)) {
+				includeSearch = reincludeSearch;
+			}
 			String[] includeSearchArray = includeSearch.split(",+");
 			for (String include : includeSearchArray) {
 				if (StringUtils.isBlank(include)) {
@@ -465,7 +491,10 @@ public class EsDAO {
 		}
 		
 		// 제외 단어
-		if (StringUtils.isNoneBlank(excludeSearch)) {
+		if (StringUtils.isNoneBlank(excludeSearch) || StringUtils.isNoneBlank(reexcludeSearch)) {
+			if (StringUtils.isNoneBlank(reexcludeSearch)) {
+				excludeSearch = reexcludeSearch;
+			}
 			String[] excludeSearchArray = excludeSearch.split(",+");
 			for (String exclude : excludeSearchArray) {
 				if (StringUtils.isBlank(excludeSearch)) {

@@ -362,7 +362,7 @@
 									<li id="page${idx}">
 										<%-- <a class="page-item active" href="index?search=${index.str}&Category=${index.Category}${index.pageMaker.makeQuery(idx)}"><span>${idx}<span class="sr-only"></span></span></a> --%>
 										<%-- <a class="page-item active" href="index?search=${index.str}&Category=${index.Category}&page=${idx}&perPageNum=${index.pageMaker.cri.perPageNum}"> --%>
-										<a href="javascript:void(0);" class="pglist" move_pg="${idx}"><span>${idx}<span class="sr-only"></span></span></a>
+										<a href="javascript:void(0);" class="page-link pglist" move_pg="${idx}">${idx}<span class="sr-only"></span></span></a>
 									</li>
 								</c:forEach>
 									<!-- next 버튼 -->

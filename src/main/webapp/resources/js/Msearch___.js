@@ -70,7 +70,7 @@ var search_btn = function() {
 	setRe();
 	resetParam('search', re);
 	
-	if (re || (category && category != '통합검색')) {
+	if (category && category != '통합검색') {
 		searchAll(true);
 	} else {
 		searchAll();
@@ -155,8 +155,7 @@ var sort_btn = function(btn) {
 
 // 상세검색
 var search_btn_detail = function() {
-	SetRe();
-	resetParam('search', re);
+	resetParam('search');
 	
 	exactSearch = document.getElementById('exactSearch').value;
 	includeSearch = document.getElementById('includeSearch').value;
@@ -223,7 +222,7 @@ var date_btn = function(btn) {
 var ClickPagiNation = function() {
 	var pagination = document.getElementsByClassName("pglist");
 	if (pagination) {
-		for (var i = 0; i < pagination.length; i++) {
+		for (var i =0; i < pagination.length; i++) {
 			pagination[i].addEventListener('click', function(){
 				page = $(this).attr("move_pg");
 				searchAll(true);	
@@ -250,10 +249,6 @@ var resetParam = function(where, re) {
 		perPageNum = 10;
 		sort = '정확도순';
 		field = "전체";
-		
-		startDate = null;
-		endDate = null;
-		
 		break;
 	case 'search_option':
 		page = 1;
@@ -262,7 +257,7 @@ var resetParam = function(where, re) {
 		break;
 	case 'default':
 		page = 1;
-		perPageNum = 10;
+		perPageNum = 1;
 		sort = '정확도순';
 		startDate = null;
 		endDate = null;
@@ -361,10 +356,3 @@ var inputDateSplit = function(obj) {
 	var dateArray = obj.split("-");
 	return dateArray[0] + dateArray[1] + dateArray[2];
 }
-
-
-//************************************************************** */
-$(document).ready(function(){
-	set_input_value
-	ClickPagiNation();
-});

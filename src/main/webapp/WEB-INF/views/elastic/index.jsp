@@ -110,7 +110,7 @@
 				</div>
 				<div class="schCheckBox">				
 					<span class="checkBtn">
-						<input type="checkbox" id="re" name="re" value class="fCheck">
+						<input type="checkbox" id="re" name="re" value class="fCheck" <c:if test="${index.paramVO.re eq true }">checked </c:if>>
 						<label for="re">결과 내 재검색</label>
 					</span>
 				</div>
@@ -278,7 +278,7 @@
 			<div class="ct-center">
 				<!--resultTopDiv/s-->
 				<div class="resultTopDiv">
-					<p class="result"><b>'${index.str}'</b>에 대하여 총 <b>${index.total}</b>건이 검색되었습니다.</p>
+					<p class="result"><b>'${index.str}<c:forEach items="${index.paramVO.reSearch}" var="reSch"><c:if test="${index.paramVO.re eq true }">+${reSch}</c:if>'</c:forEach></b>에 대하여 총 <b>${index.total}</b>건이 검색되었습니다.</p>
 					<div class="viewTab">
 						<script type="text/javascript">
 							$(function() {
@@ -476,7 +476,7 @@
 													<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
 												</c:if>
 												<c:if test="${SRR.getValue() == 999 }">
-													<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
+													<span class="rank new">new</span><!--add class:up-->
 												</c:if>
 												<c:if test="${SRR.getValue() == 0 }">
 													<span class="rank">-</span><!--add class:up-->

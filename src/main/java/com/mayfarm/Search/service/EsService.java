@@ -2,6 +2,7 @@ package com.mayfarm.Search.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ public class EsService {
 	
 	private String preTags = "<strong style ='font-size:1.0em; color: red;'>";
 	private String postTags = "</strong>";
+	private final String splitFormat =",";
 	private final int autoRecommMindocCount = 5;
 	
 	
@@ -253,12 +255,18 @@ public class EsService {
 	private String[] getHighlightKeywordArray(ParamVO paramVO) {
 		String search = paramVO.getSearch();
 		String exactSearch = paramVO.getExactSearch();
-		String includeSearch = paramVO.getIncludeSearch(); 
+		String includeSearch = paramVO.getIncludeSearch();
+		String[] reSearch = paramVO.getReSearch().split(splitFormat);
+		String[] reexactSearch = paramVO.getReexactSearch().split(splitFormat);
+		String[] reincludeSearch = paramVO.getReincludeSearch().split(splitFormat); 
 		
 		Set<String> highlightKeywords = new HashSet<>();
 		highlightKeywords.add(search);
 		highlightKeywords.add(exactSearch);
 		highlightKeywords.add(includeSearch);
+		highlightKeywords.addAll(Arrays.asList(reSearch));
+		highlightKeywords.addAll(Arrays.asList(reexactSearch));
+		highlightKeywords.addAll(Arrays.asList(reincludeSearch));
 		
 		for (String word : new HashSet<>(highlightKeywords)) {
 			if (StringUtils.isBlank(word)) {

@@ -1,5 +1,13 @@
 package com.mayfarm.core.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+
 public class SearchUtil {
 	
 	
@@ -95,5 +103,36 @@ public class SearchUtil {
 			break;
 		}
 		return fields;
+	}
+	
+	// 결과 내 재검색 값 쿼리값들 세팅
+	public static String appendSearch(String search, String osearch, String format) {
+		Set<String> set = new LinkedHashSet<>();
+		List<String> oList = Arrays.asList(osearch.split(format));
+		for (String o : oList) {
+			synchronized (set) {
+				set.add(o.trim());
+			}
+		}
+		List<String> qList = Arrays.asList(search.split(format));
+		for (String q : qList) {
+			synchronized (set) {
+				set.add(q.trim());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		list.addAll(set);
+		set = null;
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < list.size(); i++) {
+			if (StringUtils.isBlank(list.get(i))) {
+				continue;
+			}
+			sb.append(list.get(i).trim());
+			if (i < list.size() -1 ) {
+				sb.append(format);
+			}
+		}
+		return sb.toString();
 	}
 }
