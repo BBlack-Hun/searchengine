@@ -59,8 +59,8 @@
 .searchArea .layer-schRange .btnCancel{display:inline-block;vertical-align:middle;padding:7px 14px 8px;color:#5d5d5d;font-size:12px;border-radius:4px;background:#e1e6ea;}
 
 /*searchArea > 체크박스*/
-.searchArea .schCheckBox{position:absolute;right:139px;bottom:15px;z-index:2;}
-.searchArea .schCheckBox .checkBtn{position:relative;}
+.searchArea .schCheckBox {position:absolute;right:139px;bottom:15px;z-index:2;}
+.searchArea .schCheckBox .checkBtn {position:relative;}
 .searchArea .schCheckBox .fCheck{position:absolute;opacity:0;width:0;height:0;}
 .searchArea .schCheckBox .fCheck+label{cursor:pointer;font-size:12px;letter-spacing:-0.5px;padding:0 0 3px 23px;background:url("../img/bg_check.png") no-repeat 0 0;color:#fff;}
 .searchArea .schCheckBox .fCheck:checked+label{background-image:url("../img/bg_check_on.png");}

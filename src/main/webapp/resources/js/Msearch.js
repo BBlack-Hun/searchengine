@@ -38,6 +38,23 @@ var reincludeSearch = document.getElementById("paramVO_reincludeSearch").value;
 var reexcludeSearch = document.getElementById("paramVO_reexcludeSearch").value;
 var max = document.getElementById("paramVO_max").value;
 
+// input 값 세팅
+var set_input_value = function() {
+	
+	document.getElementById('search').value = search;
+	
+	// 상세 검색
+	document.getElementById('exactSearch').value = exactSearch;
+	document.getElementById('includeSearch').value = inlcudeSearch;
+	documnet.getElementById('excludeSearch').value = excludeSearch;
+	
+	// 결과 내 재검색
+	if (document.getElementById('re')) {
+		document.getElementById('re').checked = (re === 'true');
+	}
+}
+
+
 // 엔터 검색
 var search_enter = function(){
 	if(event.keyCode == 13){

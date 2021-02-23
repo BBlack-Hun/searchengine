@@ -68,7 +68,12 @@
 						<input type="hidden" name="excludeSearch">
 						<input type="hidden" name="page">
 						<input type="hidden" name="perPageNum">
+						<input type="hidden" name="re">
 						<input type="hidden" name="field">
+						<input type="hidden" name="reSearch">
+						<input type="hidden" name="reexactSearch">
+						<input type="hidden" name="reincludeSearch">
+						<input type="hidden" name="reexcludeSearch">
 						<input type="hidden" name="max">
 					</form>
 					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
@@ -82,8 +87,13 @@
 					<textarea id="paramVO_excludeSearch" style="display: none;">${index.paramVO.excludeSearch}</textarea>
 					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
 					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
+					<textarea id="paramVO_re" style="display: none;">${index.paramVO.re}</textarea>
 					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
 					<textarea id="paramVO_max" style="display: none;">${index.paramVO.max}</textarea>
+					<textarea id="paramVO_reSearch" style="display: none;">${index.paramVO.reSearch}</textarea>
+					<textarea id="paramVO_reexactSearch" style="display: none;">${index.paramVO.reexactSearch}</textarea>
+					<textarea id="paramVO_reincludeSearch" style="display: none;">${index.paramVO.reincludeSearch}</textarea>
+					<textarea id="paramVO_reexcludeSearch" style="display: none;">${index.paramVO.reexcludeSearch}</textarea>
 				</div>
 				<div class="schAuto">
 					<ul class="schlist">
