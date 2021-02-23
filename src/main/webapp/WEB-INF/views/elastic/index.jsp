@@ -521,6 +521,18 @@
 						</div>
 					</div>
 				</div>
+				<div class="historyDiv"><!--RIGHT > historyDiv/s-->
+					<div class="titArea">
+						<p class="tit">내가 찾은 검색어</p>
+					</div>
+					<div class="ctArea">
+						<div class="data">
+							<ul class="historyList">
+								
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div><!--ct-right/e-->
 		</div><!--s-container/e-->
 	</div>
