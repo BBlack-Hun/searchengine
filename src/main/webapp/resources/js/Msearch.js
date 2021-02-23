@@ -17,6 +17,10 @@ var reSearch, reexactSearch, reincludeSearch, reexcludeSearch;
 // 기간
 var max;
 
+// 내가 찾은 검색어 쿠키용
+var cookieSize = 5;
+var cookieName = "MY_SEARCH_WORD";
+
 
 // 초기값 세팅
 var search = document.getElementById("paramVO_search").value;
@@ -62,6 +66,13 @@ var search_enter = function(){
 	}
 }
 
+// 홈으로 이동
+var go_home = function() {
+	var url = "/MM";
+	location.href = url;
+	
+}
+
 // 버튼 검색
 var search_btn = function() {
 	// 태그 네임이 saerch의 값을 가져온다.
@@ -69,6 +80,9 @@ var search_btn = function() {
 	osearch = document.getElementById("paramVO_search").value;
 	setRe();
 	resetParam('search', re);
+	
+	// 내가 찾은 검색어 쿠키 생성
+	CookieUtils.addCookie(cookieName, search, cookiSize);
 	
 	if (re || (category && category != '통합검색')) {
 		searchAll(true);
@@ -128,7 +142,7 @@ var search_option = function() {
 	form.submit();
 }
 
-// 영역 클릭 (field-> 전체, 제목, 내용, 등...)
+// 영역 클릭 (field-> 전체, 제목, 내용, 등...) -> booster 처리 해야 할듯
 
 
 // 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동

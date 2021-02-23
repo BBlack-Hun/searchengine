@@ -13,8 +13,8 @@
 	<div class="totalSearch">
 		<div class="s-header"><!--s-header/s-->
 			<div class="titleArea">
-				<p class="title">
-					통합검색
+				<p class="title" >
+					<span onclick="go_home();">통합검색</span>
 				</p>
 			</div>
 			<div class="searchArea">
@@ -276,160 +276,173 @@
 			<!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 --><!-- 헤더로 분리할 부분 -->
 			<!--ct-center/s-->
 			<div class="ct-center">
-				<!--resultTopDiv/s-->
-				<div class="resultTopDiv">
-					<p class="result"><b>'${index.str}<c:forEach items="${index.paramVO.reSearch}" var="reSch"><c:if test="${index.paramVO.re eq true }">+${reSch}</c:if>'</c:forEach></b>에 대하여 총 <b>${index.total}</b>건이 검색되었습니다.</p>
-					<div class="viewTab">
-						<script type="text/javascript">
-							$(function() {
-								$('.viewTab li a').click(function() {
-									$('.viewTab li').removeClass('selected');
-									$(this).parents('li').addClass('selected');
+				<c:if test="${index.total ne 0 }">
+					<!--resultTopDiv/s-->
+					<div class="resultTopDiv">
+						<p class="result"><b>'${index.str}<c:forEach items="${index.paramVO.reSearch}" var="reSch"><c:if test="${index.paramVO.re eq true }"> + ${reSch}</c:if></c:forEach>'</b>에 대하여 총 <b>${index.total}</b>건이 검색되었습니다.</p>
+						<div class="viewTab">
+							<script type="text/javascript">
+								$(function() {
+									$('.viewTab li a').click(function() {
+										$('.viewTab li').removeClass('selected');
+										$(this).parents('li').addClass('selected');
+									});
 								});
-							});
-						</script>
-						<ul>
-							<li <c:if test="${index.paramVO.sort eq '정확도순' }">class="selected"</c:if>><a href="javascript:void(0);" value="정확도순" class="sort_btn" onclick="sort_btn(this);">정확도순</a></li><!--add class:selected-->
-							<li <c:if test="${index.paramVO.sort eq '최신순'}" >class="selected"</c:if>><a href="javascript:void(0);" value="최신순" class="sort_btn" onclick="sort_btn(this);">최신순</a></li>
-						</ul>
-					</div>
-				</div><!--resultTopDiv/e-->
-				<!--portalDiv/s-->
-				<c:if test="${index.elastic.stotal.item0 >= 1}">
-				<div class="portalDiv">
-					<p class="portalTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
-					<div class="portalCt">
-						<ul class="list">
-							<c:forEach items="${index.elastic.MOIS}" var="MOIS">
-								<li class="listItem">
-									
-									<div class="titAreaWrap">
-										<div class="titArea">
-											<a href="javascript:void(0);" class="tit">${MOIS.title}</a>
-										</div>
-									</div>
-									<div class="infoArea">
-										<span>공개</span><span class="bar">|</span><span>${MOIS.writer}</span><span class="bar">|</span><span>${MOIS.regdt}</span><span class="bar">|</span><span>${MOIS.stitle }</span>
-									</div>
-									<div class="contentArea">
-										${MOIS.content }                          
-									</div>
-									<div class="fileArea">
-										<div class="file">
-											<img src="resources/img/ico/file/hwp.gif" class="fileIco">
-											<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
-											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
-										</div>
-										<%-- <div class="FileView_mordal">
-											<div class="FileView_top">
-												<p class="view_title">미리보기</p>
-												<a href="javascript:void(0);" class="close_btn"></a>
+							</script>
+							<ul>
+								<li <c:if test="${index.paramVO.sort eq '정확도순' }">class="selected"</c:if>><a href="javascript:void(0);" value="정확도순" class="sort_btn" onclick="sort_btn(this);">정확도순</a></li><!--add class:selected-->
+								<li <c:if test="${index.paramVO.sort eq '최신순'}" >class="selected"</c:if>><a href="javascript:void(0);" value="최신순" class="sort_btn" onclick="sort_btn(this);">최신순</a></li>
+							</ul>
+						</div>
+					</div><!--resultTopDiv/e-->
+					<!--portalDiv/s-->
+					<c:if test="${index.elastic.stotal.item0 >= 1}">
+						<div class="portalDiv">
+							<p class="portalTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
+							<div class="portalCt">
+								<ul class="list">
+									<c:forEach items="${index.elastic.MOIS}" var="MOIS">
+										<li class="listItem">
+											
+											<div class="titAreaWrap">
+												<div class="titArea">
+													<a href="javascript:void(0);" class="tit">${MOIS.title}</a>
+												</div>
 											</div>
-											<div class="FileView_bottom">
-												<p class="view_info">
-													${MOIS.content }
-												</p>
+											<div class="infoArea">
+												<span>공개</span><span class="bar">|</span><span>${MOIS.writer}</span><span class="bar">|</span><span>${MOIS.regdt}</span><span class="bar">|</span><span>${MOIS.stitle }</span>
 											</div>
-										</div> --%>
-									</div>
-									<script type="text/javascript"> //미리보기 modal창 fadeOut
-										$(function(){
-											$(".FileView_mordal").fadeOut(0);
-										});
-									</script>
-								</li>			
-							</c:forEach>
-						</ul>
-					</div>
-					<c:if test="${index.elastic.stotal.item0 > 4 }">
-						<a href="javascript:void(0);" class="btnMore" value="MOIS" onclick="search_Category(this)">더보기</a>
+											<div class="contentArea">
+												${MOIS.content }                          
+											</div>
+											<div class="fileArea">
+												<div class="file">
+													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
+													<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
+													<a href="javascript:void(0);" class="btnFileView">미리보기</a>
+												</div>
+												<%-- <div class="FileView_mordal">
+													<div class="FileView_top">
+														<p class="view_title">미리보기</p>
+														<a href="javascript:void(0);" class="close_btn"></a>
+													</div>
+													<div class="FileView_bottom">
+														<p class="view_info">
+															${MOIS.content }
+														</p>
+													</div>
+												</div> --%>
+											</div>
+											<script type="text/javascript"> //미리보기 modal창 fadeOut
+												$(function(){
+													$(".FileView_mordal").fadeOut(0);
+												});
+											</script>
+										</li>			
+									</c:forEach>
+								</ul>
+							</div>
+							<c:if test="${index.elastic.stotal.item0 > 4 }">
+								<a href="javascript:void(0);" class="btnMore" value="MOIS" onclick="search_Category(this)">더보기</a>
+							</c:if>
+						</div><!--resultDiv/e-->
 					</c:if>
-				</div><!--resultDiv/e-->
-				</c:if>
-				<!--resultDiv/s-->
-				<c:if test="${index.elastic.stotal.item1 >= 1 }">
-				<div class="resultDiv">
-					<p class="resultTit">법령<b>${index.elastic.stotal.item1}</b>건</p>
-					<div class="resultCt">
-						<ul class="list">
-							<c:forEach items="${index.elastic.LAW}" var="LAW">
-								<li class="listItem">
-									<div class="titAreaWrap">
-										<div class="titArea">
-											<a href="javascript:void(0);" class="tit">${LAW.title}</a>
-										</div>
-									</div>
-									<div class="infoArea">
-										<span>공개</span><span class="bar">|</span><span>${LAW.froms}</span><span class="bar">|</span><span>${LAW.date}</span><span class="bar">|</span><span>${LAW.stitle }</span>
-									</div>
-									<div class="contentArea">
-										${LAW.content }                          
-									</div>
-									<div class="fileArea">
-										<div class="file">
-											<img src="resources/img/ico/file/hwp.gif" class="fileIco">
-											<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
-											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
-										</div>
-										<!-- <div class="FileView_mordal">
-											<div class="FileView_top">
-												<p class="view_title">미리보기</p>
-												<a href="javascript:void(0);" class="close_btn"></a>
+					<!--resultDiv/s-->
+					<c:if test="${index.elastic.stotal.item1 >= 1 }">
+						<div class="resultDiv">
+							<p class="resultTit">법령<b>${index.elastic.stotal.item1}</b>건</p>
+							<div class="resultCt">
+								<ul class="list">
+									<c:forEach items="${index.elastic.LAW}" var="LAW">
+										<li class="listItem">
+											<div class="titAreaWrap">
+												<div class="titArea">
+													<a href="javascript:void(0);" class="tit">${LAW.title}</a>
+												</div>
 											</div>
-											<div class="FileView_bottom">
-												<p class="view_info">
-													제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
-													제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
-													제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
-													<개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8.>
-												</p>
+											<div class="infoArea">
+												<span>공개</span><span class="bar">|</span><span>${LAW.froms}</span><span class="bar">|</span><span>${LAW.date}</span><span class="bar">|</span><span>${LAW.stitle }</span>
 											</div>
-										</div> -->
-									</div>
-									<script type="text/javascript"> //미리보기 modal창 fadeOut
-										$(function(){
-											$(".FileView_mordal").fadeOut(0);
-										});
-									</script>
-								</li>			
-							</c:forEach>
-						</ul>
-					</div>
-					<c:if test="${index.elastic.stotal.item1 > 4}">
-						<a href="javascript:void(0);" class="btnMore" value="LAW" onclick="search_Category(this)">더보기</a>
+											<div class="contentArea">
+												${LAW.content }                          
+											</div>
+											<div class="fileArea">
+												<div class="file">
+													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
+													<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
+													<a href="javascript:void(0);" class="btnFileView">미리보기</a>
+												</div>
+												<!-- <div class="FileView_mordal">
+													<div class="FileView_top">
+														<p class="view_title">미리보기</p>
+														<a href="javascript:void(0);" class="close_btn"></a>
+													</div>
+													<div class="FileView_bottom">
+														<p class="view_info">
+															제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
+															제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
+															제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
+															<개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8.>
+														</p>
+													</div>
+												</div> -->
+											</div>
+											<script type="text/javascript"> //미리보기 modal창 fadeOut
+												$(function(){
+													$(".FileView_mordal").fadeOut(0);
+												});
+											</script>
+										</li>			
+									</c:forEach>
+								</ul>
+							</div>
+							<c:if test="${index.elastic.stotal.item1 > 4}">
+								<a href="javascript:void(0);" class="btnMore" value="LAW" onclick="search_Category(this)">더보기</a>
+							</c:if>
+						</div>
 					</c:if>
-				</div>
-				</c:if>
+					<!--resultDiv/e-->
+					<!--resultDiv/s-->
+					<c:if test="${index.elastic.stotal.item2 >= 1}">
+						<div class="resultDiv">
+							<p class="resultTit">중국<b>${index.elastic.stotal.item2}</b>건</p>
+							<div class="resultCt">
+								<ul class="list">
+									<c:forEach items="${index.elastic.NEWS}" var="NEWS">
+										<li class="listItem">
+											<div class="titAreaWrap">
+												<div class="titArea">
+													<a href="javascript:void(0);" class="tit">${NEWS.title}</a>
+												</div>
+											</div>
+											<div class="infoArea">
+												<span>공개</span><span class="bar">|</span><span>${NEWS.writer}</span><span class="bar">|</span><span>${NEWS.date}</span><span class="bar">|</span><span>${NEWS.stitle }</span>
+											</div>
+											<div class="contentArea">
+												${NEWS.text }                          
+											</div>
+										</li>			
+									</c:forEach>
+								</ul>
+							</div>
+							<c:if test="${index.elastic.stotal.item2 > 4}">
+								<a href="javascript:void(0);" class="btnMore" value="NEWS" onclick="search_Category(this)">더보기</a>
+							</c:if>
+						</div>
+					</c:if>
 				<!--resultDiv/e-->
-				<!--resultDiv/s-->
-				<c:if test="${index.elastic.stotal.item2 >= 1}">
-				<div class="resultDiv">
-					<p class="resultTit">중국<b>${index.elastic.stotal.item2}</b>건</p>
-					<div class="resultCt">
-						<ul class="list">
-							<c:forEach items="${index.elastic.NEWS}" var="NEWS">
-								<li class="listItem">
-									<div class="titAreaWrap">
-										<div class="titArea">
-											<a href="javascript:void(0);" class="tit">${NEWS.title}</a>
-										</div>
-									</div>
-									<div class="infoArea">
-										<span>공개</span><span class="bar">|</span><span>${NEWS.writer}</span><span class="bar">|</span><span>${NEWS.date}</span><span class="bar">|</span><span>${NEWS.stitle }</span>
-									</div>
-									<div class="contentArea">
-										${NEWS.text }                          
-									</div>
-								</li>			
-							</c:forEach>
-						</ul>
-					</div>
-					<c:if test="${index.elastic.stotal.item2 > 4}">
-						<a href="javascript:void(0);" class="btnMore" value="NEWS" onclick="search_Category(this)">더보기</a>
-					</c:if>
-				</div>
 				</c:if>
-				<!--resultDiv/e-->
+				<c:if test="${index.total eq 0 }">
+					<div class="subContSec">
+						<div class="searchResult">
+							<strong>검색어를 입력해주세요</strong>
+							<div class="txtBox">
+								<p>· 찾고자하는 검색어를 입력하시고, 검색버튼을 눌러주세요.</p>
+								<a href="javascript:window.history.back();" class="btn_ty3">이전 페이지 돌아가기</a>
+							</div>
+						</div>
+					</div>
+				</c:if>
 			</div><!--ct-center/e-->
 			<!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 --><!-- footer로 분리할 부분 -->
 			<!--ct-right/s-->
