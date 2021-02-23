@@ -110,7 +110,7 @@
 				</div>
 				<div class="schCheckBox">				
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="re" name="re" class="fCheck">
 						<label for="schCheckBox">결과 내 재검색</label>
 					</span>
 				</div>

@@ -253,8 +253,8 @@
 .resultDiv .member .person .name{margin-right:5px;color:#000;}
 .resultDiv .member .info{padding:9px 10px 0 20px;}
 .resultDiv .member .info p{position:relative;color:#474646;padding-left:18px;font-size:13px;letter-spacing:-0.25px;line-height:21px;overflow:hidden;}
-.resultDiv .member .info p.tel{padding-right:10px;background:url(img/bg_info_tel.png) no-repeat 0 4px;}
-.resultDiv .member .info p.task{padding-right:10px;background:url(img/bg_info_task.png) no-repeat 0 4px;}
+.resultDiv .member .info p.tel{padding-right:10px;background:url("../img/bg_info_tel.png") no-repeat 0 4px;}
+.resultDiv .member .info p.task{padding-right:10px;background:url("../img/bg_info_task.png") no-repeat 0 4px;}
 .resultDiv .member .info p.task.overflowHeight{height:42px;}
 .resultDiv .member .info p.task.overflowHeight:before{content:'...';position:absolute;right:0;bottom:0;display:block;width:11px;height:21px;background:#FFF;}
 .resultDiv .member .info p .tit{color:#0067a9;font-weight:400;}

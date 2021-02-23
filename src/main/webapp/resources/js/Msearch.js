@@ -30,6 +30,7 @@ var excludeSearch = document.getElementById("paramVO_excludeSearch").value;
 var sort = document.getElementById("paramVO_sort").value;
 var page = document.getElementById("paramVO_page").value;
 var perPageNum = document.getElementById("paramVO_perPageNum").value;
+var re = document.getElementById("paramVO_re").value;
 var field = document.getElementById("paramVO_field").value;
 var reSearch = document.getElementById("paramVO_reSearch").value;
 var reexactSearch = document.getElementById("paramVO_reexactSearch").value;
@@ -49,7 +50,8 @@ var search_btn = function() {
 	// 태그 네임이 saerch의 값을 가져온다.
 	search = document.getElementById("searchWord").value;
 	osearch = document.getElementById("paramVO_search").value;
-	resetParam('search');
+	setRe();
+	resetParam('search', re);
 	
 	if (category && category != '통합검색') {
 		searchAll(true);
@@ -101,10 +103,10 @@ var search_option = function() {
 	form.querySelector('input[name=perPageNum]').value = perPageNum;
 	form.querySelector('input[name=re]').value = re;
 	form.querySelector('input[name=field]').value = field;
-	querySelector('input[name=reSearch]').value = reSearch;
-	querySelector('input[name=reexactSearch]').value = reexactSearch;
-	querySelector('input[name=reincludeSearch]').value = reincludeSearch;
-	querySelector('input[name=reexcludeSearch]').value = reexcludeSearch;
+	form.querySelector('input[name=reSearch]').value = reSearch;
+	form.querySelector('input[name=reexactSearch]').value = reexactSearch;
+	form.querySelector('input[name=reincludeSearch]').value = reincludeSearch;
+	form.querySelector('input[name=reexcludeSearch]').value = reexcludeSearch;
 	form.querySelector('input[name=max]').value = max;
 	form.submit();
 }
@@ -114,7 +116,8 @@ var search_option = function() {
 
 // 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
 var search_Category = function(btn) {
-	resetParam('search_category');
+	setRe();
+	resetParam('search_category', re);
 	category = btn.getAttribute('value');
 	searchAll(true)
 }
@@ -212,11 +215,17 @@ var ClickPagiNation = function() {
 	}
 }
 // 파라미터 초기화
-var resetParam = function(where) {
+var resetParam = function(where, re) {
 	switch(where) {
 	case 'search':
 		page = 1;
 		sort = '정확도순';
+		
+		if (re) {
+			
+		} else if (!re) {
+			resetParam('default', null, null);
+		}
 		break;
 	case 'search_category':
 		page = 1;
@@ -236,11 +245,23 @@ var resetParam = function(where) {
 		startDate = null;
 		endDate = null;
 		field = "전체";
+		re = false;
+		reSearch = null;
+		reexactSearch = null;
+		reincludeSearch = null;
+		reexcludeSearch = null;
 		break;
 	}
 }
 
-
+// 버튼 고정
+var setRe = function() {
+	try {
+		re = document.getElementById("re").checked;
+	} catch (e) {
+		re = false;
+	}
+}
 
 
 
