@@ -527,7 +527,7 @@
 					</div>
 					<div class="ctArea">
 						<div class="data">
-							<ul class="historyList">
+							<ul class="historyList" id="my_search_word">
 								
 							</ul>
 						</div>
@@ -537,6 +537,7 @@
 		</div><!--s-container/e-->
 	</div>
 	<!-- 스크립트 영역 -->
+	<script src="resources/js/cookie.js" ></script>
 	<script src="resources/js/Msearch.js" ></script>
 </body>
 </html>

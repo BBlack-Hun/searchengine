@@ -5,7 +5,7 @@
 var CookieUtils = function(){
 	
 	// 쿠키생성 (쿠키이름, 검색어, 유지기간)
-	var setCookie = function(cookieName, value, key)  { 
+	var setCookie = function(cookieName, value, day)  { 
 		var date = new Date();
 		date.setTime(date.getTime() + day * 60 * 60 * 24 * 1000);
 		document.cookie = cookieName + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
@@ -17,7 +17,7 @@ var CookieUtils = function(){
 		if (value) { // 쿠키값이 존재한다면
 			return value[2];	// 쿠기값 반환
 		} else {
-			setCookie(cookieName, encodeURIcomponent('[]'), 1); // 쿠기가 없다면 1일짜리 쿠키 배열을 만들어서
+			setCookie(cookieName, encodeURIComponent('[]'), 1); // 쿠기가 없다면 1일짜리 쿠키 배열을 만들어서
 		}
 		return getCookie(cookieName);	// 다시 쿠키 생성
 	} 
@@ -42,7 +42,7 @@ var CookieUtils = function(){
 			obj.splice(obj.indexOf(value), 1);
 		}
 		if (obj.length >= cookieSize) obj.splice(0, 1); // 사이즈가 넘어가면 0번 인덱스 삭제
-		if (obj.indexOf(vlaue) === -1 ) obj.push(value); // 일차하는게 없으면 obj에 푸쉬
+		if (obj.indexOf(value) === -1 ) obj.push(value); // 일차하는게 없으면 obj에 푸쉬
 		var ret = encodeURIComponent(JSON.stringify(obj)); // obj를 인코딩해서
 		setCookie(cookieName, ret); // 쿠키 생성
 	}

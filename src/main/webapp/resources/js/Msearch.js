@@ -45,12 +45,12 @@ var max = document.getElementById("paramVO_max").value;
 // input 값 세팅
 var set_input_value = function() {
 	
-	document.getElementById('search').value = search;
+	document.getElementById('searchWord').value = search;
 	
 	// 상세 검색
 	document.getElementById('exactSearch').value = exactSearch;
-	document.getElementById('includeSearch').value = inlcudeSearch;
-	documnet.getElementById('excludeSearch').value = excludeSearch;
+	document.getElementById('includeSearch').value = includeSearch;
+	document.getElementById('excludeSearch').value = excludeSearch;
 	
 	// 결과 내 재검색
 	if (document.getElementById('re')) {
@@ -82,7 +82,7 @@ var search_btn = function() {
 	resetParam('search', re);
 	
 	// 내가 찾은 검색어 쿠키 생성
-	CookieUtils.addCookie(cookieName, search, cookiSize);
+	CookieUtils.addCookie(cookieName, search, cookieSize);
 	
 	if (re || (category && category != '통합검색')) {
 		searchAll(true);
@@ -299,6 +299,43 @@ var setRe = function() {
 	}
 }
 
+// 내가 찾은 검색어 쿠키에서 가져와 뿌리기
+var getMySearchWord = function() {
+	var box = document.getElementById('my_search_word');
+	if (!box) {
+		return false;
+	}
+	
+	var foo = CookieUtils.getCookie(cookieName);	// 쿠키를 가져와서
+	var cookies = JSON.parse(decodeURIComponent(foo));	// 디코딩
+	var html = '';
+	if (cookies != null) {
+		for (var i = cookies.length - 1; i >= 0; i--) { // 가져온 쿠키의 배열만큼 반복하면서 내가 찾은 검색어 목록 만듬
+		 	var cookie = cookies[i];
+			html += '<li class="historyItem">';
+			html += '<span>';
+			html += '<a href="javascript:void(0);" onclick="search_btn_click(this)">'+cookie+'</a>&nbsp;&nbsp;';
+			html += '<span style="display:none;">' + cookie + '</span>';
+			html += '<a href="javascript:void(0);" onclick="popMySearchWord(this);">x</a>';
+			html += '<span style="display:none;">' + cookie + '</span>';
+			html += '</span>';
+			html += '</li>';
+		}
+		box.innerHTML = html;
+	}
+}
+
+// 내가 찾은 검색어를 쿠키에서 제거
+var popMySearchWord = function(e) { // 내가 찾은 검색어 제거 (쿠키 이름 , 검색어)
+	var value = e.nextElementSibling.innerHTML;
+	var j = CookieUtils.getCookie(cookieName); // 이름으로 쿠키를 가져와
+	var obj = JSON.parse(decodeURIComponent(j)); // 디코딩해서
+	var fIdx = obj.indexOf(value);	// 쿠키 배열에 검색어가 있는지 확인
+	if (fIdx !== -1) obj.splice(fIdx, 1);	// 검색어가 있으면 해당 인덱스 삭제
+	var ret = encodeURIComponent(JSON.stringify(obj));	// 다시 obj([,,,]) 을 
+	CookieUtils.setCookie(cookieName, ret);	// 해당 이름의 쿠키 생성
+	getMySearchWord(cookieName);	// 내가 찾은 검색어 새로고침
+}
 
 
 
@@ -379,6 +416,7 @@ var inputDateSplit = function(obj) {
 
 //************************************************************** */
 $(document).ready(function(){
-	set_input_value
+	set_input_value();
+	getMySearchWord();
 	ClickPagiNation();
 });
