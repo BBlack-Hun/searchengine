@@ -95,6 +95,10 @@ var search_btn = function() {
 var search_btn_click = function(e) {
 	search = e.nextElementSibling.textContent;
 	osearch = null;
+	
+	// 내가 찾은 검색어 쿠키 생성
+	CookieUtils.addCookie(cookieName, search, cookieSize);
+	
 	searchAll();
 }
 
@@ -313,10 +317,10 @@ var getMySearchWord = function() {
 		for (var i = cookies.length - 1; i >= 0; i--) { // 가져온 쿠키의 배열만큼 반복하면서 내가 찾은 검색어 목록 만듬
 		 	var cookie = cookies[i];
 			html += '<li class="historyItem">';
-			html += '<span>';
-			html += '<a href="javascript:void(0);" onclick="search_btn_click(this)">'+cookie+'</a>&nbsp;&nbsp;';
+			html += '<span class="item">';
+			html += '<a href="javascript:void(0);" class="txt" onclick="search_btn_click(this)">'+cookie+'</a>&nbsp;&nbsp;';
 			html += '<span style="display:none;">' + cookie + '</span>';
-			html += '<a href="javascript:void(0);" onclick="popMySearchWord(this);">x</a>';
+			html += '<a href="javascript:void(0);" class="txt" onclick="popMySearchWord(this);">x</a>';
 			html += '<span style="display:none;">' + cookie + '</span>';
 			html += '</span>';
 			html += '</li>';
