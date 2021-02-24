@@ -13,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mayfarm.Search.service.EsService;
 import com.mayfarm.Search.vo.Criteria;
 import com.mayfarm.Search.vo.EsVO;
@@ -28,7 +30,10 @@ public class EsController {
 	private static final Logger logger = LoggerFactory.getLogger(EsController.class);
 	
 	@Inject
-	private EsService service;
+	private EsService service;	
+	
+	@Inject
+	private ObjectMapper objectMapper;
 	
 	// 검색어 반환을 위해 전역변수 선언
 	String str = "";
@@ -53,10 +58,10 @@ public class EsController {
 		List<Map<String, Integer>> list = service.getSearchTopWordList();
 		modelMap.put("searchResult", list);
 		
-		// 통합검색 검색어 자동완성 반환을 위한 list선언 및 반환
-		List<String> list2 = service.getAutocompleteSearch(paramVO.getSearch());
-		System.out.println(list2);
-		modelMap.put("autoC", list2);
+//		// 통합검색 검색어 자동완성 반환을 위한 list선언 및 반환
+//		List<String> list2 = service.getAutocompleteSearch(paramVO.getSearch());
+//		System.out.println(list2);
+//		modelMap.put("autoC", list2);
 		
 		// VO 반환
 		modelMap.put("paramVO", paramVO);
@@ -159,6 +164,19 @@ public class EsController {
 		
 		model.addAttribute("index", modelMap);
 		return "elastic/index";
+	}
+	
+	@GetMapping(value = "/elastic/autoE", produces = "application/json;charset=UTF-8")
+	public String getAutocompleteSearch(Model model, String search) throws IOException {
+		List<String> list = service.getAutocompleteSearch(search);
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("searchResult", list);
+		String json = objectMapper.writeValueAsString(returnMap);
+		list.clear();
+		returnMap.clear();
+		model.addAttribute("result", json);
+		return "elastic/autoE";
+		
 	}
 
 }

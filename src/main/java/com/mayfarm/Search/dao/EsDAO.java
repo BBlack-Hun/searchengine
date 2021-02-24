@@ -30,8 +30,10 @@ import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mayfarm.Search.vo.ParamVO;
 import com.mayfarm.core.utils.ElasticSearchUtil;
 import com.mayfarm.core.utils.RefineUtil;

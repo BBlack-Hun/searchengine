@@ -16,9 +16,11 @@ import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.MultiSearchResponse.Item;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.action.search.SearchResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mayfarm.Search.dao.EsDAO;
 import com.mayfarm.Search.vo.EsVO;
 import com.mayfarm.Search.vo.ParamVO;

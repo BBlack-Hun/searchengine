@@ -21,7 +21,7 @@
 				<div class="schBarWrap">
 					<div class="schBar">
 						<div class="iptWrap">
-							<div class="iptBar">
+							<div class="iptBar" id="autocompleteBox">
 								<script type="text/javascript">
 									$(function() {
 										/* input */
@@ -40,7 +40,7 @@
 								</script>
 								<!--  검색라인 -->
 								<input type="text" id="searchWord" name="search" class="ipt" placeholder="검색어를 입력해 주세요."
-								value ="${index.str}" onkeypress="search_enter();">
+								value ="${index.str}" onkeypress="search_enter();" autocomplete="off">
 								<div class="schArrow">
 									<a href="#" title="검색창 위 화살표" class="selected"><img src="resources/img/sch_arrow_up.png" alt="검색창 위 화살표"></a>
 									<a href="#" title="검색창 아래 화살표" class="unselected"><img src="resources/img/sch_arrow_down.png" alt="검색창 아래 화살표"></a>
@@ -94,11 +94,10 @@
 					<textarea id="paramVO_reincludeSearch" style="display: none;">${index.paramVO.reincludeSearch}</textarea>
 					<textarea id="paramVO_reexcludeSearch" style="display: none;">${index.paramVO.reexcludeSearch}</textarea>
 				</div>
+				<!-- 자동완성 출력 되는 부분 -->
 				<div class="schAuto">
-					<ul class="schlist">
-						<c:forEach items="${index.autoC}" var="AC">
-							<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">${AC}</span></a></li>
-						</c:forEach>
+					<ul class="schlist" id="autocompleteSearch">
+						
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
@@ -537,7 +536,11 @@
 		</div><!--s-container/e-->
 	</div>
 	<!-- 스크립트 영역 -->
+	<script type="text/javascript">
+		var ctx = "/MM";
+	</script>
 	<script src="resources/js/cookie.js" ></script>
 	<script src="resources/js/Msearch.js" ></script>
+	
 </body>
 </html>

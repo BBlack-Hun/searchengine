@@ -5,6 +5,9 @@
 		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 							http://www.springframework.org/schema/data/elasticsearch https://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch.xsd"> 
 		
-		<elasticsearch:rest-client id="esClient" hosts="http://114.70.234.76:9200" /> 
+		<elasticsearch:rest-client id="esClient" hosts="http://114.70.234.76:9200" />
+		
+		<!-- ObjectMapper를 사용하기 위한 bean 등록 -->
+		<bean id="ObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" ></bean>
 
 </beans>

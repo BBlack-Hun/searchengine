@@ -128,12 +128,12 @@ var search_option = function() {
 	form.querySelector('input[name=search]').value = search;
 	form.querySelector('input[name=osearch]').value = osearch;
 	form.querySelector('input[name=category]').value = category;
+	form.querySelector('input[name=sort]').value = sort;
 	form.querySelector('input[name=startDate]').value = startDate;
 	form.querySelector('input[name=endDate]').value = endDate;
 	form.querySelector('input[name=exactSearch]').value = exactSearch;
 	form.querySelector('input[name=includeSearch]').value = includeSearch;
 	form.querySelector('input[name=excludeSearch]').value = excludeSearch;
-	form.querySelector('input[name=sort]').value = sort;
 	form.querySelector('input[name=page]').value = page;
 	form.querySelector('input[name=perPageNum]').value = perPageNum;
 	form.querySelector('input[name=re]').value = re;
@@ -341,8 +341,81 @@ var popMySearchWord = function(e) { // 내가 찾은 검색어 제거 (쿠키 �
 	getMySearchWord(cookieName);	// 내가 찾은 검색어 새로고침
 }
 
+function SuggService() {
+	this.cur = null;
+	this.$e = $("#autocompleteSearch p.autocomplete");
+	this.up = function() {
+		if (this.cur = null || this.cur -1 < 0) {
+			this.cur = this.$e.length -1;
+		} else {
+			this.cur--;
+		}
+		this.notify();
+	};
+	
+	this.down = function() {
+		if (this.cur == null || this.cur + 1 >= this.$e.length) {
+			this.cur = 0;
+		} else {
+			this.cur++;
+		}
+		this.notify();
+	};
+	
+	this.notify = function() {
+		this.$e.css("background-color", "");
+		var $curE = $(rhis.$e[this.cur]);
+		$curE.css("background-color", "#edf2f7");
+		$("#searchWord").val($curE.children('span').text());
+	};
+	
+	this.init = function() {
+		this.cur = null;
+		this.$e = $("#autocompleteSearch p.autocomplete");
+	};
+}
+var suggService = new SuggService;
 
+// 검색어 자동완성
+var autocompleteTempSearch = '';
+var getAutocompleteSearch = function() {
+	var searchInput = document.getElementById('searchWord');
+	
+	var event = 'keyup';
+	searchInput.addEventListener(event, function(e){
+		if(e.keyCode == '38') {
+			suggService.up();
+		} else if (e.keyCode == '40') {
+			suggService.down();
+		} else {
+			// 단어가 있으면 자동완성
+			var text = (searchInput.value).trim();
+			if (text) {
+				var obj = {
+					search : text,
+					page : 1,
+					size : 4
+				}
+				// 자동완성(단어) 호출
+				$.get(ctx + '/elastic/autoE', obj)
+				.done(function(result) {
+					makeAutocompleteSearch(text, result.result);
+					suggService.init();
+				});
+			}
+			suggService.init();
+		}
+	})
+}
 
+var makeAutocompleteSearch  = function(search, data) {
+	var autocompleteSearch = document.getElementById('autocompleteSearch');
+	autocompleteSearch.innerHTML = "";
+	var makeView = '<li class="valueBox">';
+	makeView += '되나?? ㅋㅋ';
+	makeView += '</li>';
+	autocompleteSearch.innerHTML = makeView;
+}
 
 /**
  * 날짜 관련 유틸
@@ -423,4 +496,5 @@ $(document).ready(function(){
 	set_input_value();
 	getMySearchWord();
 	ClickPagiNation();
+	getAutocompleteSearch();
 });
