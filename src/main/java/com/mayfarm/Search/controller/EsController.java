@@ -166,14 +166,17 @@ public class EsController {
 		return "elastic/index";
 	}
 	
-	@GetMapping(value = "/elastic/autoE", produces = "application/json;charset=UTF-8")
+	@GetMapping(value = "/autoE", produces = "application/json;charset=UTF-8")
 	public String getAutocompleteSearch(Model model, String search) throws IOException {
-		List<String> list = service.getAutocompleteSearch(search);
+		List<String> list = new ArrayList<String>(); 
+		list = service.getAutocompleteSearch(search);
 		Map<String, Object> returnMap = new HashMap<String, Object>();
-		returnMap.put("searchResult", list);
-		String json = objectMapper.writeValueAsString(returnMap);
+		returnMap.put("result", list);
+
+		String json = objectMapper.writeValueAsString(returnMap); 
 		list.clear();
 		returnMap.clear();
+		System.out.println(json);
 		model.addAttribute("result", json);
 		return "elastic/autoE";
 		

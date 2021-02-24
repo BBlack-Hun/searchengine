@@ -397,8 +397,10 @@ var getAutocompleteSearch = function() {
 					size : 4
 				}
 				// 자동완성(단어) 호출
-				$.get(ctx + '/elastic/autoE', obj)
+				$.get(ctx + '/autoE', obj)
 				.done(function(result) {
+					// 이부분 고쳐야 함... 데이터가 이상하게 넘어가서.. .인식이 안됨...
+					console.log(result);
 					makeAutocompleteSearch(text, result.result);
 					suggService.init();
 				});
@@ -407,13 +409,17 @@ var getAutocompleteSearch = function() {
 		}
 	})
 }
-
+// 검색어 자동완성(단어) 표현
 var makeAutocompleteSearch  = function(search, data) {
 	var autocompleteSearch = document.getElementById('autocompleteSearch');
 	autocompleteSearch.innerHTML = "";
-	var makeView = '<li class="valueBox">';
-	makeView += '되나?? ㅋㅋ';
-	makeView += '</li>';
+	var makeView = '';
+	for ( var obj in data) {
+		makeView += '<li class="valueBox">';
+		makeView += obj;
+		makeView += '</li>';
+	}
+	
 	autocompleteSearch.innerHTML = makeView;
 }
 
