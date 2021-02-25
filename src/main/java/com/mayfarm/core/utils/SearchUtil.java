@@ -16,6 +16,16 @@ public class SearchUtil {
 		String[] fields = null;
 		
 		switch(field) {
+			case "제목":
+				fields = new String[] { "title", "title.ngram", "stitle", "stitle.ngram" };
+				break;
+			case "내용":
+				fields = new String[] { "content", "content.ngram" };
+				break;
+			case "첨부파일명":
+				fields = new String[] { "linkname" };
+				break;
+			case "첨부파일_내용":
 			default:
 				fields = new String[] {
 						"title", "title.ngram",
@@ -32,14 +42,24 @@ public class SearchUtil {
 	public static String[] getSearchFieldLAW(String field) {
 		String[] fields = null;
 		switch(field) {
-		default:
-			fields = new String[] {
-					"title", "title.ngram",
-					"stitle", "stitle.ngram",
-					"content", "content.ngram",
-					"linkname"
-					};
-			break;
+			case "제목":
+				fields = new String[] { "title", "title.ngram", "stitle", "stitle.ngram" };
+				break;
+			case "내용":
+				fields = new String[] { "content", "content.ngram" };
+				break;
+			case "첨부파일명":
+				fields = new String[] { "linkname" };
+				break;
+			case "첨부파일_내용":
+			default:
+				fields = new String[] {
+						"title", "title.ngram",
+						"stitle", "stitle.ngram",
+						"content", "content.ngram",
+						"linkname"
+						};
+				break;
 		}
 		
 		return fields;
@@ -48,12 +68,18 @@ public class SearchUtil {
 	public static String[] getSearchFieldNEWS(String field) {
 		String[] fields = null;
 		switch(field) {
-		default:
-			fields = new String[] {
-					"title",
-					"text",
-					};
-			break;
+			case "제목":
+				fields = new String[] { "title" };
+				break;
+			case "내용":
+				fields = new String[] { "text" };
+				break;
+			default:
+				fields = new String[] {
+						"title",
+						"text",
+						};
+				break;
 		}
 		
 		return fields;
@@ -64,6 +90,16 @@ public class SearchUtil {
 	public static String[] getSearchFieldMOIS_highlight(String field) {
 		String[] fields = null;
 		switch(field) {
+		case "제목":
+			fields = new String[] { "title", "title.ngram", "stitle", "stitle.ngram" };
+			break;
+		case "내용":
+			fields = new String[] { "content", "content.ngram" };
+			break;
+		case "첨부파일명":
+			fields = new String[] { "linkname" };
+			break;
+		case "첨부파일_내용":
 		default:
 			fields = new String[] {
 					"title", "title.ngram",
@@ -80,6 +116,16 @@ public class SearchUtil {
 	public static String[] getSearchFieldLAW_highlight(String field) {
 		String[] fields = null;
 		switch(field) {
+		case "제목":
+			fields = new String[] { "title", "title.ngram", "stitle", "stitle.ngram" };
+			break;
+		case "내용":
+			fields = new String[] { "content", "content.ngram" };
+			break;
+		case "첨부파일명":
+			fields = new String[] { "linkname" };
+			break;
+		case "첨부파일_내용":
 		default:
 			fields = new String[] {
 					"title", "title.ngram",
@@ -95,6 +141,12 @@ public class SearchUtil {
 	public static String[] getSearchFieldNEWS_highlight(String field) {
 		String[] fields = null;
 		switch(field) {
+		case "제목":
+			fields = new String[] { "title" };
+			break;
+		case "내용":
+			fields = new String[] { "text" };
+			break;
 		default:
 			fields = new String[] {
 					"title",

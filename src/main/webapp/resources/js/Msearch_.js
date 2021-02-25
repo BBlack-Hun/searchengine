@@ -146,8 +146,18 @@ var search_option = function() {
 	form.submit();
 }
 
-// 영역 클릭 (field-> 전체, 제목, 내용, 등...) -> booster 처리 해야 할듯
-
+// 영역 클릭 (field-> 전체, 제목, 내용, 등...) -> booster 처리 해야 할듯 -> 안해도됨
+var doOpenCheck = function(chk) {
+	var obj = document.getElementsByName('chkSearch');
+	for (var i = 0; i < obj.length; i++) {
+		 if(obj[i] != chk){
+			obj[i].checked = false;
+		} else {
+			field = chk.getAttribute('value');
+			searchAll(true);
+		}
+	}
+}
 
 // 더보기 또는 카테고리를 눌렀을때, 각 카테고리 별 리스트로 이동
 var search_Category = function(btn) {
@@ -173,7 +183,7 @@ var sort_btn = function(btn) {
 
 // 상세검색
 var search_btn_detail = function() {
-	SetRe();
+	setRe();
 	resetParam('search', re);
 	
 	exactSearch = document.getElementById('exactSearch').value;
@@ -463,6 +473,16 @@ var makeAutocompleteSearch  = function(search, data) {
 	});
 	
 	autocompleteSearch.innerHTML = makeView;
+}
+
+// 미리보기 누르기
+var onFileView = function(target) {
+	console.log($(target).next);
+	$(target).next('.FileView_mordal').show();
+}
+
+var closeFileView = function(target) {
+	$(target).parents('.FileView_mordal').hide();
 }
 
 

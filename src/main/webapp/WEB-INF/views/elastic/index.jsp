@@ -70,23 +70,23 @@
 				</div>
 				<div class="schCheckArea">
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox2" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox2" name="chkSearch" class="fCheck" value ="전체" <c:if test="${index.paramVO.field eq '전체'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox2">전체</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox3" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox3" name="chkSearch" class="fCheck" value="제목" <c:if test="${index.paramVO.field eq '제목'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox3">제목</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox4" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox4" name="chkSearch" class="fCheck" value="내용" <c:if test="${index.paramVO.field eq '내용'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox4">본문</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox5" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox5" name="chkSearch" class="fCheck" value="첨부파일명" <c:if test="${index.paramVO.field eq '첨부파일명'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox5">첨부파일명</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox6" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox6" name="chkSearch" class="fCheck" value="첨부파일_내용" <c:if test="${index.paramVO.field eq '첨부파일_내용'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox6">첨부파일 내용</label>
 					</span>
 				</div>
@@ -317,25 +317,23 @@
 												<div class="file">
 													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 													<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
-													<a href="javascript:void(0);" class="btnFileView">미리보기</a>
+													<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
 												</div>
-												<%-- <div class="FileView_mordal">
+												<div class="FileView_mordal" style="display:none;">
 													<div class="FileView_top">
 														<p class="view_title">미리보기</p>
-														<a href="javascript:void(0);" class="close_btn"></a>
+														<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
 													</div>
 													<div class="FileView_bottom">
 														<p class="view_info">
-															${MOIS.content }
+															제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
+															제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
+															제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
+															&lt; 개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8. &gt;
 														</p>
 													</div>
-												</div> --%>
+												</div>
 											</div>
-											<script type="text/javascript"> //미리보기 modal창 fadeOut
-												$(function(){
-													$(".FileView_mordal").fadeOut(0);
-												});
-											</script>
 										</li>			
 									</c:forEach>
 								</ul>
@@ -370,26 +368,21 @@
 													<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
 													<a href="javascript:void(0);" class="btnFileView">미리보기</a>
 												</div>
-												<!-- <div class="FileView_mordal">
+												<div class="FileView_mordal">
 													<div class="FileView_top">
 														<p class="view_title">미리보기</p>
-														<a href="javascript:void(0);" class="close_btn"></a>
+														<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
 													</div>
 													<div class="FileView_bottom">
 														<p class="view_info">
 															제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
 															제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
 															제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
-															<개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8.>
+															&lt; 개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8. &gt;
 														</p>
 													</div>
-												</div> -->
+												</div>
 											</div>
-											<script type="text/javascript"> //미리보기 modal창 fadeOut
-												$(function(){
-													$(".FileView_mordal").fadeOut(0);
-												});
-											</script>
 										</li>			
 									</c:forEach>
 								</ul>

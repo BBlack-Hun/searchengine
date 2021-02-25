@@ -323,7 +323,7 @@
 											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
 										</div>
 										<!-- 첨부파일 미리보기 -->
-										<%-- <div class="FileView_mordal">
+										<div class="FileView_mordal">
 											<div class="FileView_top">
 												<p class="view_title">미리보기</p>
 												<a href="javascript:void(0);" class="close_btn"></a>
@@ -333,7 +333,7 @@
 													${MOIS.content }
 												</p>
 											</div>
-										</div> --%>
+										</div>
 									</div>
 									<script type="text/javascript"> //미리보기 modal창 fadeOut
 										$(function(){
@@ -386,15 +386,41 @@
 										<c:if test="${status.count <= 3}">
 											<li class="hitItem top3"><!--add class:top3-->
 												<span class="i">${status.count}</span>
-													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank new">new</span><!--add class:up-->
+													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="search_btn_click(this)">${SRR.getKey()}</a>
+													<span style="display:none;">${SRR.getKey()}</span>
+<!-- 												<span class="rank new">new</span>add class:up -->
+													<c:if test="${SRR.getValue() < 0 }">
+														<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() > 0 }">
+														<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 999 }">
+														<span class="rank new">${SRR.getValue()}</span><!--add class:up-->
+													</c:if>
+													<c:if test="${SRR.getValue() == 0 }">
+														<span class="rank">-</span><!--add class:up-->
+													</c:if>
 											</li>
 										</c:if>
 										<c:if test="${status.count > 3}">
 											<li class="hitItem"><!--add class:top3-->
 												<span class="i">${status.count}</span>
-													<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="">${SRR.getKey()}</a>
-												<span class="rank new">new</span><!--add class:up-->
+												<a href="javascript:void(0);" title="${SRR.getKey()}" onclick="search_btn_click(this);">${SRR.getKey()}</a>
+												<span style="display:none;">${SRR.getKey()}</span>
+<!-- 												<span class="rank new">new</span>add class:up -->
+												<c:if test="${SRR.getValue() < 0 }">
+													<span class="rank down">${SRR.getValue()}</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() > 0 }">
+													<span class="rank up">${SRR.getValue()}</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() == 999 }">
+													<span class="rank new">new</span><!--add class:up-->
+												</c:if>
+												<c:if test="${SRR.getValue() == 0 }">
+													<span class="rank">-</span><!--add class:up-->
+												</c:if>
 											</li>
 										</c:if>
 									</c:forEach>
