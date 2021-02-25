@@ -21,7 +21,7 @@
 				<div class="schBarWrap">
 					<div class="schBar">
 						<div class="iptWrap">
-							<div class="iptBar" id="autocompleteBox">
+							<div class="iptBar">
 								<script type="text/javascript">
 									$(function() {
 										/* input */
@@ -49,62 +49,17 @@
 						</div>
 						<a href="javascript:void(0);" class="btnSch" onclick="search_btn();">검색</a>
 					</div>
-					<!-- 일반 검색 -->
-					<form action="index" method="get" id='form_search'>
-						<input type="hidden" name="search">
-						<input type="hidden" name="osearch">
-					</form>
-					<!-- 상세 검색 -->
-					<form action="index" method="get" id="form_search_option">
-						<input type="hidden" name="search">
-						<input type="hidden" name="osearch">
-						<input type="hidden" name="category">
-						<input type="hidden" name="sort">
-						<input type="hidden" name="startDate">
-						<input type="hidden" name="endDate">
-						<input type="hidden" name="exactSearch">
-						<input type="hidden" name="includeSearch">
-						<input type="hidden" name="excludeSearch">
-						<input type="hidden" name="page">
-						<input type="hidden" name="perPageNum">
-						<input type="hidden" name="re">
-						<input type="hidden" name="field">
-						<input type="hidden" name="reSearch">
-						<input type="hidden" name="reexactSearch">
-						<input type="hidden" name="reincludeSearch">
-						<input type="hidden" name="reexcludeSearch">
-						<input type="hidden" name="max">
-					</form>
-					<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
-					<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
-					<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
-					<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
-					<textarea id="paramVO_startDate" style="display: none;">${index.paramVO.startDate}</textarea>
-					<textarea id="paramVO_endDate" style="display: none;">${index.paramVO.endDate}</textarea>
-					<textarea id="paramVO_exactSearch" style="display: none;">${index.paramVO.exactSearch}</textarea>
-					<textarea id="paramVO_includeSearch" style="display: none;">${index.paramVO.includeSearch}</textarea>
-					<textarea id="paramVO_excludeSearch" style="display: none;">${index.paramVO.excludeSearch}</textarea>
-					<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
-					<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
-					<textarea id="paramVO_re" style="display: none;">${index.paramVO.re}</textarea>
-					<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
-					<textarea id="paramVO_max" style="display: none;">${index.paramVO.max}</textarea>
-					<textarea id="paramVO_reSearch" style="display: none;">${index.paramVO.reSearch}</textarea>
-					<textarea id="paramVO_reexactSearch" style="display: none;">${index.paramVO.reexactSearch}</textarea>
-					<textarea id="paramVO_reincludeSearch" style="display: none;">${index.paramVO.reincludeSearch}</textarea>
-					<textarea id="paramVO_reexcludeSearch" style="display: none;">${index.paramVO.reexcludeSearch}</textarea>
 				</div>
 				<!-- 자동완성 출력 되는 부분 -->
-				<div class="schAuto">
+				<div class="schAuto" id="autocompleteBox">
 					<ul class="schlist" id="autocompleteSearch">
-						
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
 							<a href="javascript:void(0);" class="first_word">첫 단어 보기</a>
 							<a href="javascript:void(0);" class="last_word">끝 단어 보기</a>
 						</div>
-						<a href="javascript:void(0);" class="btnClose" onclick="$(this).closest('.schAuto').hide();">자동완성 끄기</a>
+						<a href="javascript:void(0);" class="btnClose" onclick="closeSearchForm(this); return false;">자동완성 끄기</a>
 					</div>
 				</div>
 				<div class="schCheckBox">				
@@ -136,6 +91,50 @@
 					</span>
 				</div>
 			</div>
+			<!-- 일반 검색 -->
+			<form action="index" method="get" id='form_search'>
+				<input type="hidden" name="search">
+				<input type="hidden" name="osearch">
+			</form>
+			<!-- 상세 검색 -->
+			<form action="index" method="get" id="form_search_option">
+				<input type="hidden" name="search">
+				<input type="hidden" name="osearch">
+				<input type="hidden" name="category">
+				<input type="hidden" name="sort">
+				<input type="hidden" name="startDate">
+				<input type="hidden" name="endDate">
+				<input type="hidden" name="exactSearch">
+				<input type="hidden" name="includeSearch">
+				<input type="hidden" name="excludeSearch">
+				<input type="hidden" name="page">
+				<input type="hidden" name="perPageNum">
+				<input type="hidden" name="re">
+				<input type="hidden" name="field">
+				<input type="hidden" name="reSearch">
+				<input type="hidden" name="reexactSearch">
+				<input type="hidden" name="reincludeSearch">
+				<input type="hidden" name="reexcludeSearch">
+				<input type="hidden" name="max">
+			</form>
+			<textarea id="paramVO_search" style="display: none;">${index.str}</textarea>
+			<textarea id="paramVO_osearch" style="display: none;">${index.ostr}</textarea>
+			<textarea id="paramVO_category" style="display: none;">${index.Category}</textarea>
+			<textarea id="paramVO_sort" style="display: none;">${index.paramVO.sort}</textarea>
+			<textarea id="paramVO_startDate" style="display: none;">${index.paramVO.startDate}</textarea>
+			<textarea id="paramVO_endDate" style="display: none;">${index.paramVO.endDate}</textarea>
+			<textarea id="paramVO_exactSearch" style="display: none;">${index.paramVO.exactSearch}</textarea>
+			<textarea id="paramVO_includeSearch" style="display: none;">${index.paramVO.includeSearch}</textarea>
+			<textarea id="paramVO_excludeSearch" style="display: none;">${index.paramVO.excludeSearch}</textarea>
+			<textarea id="paramVO_page" style="display: none;">${index.paramVO.page}</textarea>
+			<textarea id="paramVO_perPageNum" style="display: none;">${index.paramVO.listSize}</textarea>
+			<textarea id="paramVO_re" style="display: none;">${index.paramVO.re}</textarea>
+			<textarea id="paramVO_field" style="display: none;">${index.paramVO.field}</textarea>
+			<textarea id="paramVO_max" style="display: none;">${index.paramVO.max}</textarea>
+			<textarea id="paramVO_reSearch" style="display: none;">${index.paramVO.reSearch}</textarea>
+			<textarea id="paramVO_reexactSearch" style="display: none;">${index.paramVO.reexactSearch}</textarea>
+			<textarea id="paramVO_reincludeSearch" style="display: none;">${index.paramVO.reincludeSearch}</textarea>
+			<textarea id="paramVO_reexcludeSearch" style="display: none;">${index.paramVO.reexcludeSearch}</textarea>
 			<script type="text/javascript">
 				/* 포틀릿 width가 1150이하로 작아질 때 배경겹침 현상 제거 */
 				$(document).ready(function(){

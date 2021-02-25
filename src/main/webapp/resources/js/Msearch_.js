@@ -376,6 +376,44 @@ function SuggService() {
 }
 var suggService = new SuggService;
 
+// 검색어 자동완성 포커스 인 아웃
+var autocompleteFocus = function() {
+	var searchInput = document.getElementById('searchWord');
+	var autocompleteBox = document.getElementById('autocompleteBox');
+	var body = document.querySelector('body');
+	
+	var event = 'keyup';
+	searchInput.addEventListener(event, function(e){
+		autocompleteBox.classList.add('on');
+		//document.getElementById('autocompleteBoxBoxDate').innerHTML
+	})
+	
+	// 포커스 아웃
+	body.addEventListener('click', function(e){
+		var target = e.target;
+		// 자동완성 영역이면 넘김
+		
+		if (target == e.currentTarget.querySelector("searchWord")){
+			return;
+		}
+		
+		// 자동완성영역
+		if ($(target).parents('div#autocompleteBox.on')[0] == e.currentTarget.querySelector("#autocompleteBox")){
+			return;
+		}
+		
+		var nodes = Array.apply(null, e.currentTarget.querySelectorAll(".autocomplete"));
+		var is = nodes.filter(function(node){
+			return target == node;
+		});
+		if (is.length > 0) {
+			return;
+		}
+		autocompleteBox.classList.remove('on');
+		
+	})
+}
+
 // 검색어 자동완성
 var autocompleteTempSearch = '';
 var getAutocompleteSearch = function() {
@@ -425,6 +463,15 @@ var makeAutocompleteSearch  = function(search, data) {
 	});
 	
 	autocompleteSearch.innerHTML = makeView;
+}
+
+
+/* 화면 제어 */
+// 자동완성 hide
+var closeSearchForm = function(target) {
+	var target = $(target);
+	$('.schAuto').removeClass('on');
+	console.log('click');
 }
 
 /**
@@ -506,5 +553,6 @@ $(document).ready(function(){
 	set_input_value();
 	getMySearchWord();
 	ClickPagiNation();
+	autocompleteFocus();
 	getAutocompleteSearch();
 });
