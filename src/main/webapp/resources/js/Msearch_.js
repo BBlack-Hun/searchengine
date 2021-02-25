@@ -364,7 +364,7 @@ function SuggService() {
 	
 	this.notify = function() {
 		this.$e.css("background-color", "");
-		var $curE = $(rhis.$e[this.cur]);
+		var $curE = $(this.$e[this.cur]);
 		$curE.css("background-color", "#edf2f7");
 		$("#searchWord").val($curE.children('span').text());
 	};
@@ -399,8 +399,7 @@ var getAutocompleteSearch = function() {
 				// 자동완성(단어) 호출
 				$.get(ctx + '/autoE', obj)
 				.done(function(result) {
-					// 이부분 고쳐야 함... 데이터가 이상하게 넘어가서.. .인식이 안됨...
-					console.log(result);
+					result = JSON.parse(result);
 					makeAutocompleteSearch(text, result.result);
 					suggService.init();
 				});
@@ -414,11 +413,16 @@ var makeAutocompleteSearch  = function(search, data) {
 	var autocompleteSearch = document.getElementById('autocompleteSearch');
 	autocompleteSearch.innerHTML = "";
 	var makeView = '';
-	for ( var obj in data) {
-		makeView += '<li class="valueBox">';
-		makeView += obj;
+	data.forEach(function(obj) {
+		makeView += '<li class="schitem">';
+		makeView += '<a href="javascript:void(0);" onclick="search_btn_click(this)">';
+		makeView += '<span class="blue_bold">';
+		makeView += obj;		
+		makeView += '</span>';
+		makeView += '</a>';
+		makeView += '<span style="display:none;">' + obj + '</span>';
 		makeView += '</li>';
-	}
+	});
 	
 	autocompleteSearch.innerHTML = makeView;
 }

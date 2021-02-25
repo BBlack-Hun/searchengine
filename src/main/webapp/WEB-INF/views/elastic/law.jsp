@@ -429,6 +429,7 @@
 	</div>
 	
 	<!-- 스크립트 위치 -->	
-	<script src="resources/js/Msearch.js" ></script>
+	<script src="resources/js/cookie.js" ></script>
+	<script src="resources/js/Msearch_.js" ></script>
 </body>
 </html>
