@@ -2,8 +2,10 @@ package com.mayfarm.core.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,18 +28,22 @@ public class SearchUtil {
 				fields = new String[] { "linkname", "linkname.ngram" };
 				break;
 			case "첨부파일_내용":
+				fields = new String[] { "_file.content", "_file.content.ngram" };
+				break;
 			default:
 				fields = new String[] {
 						"title", "title.ngram",
 						"stitle", "stitle.ngram",
 						"content", "content.ngram",
-						"linkname", "linkname.ngram"
+						"linkname", "linkname.ngram",
+						"_file.content", "_file.content.ngram"
 				};
 				break;
 		}
 		
 		return fields;
 	}
+	
 	// LAW 필드_검색
 	public static String[] getSearchFieldLAW(String field) {
 		String[] fields = null;
@@ -52,13 +58,16 @@ public class SearchUtil {
 				fields = new String[] { "linkname", "linkname.ngram" };
 				break;
 			case "첨부파일_내용":
+				fields = new String[] { "_file.content", "_file.content.ngram" };
+				break;
 			default:
 				fields = new String[] {
 						"title", "title.ngram",
 						"stitle", "stitle.ngram",
 						"content", "content.ngram",
-						"linkname", "linkname.ngram"
-						};
+						"linkname", "linkname.ngram",
+						"_file.content", "_file.content.ngram"
+				};
 				break;
 		}
 		
@@ -100,6 +109,8 @@ public class SearchUtil {
 			fields = new String[] { "linkname" };
 			break;
 		case "첨부파일_내용":
+			fields = new String[] { "_file.content", "_file.content.ngram" };
+			break;
 		default:
 			fields = new String[] {
 					"title", "title.ngram",
@@ -126,6 +137,8 @@ public class SearchUtil {
 			fields = new String[] { "linkname" };
 			break;
 		case "첨부파일_내용":
+			fields = new String[] { "_file.content", "_file.content.ngram" };
+			break;
 		default:
 			fields = new String[] {
 					"title", "title.ngram",

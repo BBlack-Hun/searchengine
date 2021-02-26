@@ -12,6 +12,7 @@ import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.MultiSearchRequest;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -22,6 +23,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -98,7 +100,7 @@ public class EsDAO {
 		// News
 		SearchRequest searchRequest_news = getNewsRequest(paramVO);
 		multiSerachRequest.add(searchRequest_news);
-		
+			
 		return restClient.msearch(multiSerachRequest, RequestOptions.DEFAULT);
 	}
 	/**
@@ -209,7 +211,7 @@ public class EsDAO {
 		// 하이라이트 적용
 //		searchSourceBuilder.highlighter(makeHighLightField());
 		// 테스트 출력
-//		System.out.println(searchSourceBuilder.toString());
+		System.out.println(searchSourceBuilder.toString());
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 		
@@ -521,7 +523,10 @@ public class EsDAO {
 		for (MatchPhraseQueryBuilder matchPhraseQueryBuilder : MatchPhraseQueryBuilder) {
 			boolQueryBuilderForSearch_inner.should(matchPhraseQueryBuilder);
 		}
+//		NestedQueryBuilder nestedQueryBuilder = QueryBuilders.nestedQuery("_file", boolQueryBuilderForSearch_inner, ScoreMode.Max);
+//		boolQueryBuilderForSearch.must(nestedQueryBuilder);
 		boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner);
+		
 		
 		// 결과 내 재검색
 		String[] reSearchs = reSearch.split(splitFormat);

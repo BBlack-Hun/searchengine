@@ -57,6 +57,7 @@ public class EsService {
 		// News
 		SearchResponse searchResponse_news = items[2].getResponse();
 		
+		
 		// MOIS 결과 정제
 		List<Map<String, Object>> list_mois = new ArrayList<Map<String, Object>>();
 		for (SearchHit hit : searchResponse_mois.getHits().getHits()) {

@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<title>수습과제::통합검색::전체</title>
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/search_.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -315,28 +315,22 @@
 										<div class="file">
 											<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 											<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
-											<a href="javascript:void(0);" class="btnFileView">미리보기</a>
+											<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
+											<div class="FileView_mordal" style="display:none;">
+												<div class="FileView_top">
+													<p class="view_title">미리보기</p>
+													<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
+												</div>
+												<div class="FileView_bottom">
+													<p class="view_info">
+														<c:forEach items="${LAW._file}" var="file">
+															${file.preView}
+														</c:forEach>
+													</p>
+												</div>
+											</div>
 										</div>
-										<!-- <div class="FileView_mordal">
-											<div class="FileView_top">
-												<p class="view_title">미리보기</p>
-												<a href="javascript:void(0);" class="close_btn"></a>
-											</div>
-											<div class="FileView_bottom">
-												<p class="view_info">
-													제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
-													제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
-													제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
-													<개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8.>
-												</p>
-											</div>
-										</div> -->
 									</div>
-									<script type="text/javascript"> //미리보기 modal창 fadeOut
-										$(function(){
-											$(".FileView_mordal").fadeOut(0);
-										});
-									</script>
 								</li>			
 							</c:forEach>
 						</ul>
@@ -452,7 +446,10 @@
 	</div>
 	
 	<!-- 스크립트 위치 -->	
+	<script type="text/javascript">
+		var ctx = "/MM";
+	</script>
 	<script src="resources/js/cookie.js" ></script>
-	<script src="resources/js/Msearch.js" ></script>
+	<script src="resources/js/Msearch_.js" ></script>
 </body>
 </html>

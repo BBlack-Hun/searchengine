@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<title>수습과제::통합검색::전체</title>
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/search_.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -318,19 +318,19 @@
 													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 													<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
 													<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
-												<div class="FileView_mordal" style="display:none;">
-													<div class="FileView_top">
-														<p class="view_title">미리보기</p>
-														<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
+													<div class="FileView_mordal" style="display:none;">
+														<div class="FileView_top">
+															<p class="view_title">미리보기</p>
+															<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
+														</div>
+														<div class="FileView_bottom">
+															<p class="view_info">
+																<c:forEach items="${MOIS._file}" var="file">
+																	${file.preView}
+																</c:forEach>
+															</p>
+														</div>
 													</div>
-													<div class="FileView_bottom">
-														<p class="view_info">
-															<c:forEach items="${MOIS._file}" var="file">
-																${file.preView}
-															</c:forEach>
-														</p>
-													</div>
-												</div>
 												</div>
 											</div>
 										</li>			
@@ -366,7 +366,6 @@
 													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 													<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
 													<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
-												
 													<div class="FileView_mordal" style="display:none;">
 														<div class="FileView_top">
 															<p class="view_title">미리보기</p>
@@ -531,7 +530,7 @@
 		var ctx = "/MM";
 	</script>
 	<script src="resources/js/cookie.js" ></script>
-	<script src="resources/js/Msearch.js" ></script>
+	<script src="resources/js/Msearch_.js" ></script>
 	
 </body>
 </html>

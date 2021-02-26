@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<title>수습과제::통합검색::전체</title>
 	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/search.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/search_.css">
 	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -454,7 +454,10 @@
 		</div><!--s-container/e-->
 	</div>
 	<!-- 스크립트 위치 -->
+	<script type="text/javascript">
+		var ctx = "/MM";
+	</script>
 	<script src="resources/js/cookie.js" ></script>
-	<script src="resources/js/Msearch.js" ></script>
+	<script src="resources/js/Msearch_.js" ></script>
 </body>
 </html>

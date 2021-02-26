@@ -17,13 +17,13 @@
 .searchArea .schBarWrap:before{content:'';position:absolute;top:-7px;left:-211px;display:block;width:205px;height:108px;background:url("../img/bg_search_header.png") 0 0 no-repeat;}
 .searchArea .schBar{position:relative;width:495px;height:45px;padding-right:98px;}
 /*searchArea > 검색창*/
-.searchArea .schAuto{display:none; position:absolute;left:20px;top:86px;width:551px;border:1px solid #cacdd1;background:#fff;box-shadow:0px 1px 5px 0px rgba(0, 0, 0, 0.1); z-index:1;}
+.searchArea .schAuto{display:none; position:absolute;left:20px;top:86px;width:551px; padding-bottom: 31px; border:1px solid #cacdd1;background:#fff;box-shadow:0px 1px 5px 0px rgba(0, 0, 0, 0.1); z-index:1;}
 .searchArea .schAuto.on {display: flex;}
-.searchArea .schAuto .schlist{max-height:196px;padding:4px 0;overflow:hidden;}
-.searchArea .schAuto .schlist .schitem{cursor:pointer;width:513px;height:27px;padding:0 19px 1px;font-size:14px;line-height:27px;}
+.searchArea .schAuto .schlist{padding:4px 0 10px;overflow:hidden; margin: 0;}
+.searchArea .schAuto .schlist .schitem{cursor:pointer;width:513px;height:27px;padding:0 19px 1px;font-size:14px;line-height:27px; }
 .searchArea .schAuto .schlist .schitem:hover{background:#f6f6f6;}
 .searchArea .schAuto .schlist .schitem span.blue_bold{color:#0080d2;font-weight:700;}
-.searchArea .schAuto .autoBtm{position:absolute; height:26px; width:100%; border-top:1px solid #e9eff3;background:#f7f8f8; margin-top:38%;}
+.searchArea .schAuto .autoBtm{position:absolute; height:26px; bottom:0; width:100%; border-top:1px solid #e9eff3;background:#f7f8f8; box-sizing: border-box;}
 .searchArea .schAuto .autoBtm .word_all{display:inline-block; line-height:25px; padding-left:19px;}
 .searchArea .schAuto .autoBtm .word_all a{font-size:12px; color:#444;}
 .searchArea .schAuto .autoBtm .word_all .first_word{padding-right:9px; position:relative;}
