@@ -57,7 +57,6 @@ public class EsService {
 		// News
 		SearchResponse searchResponse_news = items[2].getResponse();
 		
-		
 		// MOIS 결과 정제
 		List<Map<String, Object>> list_mois = new ArrayList<Map<String, Object>>();
 		for (SearchHit hit : searchResponse_mois.getHits().getHits()) {
@@ -80,13 +79,18 @@ public class EsService {
 		
 		// News 결과 정제
 		List<Map<String, Object>> list_news = new ArrayList<Map<String, Object>>();
-		for (SearchHit hit : searchResponse_news.getHits().getHits()) {
-			Map<String, Object> sourceMap = hit.getSourceAsMap();
-			
-			//하이라이트
-			ElasticSearchUtil.sourceToHighlight(sourceMap, SearchUtil.getSearchFieldNEWS_highlight(paramVO.getField()), getHighlightKeywordArray(paramVO), preTags, postTags);
-			list_news.add(sourceMap);
-		}	
+		try {
+			for (SearchHit hit : searchResponse_news.getHits().getHits()) {
+				Map<String, Object> sourceMap = hit.getSourceAsMap();
+				
+				//하이라이트
+				ElasticSearchUtil.sourceToHighlight(sourceMap, SearchUtil.getSearchFieldNEWS_highlight(paramVO.getField()), getHighlightKeywordArray(paramVO), preTags, postTags);
+				list_news.add(sourceMap);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		
 		// 전체 검색 결과 수
 		long total = 0;
@@ -154,6 +158,7 @@ public class EsService {
 		
 		returnMap.put("total", total);
 		returnMap.put("MOIS", list_mois);
+		returnMap.put("autoRecommList", autoRecommList);
 		return returnMap;
 	}
 	
@@ -189,6 +194,7 @@ public class EsService {
 		
 		returnMap.put("total", total);
 		returnMap.put("LAW", list_law);
+		returnMap.put("autoRecommList", autoRecommList);
 		return returnMap;
 	}
 	
@@ -224,6 +230,7 @@ public class EsService {
 		
 		returnMap.put("total", total);
 		returnMap.put("NEWS", list_news);
+		returnMap.put("autoRecommList", autoRecommList);
 		return returnMap;
 	}
 	

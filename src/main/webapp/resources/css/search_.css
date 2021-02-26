@@ -88,7 +88,7 @@
 .lnbDiv .lnbList li.lnbItem .Item .num{float:right;color:#0067a9;}
 .lnbDiv .lnbList li.lnbItem.selected .Item{border-bottom:1px solid #2f7dd4;background:#2f7dd4;}
 .lnbDiv .lnbList li.lnbItem.selected .Item .title, .lnbDiv .lnbList li.lnbItem.selected .Item .num{color:#FFF;}
-.lnbDiv .lnbList li .sub_list{background:#2c6bb1; padding:21px 0;}
+.lnbDiv .lnbList li .sub_list{background:#2c6bb1; padding:21px 0; display:none;}
 .lnbDiv .lnbList li .sub_item{display:block;padding:0 20px 0 22px;box-sizing:border-box;font-size:15px; margin-top:20px; cursor:pointer;}
 .lnbDiv .lnbList li .sub_item:hover .sub_info .title{color:#aae7fe;}
 .lnbDiv .lnbList li .sub_item:first-child{margin-top:0;}

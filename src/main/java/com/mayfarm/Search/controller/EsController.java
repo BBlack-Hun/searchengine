@@ -58,11 +58,6 @@ public class EsController {
 		List<Map<String, Integer>> list = service.getSearchTopWordList();
 		modelMap.put("searchResult", list);
 		
-//		// 통합검색 검색어 자동완성 반환을 위한 list선언 및 반환
-//		List<String> list2 = service.getAutocompleteSearch(paramVO.getSearch());
-//		System.out.println(list2);
-//		modelMap.put("autoC", list2);
-		
 		// VO 반환
 		modelMap.put("paramVO", paramVO);
 			

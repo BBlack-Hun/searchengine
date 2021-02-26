@@ -100,6 +100,7 @@ public class EsDAO {
 		// News
 		SearchRequest searchRequest_news = getNewsRequest(paramVO);
 		multiSerachRequest.add(searchRequest_news);
+		
 			
 		return restClient.msearch(multiSerachRequest, RequestOptions.DEFAULT);
 	}
@@ -204,6 +205,7 @@ public class EsDAO {
 		
 		// 검색 쿼리 생성
 		setSearchQuery(paramVO, boolQueryBuilder, fields);
+
 		
 		searchSourceBuilder.query(boolQueryBuilder);
 		searchSourceBuilder.from(from);
@@ -274,7 +276,11 @@ public class EsDAO {
 		 */
 		
 		// 검색 쿼리 생성
-		setSearchQuery(paramVO, boolQueryBuilder, fields);
+		if (field.equals("첨부파일_내용")) {
+			setSearchQueryForNested(paramVO, boolQueryBuilder, fields);
+		} else {
+			setSearchQuery(paramVO, boolQueryBuilder, fields);
+		}
 		
 		// 소스 빌더에 값 넣기
 		searchSourceBuilder.query(boolQueryBuilder);
@@ -428,6 +434,12 @@ public class EsDAO {
 		return ElasticSearchUtil.getKeywordSuggestion(restClient, search);
 	}
 	
+	/**
+	 * 검색하는 부분 (재검색, 검색, 일치 포함 제외)
+	 * @param paramVO
+	 * @param boolQueryBuilder
+	 * @param fields
+	 */
 	private void setSearchQuery(ParamVO paramVO, BoolQueryBuilder boolQueryBuilder, String[] fields) {
 		
 		// 값 세팅(재검색, 검색, 일치, 포함, 제외)
@@ -526,6 +538,126 @@ public class EsDAO {
 //		NestedQueryBuilder nestedQueryBuilder = QueryBuilders.nestedQuery("_file", boolQueryBuilderForSearch_inner, ScoreMode.Max);
 //		boolQueryBuilderForSearch.must(nestedQueryBuilder);
 		boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner);
+		
+		
+		// 결과 내 재검색
+		String[] reSearchs = reSearch.split(splitFormat);
+		for (String rq : reSearchs) {
+			if (StringUtils.isBlank(rq)) {
+				continue;
+			}
+			// 일반 영역
+			BoolQueryBuilder boolQueryBuilderForSearch_inner_re = QueryBuilders.boolQuery();
+			
+			MatchPhraseQueryBuilder[] MatchPhraseQueryBuilder_re = ElasticSearchUtil.getMatchPhraseQueryBuilders(fields, rq, slop);
+			
+			for (MatchPhraseQueryBuilder matchPhraseQueryBUilder : MatchPhraseQueryBuilder_re) {
+				boolQueryBuilderForSearch_inner_re.should(matchPhraseQueryBUilder);
+			}
+			boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner_re);
+		}
+		boolQueryBuilder.must(boolQueryBuilderForSearch);
+	}
+	
+	// nest용 검색
+	private void setSearchQueryForNested(ParamVO paramVO, BoolQueryBuilder boolQueryBuilder, String[] fields) {
+		
+		// 값 세팅(재검색, 검색, 일치, 포함, 제외)
+		String reSearch = paramVO.getReSearch();
+		String search = paramVO.getSearch();
+		String exactSearch = paramVO.getExactSearch();
+		String includeSearch = paramVO.getIncludeSearch();
+		String excludeSearch = paramVO.getExcludeSearch();
+		String reexactSearch = paramVO.getReexactSearch();
+		String reincludeSearch = paramVO.getReincludeSearch();
+		String reexcludeSearch = paramVO.getReexcludeSearch();
+		
+		BoolQueryBuilder boolQueryBuilderForSearch = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForExact = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForInclude = QueryBuilders.boolQuery();
+		BoolQueryBuilder boolQueryBuilderForExclude = QueryBuilders.boolQuery();
+		
+		// 상세검색
+		// 정확히 일치
+		if (StringUtils.isNoneBlank(exactSearch) || StringUtils.isNoneBlank(reexactSearch)) {
+			if (StringUtils.isNoneBlank(reexactSearch)) {
+				exactSearch = reexactSearch;
+			}
+			String[] exactArray = exactSearch.split(",+");
+			for (String exact : exactArray) {
+				if (StringUtils.isBlank(exact)) {
+					continue;
+				}
+				exact = RefineUtil.escapeString(exact);
+				BoolQueryBuilder boolQueryBilderForExactInner = QueryBuilders.boolQuery();
+				// 일반영역
+				for (String f : fields) {
+					if (f.contains("ngram")) {
+						continue;
+					} else {
+						f = f + ".keyword";
+					}
+					RegexpQueryBuilder regexpQueryBuilder = QueryBuilders.regexpQuery(f, ".*" + exact + ".*");
+					 boolQueryBilderForExactInner.should(regexpQueryBuilder);
+				}
+				boolQueryBuilderForExact.must(boolQueryBilderForExactInner);
+			}
+			boolQueryBuilder.must(boolQueryBuilderForExact);
+		}
+		
+		// 반드시 포함
+		if (StringUtils.isNoneBlank(includeSearch) || StringUtils.isNoneBlank(reincludeSearch)) {
+			if (StringUtils.isNoneBlank(reincludeSearch)) {
+				includeSearch = reincludeSearch;
+			}
+			String[] includeSearchArray = includeSearch.split(",+");
+			for (String include : includeSearchArray) {
+				if (StringUtils.isBlank(include)) {
+					continue;
+				}
+				include = RefineUtil.escapeString(include);
+				BoolQueryBuilder boolQueryBuilderForIncludeQueryInner = QueryBuilders.boolQuery();
+				// 일반 영역
+				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(include, fields)
+						.operator(Operator.AND);
+				boolQueryBuilderForIncludeQueryInner.should(multiMatchQueryBuilder);
+				boolQueryBuilderForInclude.must(boolQueryBuilderForIncludeQueryInner);
+			}
+			boolQueryBuilder.must(boolQueryBuilderForInclude);
+		}
+		
+		// 제외 단어
+		if (StringUtils.isNoneBlank(excludeSearch) || StringUtils.isNoneBlank(reexcludeSearch)) {
+			if (StringUtils.isNoneBlank(reexcludeSearch)) {
+				excludeSearch = reexcludeSearch;
+			}
+			String[] excludeSearchArray = excludeSearch.split(",+");
+			for (String exclude : excludeSearchArray) {
+				if (StringUtils.isBlank(excludeSearch)) {
+					continue;
+				}
+				exclude = RefineUtil.escapeString(exclude);
+				BoolQueryBuilder boolQeuryBuilderForExcludeQueryInner = QueryBuilders.boolQuery();
+				// 일반 영역
+				MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(exclude, fields)
+						.operator(Operator.AND);
+				boolQeuryBuilderForExcludeQueryInner.should(multiMatchQueryBuilder);
+				boolQueryBuilderForExclude.must(boolQeuryBuilderForExcludeQueryInner);
+			}
+			boolQueryBuilder.mustNot(boolQueryBuilderForExclude);
+		}
+		
+		// 검색
+		BoolQueryBuilder boolQueryBuilderForSearch_inner = QueryBuilders.boolQuery();
+		
+		MatchPhraseQueryBuilder[] MatchPhraseQueryBuilder = ElasticSearchUtil.getMatchPhraseQueryBuilders(
+				fields, search, slop);
+		for (MatchPhraseQueryBuilder matchPhraseQueryBuilder : MatchPhraseQueryBuilder) {
+			boolQueryBuilderForSearch_inner.should(matchPhraseQueryBuilder);
+		}
+		NestedQueryBuilder nestedQueryBuilder = QueryBuilders.nestedQuery("_file", boolQueryBuilderForSearch_inner, ScoreMode.Max);
+		boolQueryBuilderForSearch.must(nestedQueryBuilder);
+//		boolQueryBuilderForSearch.must(boolQueryBuilderForSearch_inner);
 		
 		
 		// 결과 내 재검색

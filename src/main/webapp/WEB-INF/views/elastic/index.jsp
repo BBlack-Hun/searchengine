@@ -198,15 +198,6 @@
 								</li>
 							</ul>
 						</li>
-						<script type="text/javascript">//서브메뉴 슬라이드
-						$(function(){
-							$(".lnbDiv .lnbList .lnbItem .sub_list").slideUp(0);
-							$(".lnbDiv .lnbList .lnbItem").click(function(){
-								$(".lnbDiv .lnbList > li").removeClass('selected');
-								$(this).addClass('selected');
-							});
-						});
-						</script>
 					</ul>
 				</div>
 				<div class="detailSearch">
@@ -294,7 +285,7 @@
 						</div>
 					</div><!--resultTopDiv/e-->
 					<!--resultDiv/s-->
-					<c:if test="${index.elastic.stotal.item0 >= 1}">
+					<c:if test="${index.elastic.stotal.item0 gt 0 }">
 						<div class="resultDiv">
 							<p class="resultTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
 							<div class="resultCt">
@@ -343,11 +334,11 @@
 						</div><!--resultDiv/e-->
 					</c:if>
 					<!--resultDiv/s-->
-					<c:if test="${index.elastic.stotal.item1 >= 1 }">
+					<c:if test="${index.elastic.stotal.item1 gt 0 }">
 						<div class="resultDiv">
 							<p class="resultTit">법령<b>${index.elastic.stotal.item1}</b>건</p>
 							<div class="resultCt">
-								<ul class="list">
+								<ul class="list">						
 									<c:forEach items="${index.elastic.LAW}" var="LAW">
 										<li class="listItem">
 											<div class="titAreaWrap">
@@ -392,7 +383,7 @@
 					</c:if>
 					<!--resultDiv/e-->
 					<!--resultDiv/s-->
-					<c:if test="${index.elastic.stotal.item2 >= 1}">
+					<c:if test="${index.elastic.stotal.item2 gt 0}">
 						<div class="resultDiv">
 							<p class="resultTit">중국<b>${index.elastic.stotal.item2}</b>건</p>
 							<div class="resultCt">

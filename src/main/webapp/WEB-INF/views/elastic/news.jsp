@@ -198,15 +198,6 @@
 								</li>
 							</ul>
 						</li>
-						<script type="text/javascript">//서브메뉴 슬라이드
-						$(function(){
-							$(".lnbDiv .lnbList .lnbItem .sub_list").slideUp(0);
-							$(".lnbDiv .lnbList .lnbItem").click(function(){
-								$(".lnbDiv .lnbList > li").removeClass('selected');
-								$(this).addClass('selected');
-							});
-						});
-						</script>
 					</ul>
 				</div>
 				<div class="detailSearch">
@@ -442,10 +433,23 @@
 								<c:forEach items="${index.elastic.autoRecommList }" var="autoR">
 									<li class="historyItem"> <!-- select라는 옵션 추가 가능! -->
 										<span class="item">
-											<a href="javascript:void(0);" class="txt" title="${autoR}">${autoR}</a>
+											<a href="javascript:void(0);" class="txt" title="${autoR}" onclick="search_btn_click(this)">${autoR}</a>
+											<span style="display:none;">${autoR}</span>
 										</span>
 									</li>
 								</c:forEach>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="historyDiv"><!--RIGHT > historyDiv/s-->
+					<div class="titArea">
+						<p class="tit">내가 찾은 검색어</p>
+					</div>
+					<div class="ctArea">
+						<div class="data">
+							<ul class="historyList" id="my_search_word">
+								
 							</ul>
 						</div>
 					</div>
