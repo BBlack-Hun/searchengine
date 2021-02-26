@@ -175,26 +175,26 @@
 							<a href="javascript:void(0)" class="Item" value="통합검색" onclick="search_Category(this);"><span class="title">전체</span><span class="num">${index.total}</span></a>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="MOIS" onclick="search_Category(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
+							<a href="javascript:void(0);" class="Item"  onclick="onCategoryView(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="javascript:void(0);" class="sub_info"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="MOIS" onclick="search_Category(this);"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
 								</li>
 							</ul>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="LAW" onclick="search_Category(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
+							<a href="javascript:void(0);" class="Item" onclick="onCategoryView(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="javascript:void(0);" class="sub_info" ><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="LAW" onclick="search_Category(this);"><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
 								</li>
 							</ul>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="search_Category(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
+							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="onCategoryView(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="javascript:void(0);" class="sub_info"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="NEWS" onclick="search_Category(this);"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
 								</li>
 							</ul>
 						</li>
@@ -293,11 +293,11 @@
 							</ul>
 						</div>
 					</div><!--resultTopDiv/e-->
-					<!--portalDiv/s-->
+					<!--resultDiv/s-->
 					<c:if test="${index.elastic.stotal.item0 >= 1}">
-						<div class="portalDiv">
-							<p class="portalTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
-							<div class="portalCt">
+						<div class="resultDiv">
+							<p class="resultTit">행정자치부<b>${index.elastic.stotal.item0}</b>건</p>
+							<div class="resultCt">
 								<ul class="list">
 									<c:forEach items="${index.elastic.MOIS}" var="MOIS">
 										<li class="listItem">
@@ -318,7 +318,6 @@
 													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 													<a href="${MOIS.link}" class="fileLink">${MOIS.linkname}</a>
 													<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
-												</div>
 												<div class="FileView_mordal" style="display:none;">
 													<div class="FileView_top">
 														<p class="view_title">미리보기</p>
@@ -326,12 +325,12 @@
 													</div>
 													<div class="FileView_bottom">
 														<p class="view_info">
-															제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
-															제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
-															제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
-															&lt; 개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8. &gt;
+															<c:forEach items="${MOIS._file}" var="file">
+																${file.preView}
+															</c:forEach>
 														</p>
 													</div>
+												</div>
 												</div>
 											</div>
 										</li>			
@@ -366,20 +365,20 @@
 												<div class="file">
 													<img src="resources/img/ico/file/hwp.gif" class="fileIco">
 													<a href="${LAW.link}" class="fileLink">${LAW.linkname}.hwp</a>
-													<a href="javascript:void(0);" class="btnFileView">미리보기</a>
-												</div>
-												<div class="FileView_mordal">
-													<div class="FileView_top">
-														<p class="view_title">미리보기</p>
-														<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
-													</div>
-													<div class="FileView_bottom">
-														<p class="view_info">
-															제1조(목적) 이 영은 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」에서 위임된 사항과 그 시행에 필요한 사항을 규정함을 목적으로 한다.
-															제2조(10ㆍ27법난피해자명예회복심의위원회의 구성 및 운영) ① 「10ㆍ27법난 피해자의 명예회복 등에 관한 법률」(이하 “법”이라 한다) 
-															제3조에 따른 10ㆍ27법난피해자명예회복심의위원회(이하 “위원회”라 한다)는 문화체육관광부장관이 임명하는 제1호부터 제3호까지의 위원과 문화체육관광부장관이 성별을 고려하여 위촉하는 7명 이내의 제4호의 위원으로 구성한다. 
-															&lt; 개정 2011. 11. 11., 2013. 3. 23., 2015. 1. 6., 2016. 6. 8. &gt;
-														</p>
+													<a href="javascript:void(0);" class="btnFileView" onclick="onFileView(this);">미리보기</a>
+												
+													<div class="FileView_mordal" style="display:none;">
+														<div class="FileView_top">
+															<p class="view_title">미리보기</p>
+															<a href="javascript:void(0);" class="close_btn" onclick="closeFileView(this);"></a>
+														</div>
+														<div class="FileView_bottom">
+															<p class="view_info">
+																<c:forEach items="${LAW._file}" var="file">
+																	${file.preView}
+																</c:forEach>
+															</p>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -532,7 +531,7 @@
 		var ctx = "/MM";
 	</script>
 	<script src="resources/js/cookie.js" ></script>
-	<script src="resources/js/Msearch_.js" ></script>
+	<script src="resources/js/Msearch.js" ></script>
 	
 </body>
 </html>

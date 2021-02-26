@@ -475,12 +475,17 @@ var makeAutocompleteSearch  = function(search, data) {
 	autocompleteSearch.innerHTML = makeView;
 }
 
-// 미리보기 누르기
-var onFileView = function(target) {
-	console.log($(target).next);
-	$(target).next('.FileView_mordal').show();
+// 카테코리 열기
+var onCategoryView = function(target) {
+	$(target).next(".sub_list").show();
 }
 
+// 미리보기 누르기
+var onFileView = function(target) {
+	$(target).next(".FileView_mordal").show();
+}
+
+// 미리보기 닫기
 var closeFileView = function(target) {
 	$(target).parents('.FileView_mordal').hide();
 }

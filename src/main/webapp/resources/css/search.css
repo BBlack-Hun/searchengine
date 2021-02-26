@@ -238,7 +238,7 @@
 .resultDiv .list .listItem .fileArea .btnFileView{margin:0 0 0 5px;border-radius:2px;padding:0 9px 1px 8px;color:#a3a3a3;font-size:12px;font-family:nanumgothic,'Dotum';letter-spacing:-1px;background:url("../img/btnFile.gif") 0 0 repeat;border-top:1px solid #e5e5e6;border-right:1px solid #ddddde;border-bottom:1px solid #d0d1d3;border-left:1px solid #e0e0e1;}
 .resultDiv .list .listItem .fileArea .btnFileView:hover{border-top:1px solid #c4c4c4;border-right:1px solid #c4c4c4;border-bottom:1px solid #b7b7b7;border-left:1px solid #c4c4c4;}
 .resultDiv .list .listItem .fileArea .btnFileView:active{background:url("../img/btnFile_down.gif") 0 0 repeat;border-top:1px solid #999;border-right:1px solid #c4c4c4;border-bottom:1px solid #c4c4c4;border-left:1px solid #c4c4c4;}
-.resultDiv .list .listItem .fileArea .FileView_mordal{background:#fff; border:1px solid #e0e0e0; position:absolute; left:0; top:25px; z-index:1;}
+.resultDiv .list .listItem .fileArea .FileView_mordal {background:#fff; border:1px solid #e0e0e0; position:absolute; left:0; top:25px; z-index:1;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top{background:#f6fbff; border-bottom:1px solid #e0e0e0; padding:10px 20px 9px; position:relative;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top .view_title{font-size:13px; font-weight:700; color:#333;}
 .resultDiv .list .listItem .fileArea .FileView_mordal .FileView_top .close_btn{display:block; width:10px; height:9px; background:url("../img/close_btn.png")no-repeat; position:absolute; right:20px; top:13px;}

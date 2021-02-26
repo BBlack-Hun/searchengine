@@ -41,7 +41,7 @@
 								</script>
 								<!--  검색라인 -->
 								<input type="text" id="searchWord" name="search" class="ipt" placeholder="검색어를 입력해 주세요."
-								value ="${index.str}" onkeypress="search_enter();">
+								value ="${index.str}" onkeypress="search_enter();" autocomplete="off">
 								<div class="schArrow">
 									<a href="#" title="검색창 위 화살표" class="selected"><img src="resources/img/sch_arrow_up.png" alt="검색창 위 화살표"></a>
 									<a href="#" title="검색창 아래 화살표" class="unselected"><img src="resources/img/sch_arrow_down.png" alt="검색창 아래 화살표"></a>
@@ -95,18 +95,15 @@
 					<textarea id="paramVO_reincludeSearch" style="display: none;">${index.paramVO.reincludeSearch}</textarea>
 					<textarea id="paramVO_reexcludeSearch" style="display: none;">${index.paramVO.reexcludeSearch}</textarea>
 				</div>
-				<div class="schAuto">
-					<ul class="schlist">
-						<c:forEach items="${index.autoC}" var="AC">
-							<li class="schitem"><a href="javascript:void(0);"><span class="blue_bold">${AC}</span></a></li>
-						</c:forEach>
+				<div class="schAuto" id="autocompleteBox">
+					<ul class="schlist" id="autocompleteSearch">
 					</ul>
 					<div class="autoBtm">
 						<div class="word_all">
 							<a href="javascript:void(0);" class="first_word">첫 단어 보기</a>
 							<a href="javascript:void(0);" class="last_word">끝 단어 보기</a>
 						</div>
-						<a href="javascript:void(0);" class="btnClose" onclick="$(this).closest('.schAuto').hide();">자동완성 끄기</a>
+						<a href="javascript:void(0);" class="btnClose" onclick="closeSearchForm(this); return false;">자동완성 끄기</a>
 					</div>
 				</div>
 				<div class="schCheckBox">				
@@ -117,23 +114,23 @@
 				</div>
 				<div class="schCheckArea">
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox2" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox2" name="chkSearch" class="fCheck" value ="전체" <c:if test="${index.paramVO.field eq '전체'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox2">전체</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox3" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox3" name="chkSearch" class="fCheck" value="제목" <c:if test="${index.paramVO.field eq '제목'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox3">제목</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox4" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox4" name="chkSearch" class="fCheck" value="내용" <c:if test="${index.paramVO.field eq '내용'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox4">본문</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox5" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox5" name="chkSearch" class="fCheck" value="첨부파일명" <c:if test="${index.paramVO.field eq '첨부파일명'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox5">첨부파일명</label>
 					</span>
 					<span class="checkBtn">
-						<input type="checkbox" id="schCheckBox6" name="chkSearch" class="fCheck">
+						<input type="checkbox" id="schCheckBox6" name="chkSearch" class="fCheck" value="첨부파일_내용" <c:if test="${index.paramVO.field eq '첨부파일_내용'}">checked</c:if> onclick="doOpenCheck(this);">
 						<label for="schCheckBox6">첨부파일 내용</label>
 					</span>
 				</div>
@@ -178,26 +175,26 @@
 							<a href="javascript:void(0)" class="Item" value="통합검색" onclick="search_Category(this);"><span class="title">전체</span><span class="num">${index.total}</span></a>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="MOIS" onclick="search_Category(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
+							<a href="javascript:void(0);" class="Item"  onclick="onCategoryView(this);"><span class="title">정부기관</span><span class="num">${index.elastic.stotal.item0}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="mois" class="sub_info"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="MOIS" onclick="search_Category(this);"><span class="title">행정자치부</span><span class="num">${index.elastic.stotal.item0}</span></a>
 								</li>
 							</ul>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="LAW" onclick="search_Category(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
+							<a href="javascript:void(0);" class="Item" onclick="onCategoryView(this);"><span class="title">국가법령/규칙</span><span class="num">${index.elastic.stotal.item1}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="law" class="sub_info"><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="LAW" onclick="search_Category(this);"><span class="title">법령</span><span class="num">${index.elastic.stotal.item1}</span></a>
 								</li>
 							</ul>
 						</li>
 						<li class="lnbItem">
-							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="search_Category(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
+							<a href="javascript:void(0);" class="Item" value="NEWS" onclick="onCategoryView(this);"><span class="title">해외뉴스</span><span class="num">${index.elastic.stotal.item2}</span></a>
 							<ul class="sub_list">
-								<li class="sub_item selected">
-									<a href="news" class="sub_info"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
+								<li class="sub_item">
+									<a href="javascript:void(0);" class="sub_info" value="NEWS" onclick="search_Category(this);"><span class="title">중국</span><span class="num">${index.elastic.stotal.item2}</span></a>
 								</li>
 							</ul>
 						</li>
@@ -452,6 +449,6 @@
 	</div>
 	<!-- 스크립트 위치 -->
 	<script src="resources/js/cookie.js" ></script>
-	<script src="resources/js/Msearch_.js" ></script>
+	<script src="resources/js/Msearch.js" ></script>
 </body>
 </html>

@@ -209,7 +209,7 @@ public class EsDAO {
 		// 하이라이트 적용
 //		searchSourceBuilder.highlighter(makeHighLightField());
 		// 테스트 출력
-		System.out.println(searchSourceBuilder.toString());
+//		System.out.println(searchSourceBuilder.toString());
 		searchRequest.source(searchSourceBuilder);
 		return searchRequest;
 		
@@ -280,7 +280,7 @@ public class EsDAO {
 		searchSourceBuilder.size(listSize);
 		searchRequest.source(searchSourceBuilder);
 		// 테스트 출력
-//		System.out.println(searchSourceBuilder.toString());
+		System.out.println(searchSourceBuilder.toString());
 		return searchRequest;
 	}
 	/**

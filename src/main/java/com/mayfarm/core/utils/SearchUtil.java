@@ -23,7 +23,7 @@ public class SearchUtil {
 				fields = new String[] { "content", "content.ngram" };
 				break;
 			case "첨부파일명":
-				fields = new String[] { "linkname" };
+				fields = new String[] { "linkname", "linkname.ngram" };
 				break;
 			case "첨부파일_내용":
 			default:
@@ -31,7 +31,7 @@ public class SearchUtil {
 						"title", "title.ngram",
 						"stitle", "stitle.ngram",
 						"content", "content.ngram",
-						"linkname"
+						"linkname", "linkname.ngram"
 				};
 				break;
 		}
@@ -49,7 +49,7 @@ public class SearchUtil {
 				fields = new String[] { "content", "content.ngram" };
 				break;
 			case "첨부파일명":
-				fields = new String[] { "linkname" };
+				fields = new String[] { "linkname", "linkname.ngram" };
 				break;
 			case "첨부파일_내용":
 			default:
@@ -57,7 +57,7 @@ public class SearchUtil {
 						"title", "title.ngram",
 						"stitle", "stitle.ngram",
 						"content", "content.ngram",
-						"linkname"
+						"linkname", "linkname.ngram"
 						};
 				break;
 		}
